@@ -39,31 +39,41 @@ class _HomeCarouselState extends State<HomeCarousel> {
       CarouselSlider(
         items: [
           Container(
-            color: Colors.yellowAccent,
-            child: Image.asset(
-              'images/jar1.jpg',
-              fit: BoxFit.cover,
-            ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  color: Colors.pink[900],
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child:Text('عن عائشة رضي الله عنها عن النبي  صلى الله عليه وسلم\n  قال: ((ما زال جبريل يوصيني بالجار حتى ظننت أنه سيورثه)) .',
+                style:TextStyle(fontSize:15,fontWeight:FontWeight.bold,color: Colors.white ) ,textDirection: TextDirection.rtl,)
           ),
           Container(
-            color: Colors.yellowAccent,
-            child: Image.asset(
-              'images/jar2.jpg',
-              fit: BoxFit.cover,
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                color: Colors.pink[900],
+                borderRadius: BorderRadius.circular(10)
             ),
+             child:Text('(وَاعْبُدُوا اللَّهَ وَلَا تُشْرِكُوا بِهِ شَيْئًا وَبِالْوَالِدَيْنِ إِحْسَانًا وَبِذِي الْقُرْبَى وَالْيَتَامَى وَالْمَسَاكِينِ وَالْجَارِ ذِي الْقُرْبَى وَالْجَارِ الْجُنُبِ وَالصَّاحِبِ بِالْجَنْبِ وَابْنِ السَّبِيلِ وَمَا مَلَكَتْ أَيْمَانُكُمْ إِنَّ اللَّهَ لَا يُحِبُّ مَنْ كَانَ مُخْتَالًا فَخُورًا)'
+
+               ,style:TextStyle(fontSize:13,fontWeight:FontWeight.bold,color: Colors.white ) ,textDirection: TextDirection.rtl,)
           ),
           Container(
-            color: Colors.yellowAccent,
-            child: Image.asset(
-              'images/jar3.jpg',
-              fit: BoxFit.cover,
-            ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                  color: Colors.pink[900],
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child:Text('عن أَبي شُريْحٍ الخُزاعيِّ : أَنَّ النَّبيَّ ﷺ قَالَ \n(("مَنْ كَانَ يُؤمِنُ بِاللَّهِ والْيَوْمِ الآخِرِ فَلْيُحْسِنْ إلى جارِهِ"))',
+                style:TextStyle(fontSize:15,fontWeight:FontWeight.bold,color: Colors.white ) ,textDirection: TextDirection.rtl,)
           ),
         ],
         options: CarouselOptions(
             autoPlay: true,
             enlargeCenterPage: true,
-            aspectRatio: 2.4,
+            aspectRatio: 2.9,
             onPageChanged: (index, reason) {
               setState(() {
                 currentPage = index;

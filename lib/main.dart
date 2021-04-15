@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           primaryColor:Colors.pink[900],
             accentColor: Colors.pink[900]
       ),
-      home: HomeScreen(),
+      home: OnBoardingScreen(),
     );
   }
 }
