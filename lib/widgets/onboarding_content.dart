@@ -16,7 +16,7 @@ class OnboardingContent extends StatelessWidget {
         Text(
           "جيران",
           style: TextStyle(
-            fontSize: 40,
+            fontSize: 35,
             color: mainColor,
             fontWeight: FontWeight.bold,
           ),
@@ -27,7 +27,7 @@ class OnboardingContent extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-            fontSize: 20
+            fontSize: 18
             ),
             textDirection: TextDirection.rtl,
           ),
@@ -35,7 +35,7 @@ class OnboardingContent extends StatelessWidget {
         Spacer(flex: 2),
         Image.asset(
           image,
-          height: mediaQuery.height*0.25,
+          height: mediaQuery.height*0.23,
           width: mediaQuery.width*0.5,
         ),
       ],

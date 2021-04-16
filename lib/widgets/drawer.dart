@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jeraan_project/screens/auth/sign_in.dart';
+import 'package:jeraan_project/screens/drawer_sections/user_profile.dart';
 
 Widget drawer(context) {
   return Drawer(
@@ -8,72 +11,56 @@ Widget drawer(context) {
             child: Column(
               children: [
                 Container(
-                  height: 120,
+                  height: 130,
                   child: Row(
                     children: [
                       Container(
-                          width: 50,
-                          height: 50,
+                          width: 70,
+                          height: 70,
                           child: CircleAvatar(
-                              child: Image(
-                                  image: AssetImage("images/book_5.png")))),
+                            maxRadius: 35,
+                            backgroundImage: NetworkImage('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6'),
+                          )),
                       SizedBox(width: 12),
-                      Text("Mohamed Ahmed",
-                          style: TextStyle(color: Colors.black45, fontSize: 20))
+                      Text("Khaled Mohamed",
+                          style: TextStyle(color: Colors.pink[900], fontSize: 20))
                     ],
                   ),
                 ),
                 Divider(
                   thickness: 2,
-                  height: 5,
+                  height: 15,
                 ),
-                drawerCard(context, "images/user_6.png", "My Profile", 1),
-                drawerCard(context, "images/subscription.png", "My Plan", 2),
-                drawerCard(context, "images/youtube_2.png", "Videos", 3),
-                drawerCard(context, "images/settings.png", "Settings", 4),
-                drawerCard(context, "images/logo_v_en_2.png", "About us", 5),
+                drawerCard(context, "images/user_6.png", "ملفي الشخصي", 1),
+                drawerCard(context, "images/subscription.png", "نشاطي", 2),
+                drawerCard(context, "images/youtube_2.png", "الاعدادات", 3),
+                drawerCard(context, "images/settings.png", "عن التطبيق", 4),
+                drawerCard(context, "images/logo_v_en_2.png", "الشروط والخصوصية", 5),
                 drawerCard(context, "images/logo_v_en_2.png",
-                    "Terms and Condetions", 6),
-                drawerCard(
-                    context, "images/logo_v_en_2.png", "Privacy policy", 7),
-                drawerCard(context, "images/email_2.png", "Contact Us", 8),
+                    "التواصل معنا", 6),
+
                 Container(
                     height: 80,
                     alignment: Alignment.center,
                     child: GestureDetector(
-                      //             onTap: (){
-                      //               logOut(context).then((value) {
-                      //                 Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => SignIn()),
-                      //   (Route<dynamic> route) => false,
-                      // );
-                      //               });
-                      //             },
+                                  onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                                  },
                       child: Container(
-                        height: 45,
+                        alignment: Alignment.center,
+                        height: 50,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xffe02020)),
+                          border: Border.all(color: Colors.pink[900]),
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(
-                              image: AssetImage("images/logout_3.png"),
-                              width: 22,
-                              height: 22,
-                            ),
-                            SizedBox(width: 12),
-                            Text("Log Out",
-                                style: TextStyle(
-                                    color: Color(0xffe02020),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600))
-                          ],
-                        ),
+                        child: Text("Log Out",
+                            style: TextStyle(
+
+                                color: Colors.pink[900],
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600)),
                       ),
                     ))
               ],
@@ -84,60 +71,51 @@ Widget drawer(context) {
 Widget drawerCard(context, imageurl, text, id) {
   return GestureDetector(
     onTap: () {
-      // switch (id) {
-      //   case 1:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => MyProfile()));
-      //     break;
-      //   case 2:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => MyPlan()));
-      //     break;
-      //   case 3:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => Videos()));
-      //     break;
-      //   case 4:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => Settings()));
-      //     break;
-      //   case 5:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => AboutUs()));
-      //     break;
-      //   case 6:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => Terms()));
-      //     break;
-      //   case 7:
-      //     Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => PrivacyPolicy()));
-      //     break;
-      //   case 8:
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => ContactUs()));
-      //     break;
-      // }
+      switch (id) {
+        case 1:
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => UserProfile()));
+          break;
+        // case 2:
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => MyPlan()));
+        //   break;
+        // case 3:
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => Videos()));
+        //   break;
+        // case 4:
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => Settings()));
+        //   break;
+        // case 5:
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => AboutUs()));
+        //   break;
+        // case 6:
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => Terms()));
+        //   break;
+        // case 7:
+        //   Navigator.push(context,
+        //       MaterialPageRoute(builder: (context) => PrivacyPolicy()));
+        //   break;
+        // case 8:
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => ContactUs()));
+        //   break;
+      }
     },
     child: Column(
       children: [
         Container(
+          alignment: Alignment.center,
           color: Color(0xfffdfdfd),
-          height: 45,
-          child: Row(
-            children: [
-              Image(
-                image: AssetImage(imageurl),
-                width: 20,
-                height: 20,
-              ),
-              SizedBox(width: 12),
-              Text(text, style: TextStyle(color: Colors.black45, fontSize: 18))
-            ],
-          ),
+          height: 50,
+          child: Text(text, style: TextStyle(color: Colors.black, fontSize: 18)),
         ),
         Divider(
-          thickness: 2,
+          thickness: 1,
           height: 5,
         ),
       ],

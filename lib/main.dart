@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jeraan_project/screens/auth/onBoarding_screen.dart';
 import 'package:jeraan_project/screens/auth/sign_in.dart';
+import 'package:jeraan_project/screens/drawer_sections/user_profile.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/widgets/carosul_slider.dart';
 void main() {
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
     debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Jeran',
       theme: ThemeData(
           primaryColor:Colors.pink[900],
             accentColor: Colors.pink[900]
@@ -22,4 +23,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 

@@ -70,7 +70,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           (index) => buildDot(index: index),
                         ),
                       ),
-                      Spacer(flex: 2),
+                      Spacer(flex: 1),
                       DefaultButton(
                         text: "تخطي",
                         press: () {
