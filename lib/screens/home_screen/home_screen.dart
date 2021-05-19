@@ -17,8 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
 GlobalKey<ScaffoldState>drawerKey=GlobalKey();
 @override
   Widget build(BuildContext context) {
-    var width=MediaQuery.of(context).size.width;
-    var height=MediaQuery.of(context).size.height;
+    var mediQuery = MediaQuery.of(context).size;
+
     return Scaffold(
       key: drawerKey,
       drawer: Drawer(
@@ -26,45 +26,42 @@ GlobalKey<ScaffoldState>drawerKey=GlobalKey();
       ),
       body: SafeArea(
         child: ListView(
-          physics: BouncingScrollPhysics(),
           children: [
-            Container(
-
-              height: height,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(icon:Icon(Icons.menu,size: 30,color: Colors.pink[900],),
-                            onPressed: (){
-                          drawerKey.currentState.openDrawer();
-                            }),
-                        Container(
-                            width: 150,
-                            height: 60,
-                            child: Image.asset(
-                              'images/text.png',fit: BoxFit.cover,)),
-
-                      IconButton(icon: Icon(Icons.location_on_outlined,size: 25,color: Colors.pink[900],),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(icon:Icon(Icons.menu,size: 30,color: Colors.pink[900],),
                           onPressed: (){
+                        drawerKey.currentState.openDrawer();
+                          }),
+                      Container(
+                        margin: EdgeInsets.only(left: 15),
+                        width: mediQuery.width*.55,
+                        height: mediQuery.height*.13,
+                        alignment: Alignment.center,
+                        child: Image.asset('images/jeran2022.jpeg',
+                        ),
+                      ),
 
-                          })
-                      ],
-                    ),
+                    IconButton(icon: Icon(Icons.location_on_outlined,size: 25,color: Colors.pink[900],),
+                        onPressed: (){
+
+                        })
+                    ],
                   ),
-                  SizedBox(height: 5,),
-                  serchBar((value){},'Search'),
-                  Container(
-                    margin: EdgeInsets.only(top: 12),
-                      child: HomeCarousel()
-                  ),
-                  SizedBox(height: 10,),
-                  HomeGrid(),
-                ],
-              ),
+                ),
+                serchBar((value){},'Search'),
+                Container(
+                  margin: EdgeInsets.only(top: 12),
+                    child: HomeCarousel()
+                ),
+                SizedBox(height: mediQuery.height*.035),
+                HomeGrid(),
+              ],
             ),
           ],
         ),

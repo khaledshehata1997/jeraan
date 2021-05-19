@@ -41,7 +41,7 @@ class _SignUpState extends State<SignUp> {
         child: ListView(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 12, right: 12, top: 7),
+              margin: EdgeInsets.only(left: 12, right: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -49,18 +49,14 @@ class _SignUpState extends State<SignUp> {
                     height: mediQuery.width * .04,
                   ),
                   Container(
-                    width: mediQuery.width,
-                    height: mediQuery.height*.18,
+                    margin: EdgeInsets.only(left: 15),
+                    width: mediQuery.width*.95,
+                    height: mediQuery.height*.25,
                     alignment: Alignment.center,
-                    child: Image.asset('images/jeran.png'),
+                    child: Image.asset('images/jeran2022.jpeg',
+                    ),
                   ),
-                  Container(
-                      width: mediQuery.width,
-                      child:Image.asset('images/text.png')
-                  ),
-                  SizedBox(
-                    height: mediQuery.width * .01,
-                  ),
+
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(

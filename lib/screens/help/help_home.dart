@@ -2,55 +2,53 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jeraan_project/screens/auth/forget_password.dart';
 import 'package:get/get.dart';
+import 'package:jeraan_project/screens/help/add_product_help.dart';
 
-import 'add_product_ecommerse.dart';
-class ECommerseHome extends StatefulWidget {
+class HelpHome extends StatefulWidget {
   @override
-  _ECommerseHomeState createState() => _ECommerseHomeState();
+  _HelpHomeState createState() => _HelpHomeState();
 }
 
-class _ECommerseHomeState extends State<ECommerseHome> {
+class _HelpHomeState extends State<HelpHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Padding(
         padding: const EdgeInsets.only(left: 30,right: 30),
         child: BottomSheet(
-          elevation: 10,
-          backgroundColor: Colors.pink[900],
-          onClosing: (){},
-          builder: (ctx) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        child: TextButton(
-            onPressed: (){
-           Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProductEcommerse()));
-            },
-            child: Text('إضافة منتج',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
-    );
-    }),
+            elevation: 10,
+            backgroundColor: Colors.pink[900],
+            onClosing: (){},
+            builder: (ctx) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                child: TextButton(
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProductHelp()));
+                    },
+                    child: Text('إضافة منتج',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
+              );
+            }),
       ),
       appBar: AppBar(
-        title: Text('بيع وشراء الجيران'),
+        title: Text('إستعارات الجيران'),
         centerTitle: true,
       ),
       body: ListView(
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Column(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
               children: [
                 post(
                     'Khaled Mohamed',
-                      '4200\n ريال',
-                      'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6',
-                      'https://el5olasa.com/wp-content/uploads/2019/10/%D9%84%D8%A7%D8%A8%D8%AA%D9%88%D8%A8-XPS-15-%D8%B7%D8%B1%D8%A7%D8%B2-2020-%D8%A3%D9%81%D8%B6%D9%84-%D9%84%D8%A7%D8%A8%D8%AA%D9%88%D8%A8-%D8%AF%D9%8A%D9%84-768x384.png',
-                      'لاب توب apple جيل خامس \n رام: 8 جيجابايت \n هارد: 1000 جيجا , شاشة 15 بوصه full hd',
-                      '+201064871625' ),
+                    'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6',
+                    'https://el5olasa.com/wp-content/uploads/2019/10/%D9%84%D8%A7%D8%A8%D8%AA%D9%88%D8%A8-XPS-15-%D8%B7%D8%B1%D8%A7%D8%B2-2020-%D8%A3%D9%81%D8%B6%D9%84-%D9%84%D8%A7%D8%A8%D8%AA%D9%88%D8%A8-%D8%AF%D9%8A%D9%84-768x384.png',
+                    'لاب توب apple جيل خامس \n رام: 8 جيجابايت \n هارد: 1000 جيجا , شاشة 15 بوصه full hd',
+                    '+201064871625' ),
                 SizedBox(height: 15,),
                 post(
                     'Hassan Abdelhameed',
-                    '1000\n ريال',
                     'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/84110374_1484842798350693_3347258839169761280_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=ivgoBlfPwSoAX91-hP6&_nc_ht=scontent-hbe1-1.xx&oh=0eaa65405fc797e8bcbbb990e1765167&oe=609767BE',
                     'https://www.elarabygroup.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/a/l/alba-ladies-hand-watch-fashion-stainless-steel-bracelet-and-silver-white-dial-ah7p34x1.jpg',
                     'لاب توب apple جيل خامس \n رام: 8 جيجابايت \n هارد: 1000 جيجا , شاشة 15 بوصه full hd',
@@ -63,7 +61,7 @@ class _ECommerseHomeState extends State<ECommerseHome> {
       ),
     );
   }
-  Widget post(name , price,photo,product,desc,phone){
+  Widget post(name ,photo,product,desc,phone){
     return  Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -100,7 +98,7 @@ class _ECommerseHomeState extends State<ECommerseHome> {
                   radius: 30,
                   backgroundColor: Colors.pink[900],
                   child: Text(
-                    '$price',
+                    'free',
                     style: TextStyle(
                         fontSize: 16, color: Colors.white,fontWeight: FontWeight.bold),
                     textDirection: TextDirection.rtl,textAlign: TextAlign.center,

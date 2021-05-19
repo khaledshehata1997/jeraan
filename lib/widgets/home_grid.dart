@@ -1,37 +1,43 @@
 
 import 'package:flutter/material.dart';
 import 'package:jeraan_project/screens/e_commerse/e_commerse_home.dart';
+import 'package:jeraan_project/screens/events/event_home.dart';
+import 'package:jeraan_project/screens/help/help_home.dart';
+import 'package:jeraan_project/screens/jobs/jobs_home.dart';
+import 'package:jeraan_project/screens/t3arf/t3arf_home.dart';
 class HomeGrid extends StatelessWidget {
   String image1,image2;
   String text1,text2;
 
   @override
   Widget build(BuildContext context) {
- Fun1(){};
- Fun2(){};
- Fun3(){};
- Fun4(){Navigator.push(context, MaterialPageRoute(builder: (context)=>ECommerseHome()));};
- Fun5(){};
+ Fun1(){Navigator.push(context, MaterialPageRoute(builder: (context)=>EventHome()));};
+ Fun2(){Navigator.push(context, MaterialPageRoute(builder: (context)=>T3arfHome()));};
+ Fun3(){Navigator.push(context, MaterialPageRoute(builder: (context)=>ECommerseHome()));};
+ Fun4(){Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpHome()));};
+ Fun5(){Navigator.push(context, MaterialPageRoute(builder: (context)=>JobsHome()));};
  Fun6(){};
-    return Column(
-      children: [
+    return SingleChildScrollView(
+      child: Column(
+        children: [
 
-        homeGrid(context,'home_images/jobs.jpg',   'home_images/eventss.png',
-            'وظائف الجيرن',     'مناسبات الجيران',
-               Fun1,
-               Fun2,
-    ),
-        homeGrid(context,'home_images/help.jpg',    'home_images/E-commerse.png'
-            ,'استعارات الجيران',   'بيع وشراء الجيران',
-            Fun3,
-            Fun4,
-        ),
-        homeGrid(context,'home_images/twasl.jpg',   'home_images/istshara.jpg',
-            'تعارف الجيران',   'استشارات بين الجيران',
-    Fun5,
-    Fun6,
-    ),
-      ],
+          homeGrid(context,'home_images/eventss.png',   'home_images/twasl.jpg',
+              'مناسبات الجيران',     'تعارف الجيران',
+                 Fun1,
+                 Fun2,
+      ),
+          homeGrid(context,'home_images/E-commerse.png',    'home_images/help.jpg'
+              ,'بيع وشراء الجيران',   'إستعارات الجيران',
+              Fun3,
+              Fun4,
+          ),
+          homeGrid(context,'home_images/jobs.jpg',   'home_images/istshara.jpg',
+              'هوايات الجيران',   'استشارات بين الجيران',
+      Fun5,
+      Fun6,
+      ),
+        ],
+      ),
     );
   }
 

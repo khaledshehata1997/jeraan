@@ -12,7 +12,7 @@ Widget serchBar(Function onSubmitt(value), text) {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(
-                  width: 3, style: BorderStyle.values[1], color: Colors.black45)),
+                  width: 3, style: BorderStyle.values [1], color: Colors.black45)),
           prefixIcon: Icon(Icons.search),
           hintText: text,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

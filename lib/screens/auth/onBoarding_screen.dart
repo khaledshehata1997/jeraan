@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jeraan_project/constants.dart';
 import 'package:jeraan_project/screens/auth/sign_in.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
@@ -55,37 +57,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05),
-                  child: Column(
-                    children: <Widget>[
-                      Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          onboardingData.length,
-                          (index) => buildDot(index: index),
-                        ),
-                      ),
-                      Spacer(flex: 1),
-                      DefaultButton(
-                        text: "تخطي",
-                        press: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
-                        },
-                      ),
-                      Spacer(),
+
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

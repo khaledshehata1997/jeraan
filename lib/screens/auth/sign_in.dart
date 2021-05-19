@@ -14,7 +14,6 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
-  // var keepMeLoggedIn=false;
 
   String message = "";
   bool isLoading = false;
@@ -41,21 +40,14 @@ class _SignInState extends State<SignIn> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                  Container(
-                   width: mediQuery.width,
-                   height: mediQuery.height*.18,
+                   margin: EdgeInsets.only(left: 15),
+                   width: mediQuery.width*.95,
+                   height: mediQuery.height*.25,
                    alignment: Alignment.center,
-                   child: Image.asset('images/jeran.png'),
+                   child: Image.asset('images/jeran2022.jpeg',
+                   ),
                  ),
-                  SizedBox(
-                    height: mediQuery.width * .001,
-                  ),
-                  Container(
-                    width: mediQuery.width,
-                    child:Image.asset('images/text.png')
-                  ),
-                  SizedBox(
-                    height: mediQuery.width * .06,
-                  ),
+
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(

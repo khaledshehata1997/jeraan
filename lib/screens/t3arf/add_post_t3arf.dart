@@ -1,22 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jeraan_project/screens/events/event_home.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
+import 'package:jeraan_project/screens/t3arf/t3arf_home.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
-class AddProduct extends StatelessWidget {
-  final TextEditingController _titleController = new TextEditingController();
-  final TextEditingController _priceController = new TextEditingController();
-  final TextEditingController _descController = new TextEditingController();
-  final TextEditingController _whatsController = new TextEditingController();
 
+class AddPostT3arf extends StatelessWidget {
+  final TextEditingController _ageController = new TextEditingController();
+  final TextEditingController _jobController = new TextEditingController();
+  final TextEditingController _whatsController = new TextEditingController();
+  final TextEditingController _postController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('إضافة منتج'),
+        title: Text('إضافة منشور'),
         centerTitle: true,
       ),
       body: Form(
@@ -31,21 +33,49 @@ class AddProduct extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(
-                      "اسم المنتج",
+                      "العمر",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  CustomTextForm(false, 'اسم المنتج ',controller: _titleController,),
+                  CustomTextForm(false, 'العمر',controller: _ageController,),
+                  SizedBox(
+                    height: Get.height*.02,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right:10.0),
+                    child: Text(
+                      "الوظيفة",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black45,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  CustomTextForm(false, 'الوظيفة',controller: _jobController,),
+                  SizedBox(
+                    height: Get.height*.02,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right:10.0),
+                    child: Text(
+                      "رقم التواصل",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black45,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  CustomTextForm(false, 'رقم التواصل',controller: _whatsController,),
                   SizedBox(
                     height: Get.height*.02,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:15.0),
                     child: Text(
-                      "تفاصيل المنتج",
+                      "المنشور",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -56,70 +86,15 @@ class AddProduct extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: SpetialCustomTextForm(
 
-                      false, 'ادخل التفاصيل ',controller: _descController,),
+                      false, 'ادخل المنشور',controller: _postController,),
                   ),
-                  SizedBox(
-                   height:Get.height*.02 ,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right:15.0),
-                    child: Text(
-                      "سعر المنتج",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black45,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: CustomTextForm(
 
-                      false, 'ادخل السعر ',controller:_priceController,),
-                  ),
-                  SizedBox(
-                    height: Get.height*.02,
-                  ), Padding(
-                    padding: const EdgeInsets.only(right:15.0),
-                    child: Text(
-                      "رقم التواصل",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black45,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: CustomTextForm(
 
-                      false, 'ادخل الرفم ',controller: _whatsController,),
-                  ),
                   SizedBox(
-                    height: Get.height*.02,
-                  ),
-                  Center(
-                    child: Container(
-                      color: Colors.grey[100],
-                      height: Get.height*.15,
-                      width: Get.width*.4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.add_a_photo,color: Colors.pink[900],size: 30,),
-                          SizedBox(
-                            width: Get.width*.03,
-                          ),
-                          Text('إضافة صورة',style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: Get.height*.02,
+                    height: Get.height*.05,
                   ),
                   DefaultButton(
-                    text: 'إضافة المنتج',
+                    text: 'إضافة المنشور',
                     press: (){
                       var result =  showDialog(
 
@@ -130,7 +105,7 @@ class AddProduct extends StatelessWidget {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنتج بنجاح :)',style: TextStyle(
+                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
                                     fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -142,14 +117,14 @@ class AddProduct extends StatelessWidget {
                                 child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
                                     fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>T3arfHome()));
                                 },
                               ),
                               TextButton(
                                 child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
                                     fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                                 },
                               ),
                             ],
@@ -169,4 +144,3 @@ class AddProduct extends StatelessWidget {
     );
   }
 }
-
