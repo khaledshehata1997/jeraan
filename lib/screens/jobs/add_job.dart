@@ -1,20 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jeraan_project/screens/events/event_home.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/jobs/jobs_home.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
+import 'package:provider/provider.dart';
 
-class AddJob extends StatelessWidget {
+class AddJob extends StatefulWidget {
+  @override
+  _AddJobState createState() => _AddJobState();
+}
+
+class _AddJobState extends State<AddJob> {
   final TextEditingController _titleController = new TextEditingController();
+
   final TextEditingController _descController = new TextEditingController();
-  final TextEditingController _whatsController = new TextEditingController();
+
+  final TextEditingController _ageController = new TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('إضافة هواية'),
@@ -55,7 +69,7 @@ class AddJob extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: CustomTextForm(false, 'العمر',controller: _titleController,),
+                    child: CustomTextForm(false, 'العمر',controller: _ageController,),
                   ),
                   SizedBox(
                     height: Get.height*.02,
@@ -83,10 +97,165 @@ class AddJob extends StatelessWidget {
 
 
                   DefaultButton(
-                    text: 'إضافة المنتج',
-                    press: (){
-                      var result =  showDialog(
+                    text: 'إضافة الهواية',
+                    press: ()async{
+                      if(_titleController.text.trim() !="" &&
+                        _ageController.text.trim() !="" &&
+                        _descController.text.trim() !=""
+                      ){
+                        EasyLoading.show(status:"جاري اضافة الهواية");
+                       
+                        try{
+                          // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
+                        List<String> listId = [];
+                        List<double> listL = [];
+                        List<double> listG = [];
+                        List<String> listimage = [];
+                        List<String> listname = [];
+                        List<String> listdate = [];
+                        //
+                        List<String> listAge = [];
+                        List<String> listHobby = [];
+                        List<String> listdesc = [];
 
+                        QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Hobby').get();
+                        if(_myDoc.size>0){
+                      for (var i = 0; i < _myDoc.size; i++) {
+                        print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
+                        if(_myDoc.docs[i]["index"] == "${_myDoc.size-1}"){
+                          List l =  List.from(_myDoc.docs[i]["listId"]);
+                          if(l.length < 200){
+                            listimage = List.from(_myDoc.docs[i]["listImage"]);
+                            listname = List.from(_myDoc.docs[i]["listName"]);
+                            listL = List.from(_myDoc.docs[i]["listL"]);
+                            listG = List.from(_myDoc.docs[i]["listG"]);
+                            listdate = List.from(_myDoc.docs[i]["listDate"]);
+                            listId = List.from(_myDoc.docs[i]["listId"]);
+
+                            listHobby = List.from(_myDoc.docs[i]["listHobby"]);
+                            listAge = List.from(_myDoc.docs[i]["listAge"]);
+                            listdesc = List.from(_myDoc.docs[i]["listDesc"]);
+
+                            listimage.add(appState.getimage);
+                            listname.add(appState.getname);
+                            listId.add(FirebaseAuth.instance.currentUser.uid);
+                            listdate.add(DateTime.now().toString());
+                            listL.add(appState.getlat);
+                            listG.add(appState.getlong);
+
+
+                            listHobby.add(_titleController.text.trim().toString());
+                            listAge.add(_ageController.text.trim().toString());
+                            listdesc.add(_descController.text.trim().toString());
+                            
+
+                            FirebaseFirestore.instance.collection("Hobby").doc(_myDoc.docs[i].id).update({
+                              "listImage" : listimage,
+                              "listName" : listname,
+                              "listId" : listId,
+                              "listL" : listL,
+                              "listG" : listG,
+                              "listDate" : listdate,
+                              
+                              "listHobby" : listHobby,
+                              "listAge" : listAge,
+                              "listDesc" : listdesc
+                              
+                            }).then((value){
+                              EasyLoading.dismiss();
+                              showDialogNow();
+                            });
+                          }else{
+                            listimage.add(appState.getimage);
+                            listname.add(appState.getname);
+                            listId.add(FirebaseAuth.instance.currentUser.uid);
+                            listdate.add(DateTime.now().toString());
+                            listL.add(appState.getlat);
+                            listG.add(appState.getlong);
+
+                            listHobby.add(_titleController.text.trim().toString());
+                            listAge.add(_ageController.text.trim().toString());
+                            listdesc.add(_descController.text.trim().toString());
+
+                            FirebaseFirestore.instance.collection("Hobby").add({
+                              "index" : _myDoc.size.toString(),
+                              "listImage" : listimage,
+                              "listName" : listname,
+                              "listId" : listId,
+                              "listL" : listL,
+                              "listG" : listG,
+                              "listDate" : listdate,
+                              
+                              "listHobby" : listHobby,
+                              "listAge" : listAge,
+                              "listDesc" : listdesc
+                            }).then((value){
+                              EasyLoading.dismiss();
+                              showDialogNow();
+                            });
+
+                          }
+                          break;
+                        }
+                        
+                        }
+                        
+                        }else{
+                            listimage.add(appState.getimage);
+                            listname.add(appState.getname);
+                            listId.add(FirebaseAuth.instance.currentUser.uid);
+                            listdate.add(DateTime.now().toString());
+                            listL.add(appState.getlat);
+                            listG.add(appState.getlong);
+
+                            listHobby.add(_titleController.text.trim().toString());
+                            listAge.add(_ageController.text.trim().toString());
+                            listdesc.add(_descController.text.trim().toString());
+
+                            FirebaseFirestore.instance.collection("Hobby").add({
+                              "index" : _myDoc.size.toString(),
+                              "listImage" : listimage,
+                              "listName" : listname,
+                              "listId" : listId,
+                              "listL" : listL,
+                              "listG" : listG,
+                              "listDate" : listdate,
+                              
+                              "listHobby" : listHobby,
+                              "listAge" : listAge,
+                              "listDesc" : listdesc
+                            }).then((value){
+                              EasyLoading.dismiss();
+                              showDialogNow();
+                            });
+
+                        }
+
+                        }catch(e){
+                          EasyLoading.dismiss();
+                          EasyLoading.showError("عفوا حدث خطأ ما" , duration: Duration(milliseconds: 600));
+                          print(e);
+                        }
+                       
+                        
+                      }else{
+                        EasyLoading.showInfo("تأكد من ملئ البيانات",duration: Duration(milliseconds:900));
+                      }
+                      
+                    },
+                  )
+                ],
+              ),
+            ),
+
+
+          ],
+        ),
+      ),
+    );
+  }
+  showDialogNow(){
+    var result =  showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
@@ -106,30 +275,21 @@ class AddJob extends StatelessWidget {
                                 child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
                                     fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>JobsHome()));
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>JobsHome()));
                                 },
                               ),
                               TextButton(
                                 child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
                                     fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                 Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },
                               ),
                             ],
                           );
                         },
                       );
-                    },
-                  )
-                ],
-              ),
-            ),
-
-
-          ],
-        ),
-      ),
-    );
   }
 }

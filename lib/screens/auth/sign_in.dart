@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jeraan_project/constants.dart';
+import 'package:jeraan_project/main.dart';
 import 'package:jeraan_project/screens/auth/sign_up.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
-
 import 'forget_password.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -140,14 +141,12 @@ class _SignInState extends State<SignIn> {
                       String email, password;
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-
                         setState(() {
                           isLoading = true;
                         });
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                        email = _emailController.text.toLowerCase();
+                        email = _emailController.text.toLowerCase().trim();
                         password = _passwordController.text;
-                        //loginData(email, password);
+                        loginData(email, password);
                       }
                     },
                   )
@@ -189,42 +188,31 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  // loginData(String email, String password) async {
-  //   try {
-  //     print(email);
-  //     print(password);
-  //     var url = "https://api.hvacrtoolbox.com/api/auth/login";
-  //
-  //     var request = await http.post(
-  //       url,
-  //       headers: <String, String>{
-  //         'Content-Type': 'application/json; charset=UTF-8',
-  //       },
-  //       body:
-  //       jsonEncode(<String, String>{'email': email, 'password': password}),
-  //     );
-  //     print(request.body);
-  //     var data = jsonDecode(request.body);
-  //
-  //     if ("${data['success']}" == "true") {
-  //       saveTok("${data['token']}");
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => MainScreen()),
-  //             (Route<dynamic> route) => false,
-  //       );
-  //     } else {
-  //       setState(() {
-  //         isLoading = false;
-  //         message = data['message'];
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     setState(() {
-  //       isLoading = false;
-  //       message = "Error From Server or Network";
-  //     });
-  //   }
-  // }
+  loginData(String email, String password) async {
+    try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+          if(value.user.uid != null){
+          Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyApp()),
+              (Route<dynamic> route) => false,
+        );
+          }
+        });
+        
+    } on Exception catch (exception) {
+      print(exception);
+      setState(() {
+        isLoading = false;
+        message = "${exception.toString()}";
+      });
+    }catch (e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+        message = "${e.toString()}";
+      });
+    }
+  }
 }

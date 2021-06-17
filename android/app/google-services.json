@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "923447145343",
+    "project_id": "jeeran-24c62",
+    "storage_bucket": "jeeran-24c62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923447145343:android:ed26d65ef3df993c53a04a",
+        "android_client_info": {
+          "package_name": "com.jeraan_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923447145343-g7f58k2cugjfpuc7etu0lejffe24mv4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7LRM2Mou-5Ae5lgSaFp_8Ze4UWHe5qmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923447145343-g7f58k2cugjfpuc7etu0lejffe24mv4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

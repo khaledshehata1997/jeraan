@@ -9,14 +9,14 @@ import 'package:jeraan_project/screens/serves/alerts.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
 import 'package:provider/provider.dart';
-import 'add_post_t3arf.dart';
+import 'add_post_Ask.dart';
 
-class T3arfHome extends StatefulWidget {
+class AskHome extends StatefulWidget {
   @override
-  _T3arfHomeState createState() => _T3arfHomeState();
+  _AskHomeState createState() => _AskHomeState();
 }
 
-class _T3arfHomeState extends State<T3arfHome> {
+class _AskHomeState extends State<AskHome> {
   ScrollController _scrollController = new ScrollController();
   Color fav=Colors.grey[400];
   bool isfav=false;
@@ -70,9 +70,9 @@ void dispose() {
     AppState appState = Provider.of<AppState>(context , listen: false);
     LatLng l1 = LatLng(appState.getlat , appState.getlong);
     double myDistance = double.parse(appState.getnearest) * 1000;
-    QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('T3arf').get();
+    QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Ask').get();
     if(_myDoc.size>0){
-    FirebaseFirestore.instance.collection("T3arf").where("index", isEqualTo: (_myDoc.size-1).toString()).get().then((value){
+    FirebaseFirestore.instance.collection("Ask").where("index", isEqualTo: (_myDoc.size-1).toString()).get().then((value){
       mainlistimage = List.from(value.docs[0]["listImage"]);
       mainlistage = List.from(value.docs[0]["listAge"]);
       mainlistjop = List.from(value.docs[0]["listJops"]);
@@ -124,7 +124,7 @@ void dispose() {
     mainlistname = []; mainlistpost = []; mainlistphone = [];
     mainlistL = []; mainlistG = [];
     mainlistdate = []; mainlistId = [];
-    FirebaseFirestore.instance.collection("T3arf").where("index", isEqualTo: (int.parse(myIndex) - 1).toString()).get().then((value){
+    FirebaseFirestore.instance.collection("Ask").where("index", isEqualTo: (int.parse(myIndex) - 1).toString()).get().then((value){
       mainlistimage = List.from(value.docs[0]["listImage"]);
       mainlistage = List.from(value.docs[0]["listAge"]);
       mainlistjop = List.from(value.docs[0]["listJops"]);
@@ -176,14 +176,14 @@ void dispose() {
                   width: MediaQuery.of(context).size.width,
                   child: TextButton(
                       onPressed: ()async{
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddPostT3arf()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddPostAsk()));
                       },
-                      child: Text('إضافة منشور',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
+                      child: Text('إضافة استشارة',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
                 );
               }),
         ),
       appBar: AppBar(
-        title: Text('تعارف الجيران '),
+        title: Text('استشارات الجيران '),
         centerTitle: true,
       ),
       body: Container(
@@ -222,7 +222,7 @@ void dispose() {
                 //physics: NeverScrollableScrollPhysics(),
                 itemCount: listimage.length ?? 0,
                 itemBuilder: (context,i){
-                  return t3arf(listimage[i], listname[i], listage[i], listjop[i], listpost[i], listphone[i], listId[i] , listDistance[i].toInt() , listdate[i]);
+                  return Ask(listimage[i], listname[i], listage[i], listjop[i], listpost[i], listphone[i], listId[i] , listDistance[i].toInt() , listdate[i]);
                 },
                ),
             ),
@@ -235,7 +235,7 @@ void dispose() {
     );
   }
 
-  Widget t3arf(String image,String name,String age,String job,String text,String phone,String id , int distance , String date){
+  Widget Ask(String image,String name,String age,String job,String text,String phone,String id , int distance , String date){
     int different = DateTime.now().difference(DateTime.parse(date)).inMinutes;
     int hour = DateTime.now().difference(DateTime.parse(date)).inHours;
     int days = DateTime.now().difference(DateTime.parse(date)).inDays;
@@ -340,7 +340,7 @@ void dispose() {
           ),
           SizedBox(height: Get.height*.01,),
           Divider(thickness: 2,),
-          Text('$text'
+          Text(' $text'
 
             ,style: TextStyle(fontSize: 16)
             ,textDirection: TextDirection.rtl,),
@@ -371,4 +371,4 @@ void dispose() {
   }
 }
 
-//snapshot.data.docs.map((doc)=>t3arf(doc["image"], doc["name"], doc["age"], doc["jop"], doc["post"], doc["phone"] , doc["uid"])).toList()
+//snapshot.data.docs.map((doc)=>Ask(doc["image"], doc["name"], doc["age"], doc["jop"], doc["post"], doc["phone"] , doc["uid"])).toList()

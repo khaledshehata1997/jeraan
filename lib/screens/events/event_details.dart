@@ -1,7 +1,17 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
+import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
 class EventDetails extends StatefulWidget {
+  final String image;
+  final String name;
+  final String id;
+  final int distance;
+  final String eventDate;
+  final String type;
+  final String desc;
+  EventDetails(this.image,this.name,this.id,this.distance,this.type,this.eventDate,this.desc);
   @override
   _EventDetailsState createState() => _EventDetailsState();
 }
@@ -38,25 +48,30 @@ class _EventDetailsState extends State<EventDetails> {
               child:SingleChildScrollView(
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage:NetworkImage('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6'),
-                          maxRadius: 25,
-                        ),
-                        Text(
-                          'Khaled Mohamed',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17),
-                        ),
-                        IconButton(icon: Icon(Icons.favorite,color: fav,size: 30,), onPressed: (){
-                          setState(() {
-                            isfav= !isfav;
-                            isfav?fav=Colors.grey[400]:fav=Colors.red;
-                          });
-                        })
-                      ],
+                    GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen("${widget.id}")));
+                },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:FirebaseImage(widget.image),
+                            maxRadius: 25,
+                          ),
+                          Text(
+                            widget.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17),
+                          ),
+                          IconButton(icon: Icon(Icons.favorite,color: fav,size: 30,), onPressed: (){
+                            setState(() {
+                              isfav= !isfav;
+                              isfav?fav=Colors.grey[400]:fav=Colors.red;
+                            });
+                          })
+                        ],
+                      ),
                     ),
                     Divider(
                       height: 15,
@@ -77,7 +92,7 @@ class _EventDetailsState extends State<EventDetails> {
                           width: Get.width*.4,
                           height: Get.height*.04,
                           child: Text(
-                            'عيد ميلاد ',
+                            widget.type,
                             style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),textDirection: TextDirection.rtl,
                           ),
                         ),
@@ -92,12 +107,13 @@ class _EventDetailsState extends State<EventDetails> {
                           width: Get.width*.4,
                           height: Get.height*.04,
                           child: Text(
-                            '24/12/2021',
+                            widget.eventDate,
                             style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.bold),textDirection: TextDirection.rtl,
                           ),
                         ),
                       ],
                     ),
+                    SizedBox(height:15),
                     Stack(
                       alignment: Alignment.center,
                       children: [
@@ -107,16 +123,16 @@ class _EventDetailsState extends State<EventDetails> {
                           child: Column(
                             children: [
                               Text(
-                                  'ادعوكم جيراني لحضور حفل عيد ميلاد ابني كريم .وارجو منكم الحضور في الموعد المحدد ومعكم الاسرة الكريمة لمشاركة ابني فرحته. دمتم خير جيران :)',style:
-                                TextStyle(fontSize: 18,color: Colors.pink[900]),textDirection: TextDirection.rtl,),
-                              Container(
-                                child: Image.network(
-                                  'https://www.cocokids.org/wp-content/uploads/2019/12/Find-Child-Care2.jpg',fit: BoxFit.cover,),
-                                margin: EdgeInsets.only(top: 18),
-                                color: Colors.white,
-                                width: Get.width*.65,
-                                height: Get.height*.2,
-                              )
+                                  widget.desc,style:
+                                TextStyle(fontSize: 18,color: Colors.pink[900]),textDirection: TextDirection.rtl,textAlign: TextAlign.center,),
+                              // Container(
+                              //   child: Image.network(
+                              //     'https://www.cocokids.org/wp-content/uploads/2019/12/Find-Child-Care2.jpg',fit: BoxFit.cover,),
+                              //   margin: EdgeInsets.only(top: 18),
+                              //   color: Colors.white,
+                              //   width: Get.width*.65,
+                              //   height: Get.height*.2,
+                              // )
 
                             ],
                           ),
@@ -132,38 +148,43 @@ class _EventDetailsState extends State<EventDetails> {
                         onPressed:() {
                           var result =  showDialog(
 
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title:Image.asset('images/text.png',width: 60,height: 50,),
-                                content: Row(
-                                  children: [
-                                    Image.asset('images/smile.png',width: 30,height: 30,),
-                                    Text('شكرا علي الاستجابة لهذه المناسبة :)',style: TextStyle(
-                                        fontSize: 15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
-                                  ],
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                actions: [
-                                  Text(''
-                                      'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.',style: TextStyle(
-                                        fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
-
-
-                                  TextButton(
-                                    child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                        fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                                    },
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title:Image.asset('images/text.png',width: 60,height: 50,),
+                                  content: Row(
+                                    children: [
+                                      Image.asset('images/smile.png',width: 30,height: 30,),
+                                      Text('شكرا علي الاهتمام بهذه المناسبة :)',style: TextStyle(
+                                          fontSize: 15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                    ],
                                   ),
-                                ],
-                              );
-                            },
-                          );
-                        } ,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(''
+                                          'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.',style: TextStyle(
+                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen(widget.id)));
+                                      },
+                                    ),
+
+
+                                    TextButton(
+                                      child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
+                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
+                                      onPressed: () {
+                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                        },
                         child:Text('أنوي الحضور',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
                   ],
                 ),

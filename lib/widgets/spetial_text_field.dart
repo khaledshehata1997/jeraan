@@ -39,7 +39,7 @@ class _CustomTextFormState extends State<SpetialCustomTextForm> {
                     fontSize:15
                 ),
                 // contentPadding: new EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-                contentPadding: EdgeInsets.only(left: 15 , right:15),
+                contentPadding: EdgeInsets.only(left: 15 , right:15 , top: 8 , bottom: 8),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(

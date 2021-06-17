@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:jeraan_project/screens/ask/ask_home.dart';
 import 'package:jeraan_project/screens/e_commerse/e_commerse_home.dart';
 import 'package:jeraan_project/screens/events/event_home.dart';
 import 'package:jeraan_project/screens/help/help_home.dart';
@@ -16,7 +17,7 @@ class HomeGrid extends StatelessWidget {
  Fun3(){Navigator.push(context, MaterialPageRoute(builder: (context)=>ECommerseHome()));};
  Fun4(){Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpHome()));};
  Fun5(){Navigator.push(context, MaterialPageRoute(builder: (context)=>JobsHome()));};
- Fun6(){};
+ Fun6(){Navigator.push(context, MaterialPageRoute(builder: (context)=>AskHome()));};
     return SingleChildScrollView(
       child: Column(
         children: [

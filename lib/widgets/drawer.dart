@@ -1,11 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geodesy/geodesy.dart';
 import 'package:jeraan_project/screens/auth/sign_in.dart';
 import 'package:jeraan_project/screens/drawer_sections/my_activity.dart';
 import 'package:jeraan_project/screens/drawer_sections/settings.dart';
 import 'package:jeraan_project/screens/drawer_sections/user_profile.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
+import 'package:provider/provider.dart';
 
 Widget drawer(context) {
+  AppState appState = Provider.of<AppState>(context);
   return Drawer(
       child: Container(
           padding: EdgeInsets.all(20),
@@ -21,11 +27,12 @@ Widget drawer(context) {
                           height: 60,
                           child: CircleAvatar(
                             radius: 27,
-                            backgroundImage: NetworkImage('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6'),
+                            backgroundImage: FirebaseImage((appState.image)?? "gs://jeeran-24c62.appspot.com/391-3918613_personal-service-platform-person-icon-circle-png-transparent.png"),
                           )),
                       SizedBox(width: 12),
-                      Text("Khaled Mohamed",
-                          style: TextStyle(color: Colors.pink[900], fontSize: 20))
+                      Text(appState.getname ?? "",
+                          style:
+                              TextStyle(color: Colors.pink[900], fontSize: 20))
                     ],
                   ),
                 ),
@@ -34,20 +41,26 @@ Widget drawer(context) {
                   height: 15,
                 ),
                 drawerCard(context, "images/user_6.png", "ملفي الشخصي", 1),
-                drawerCard(context, "images/subscription.png", "نشاطي", 2),
-                drawerCard(context, "images/youtube_2.png", "الاعدادات", 3),
+                // drawerCard(context, "images/subscription.png", "نشاطي", 2),
+                //drawerCard(context, "images/youtube_2.png", "الاعدادات", 3),
                 drawerCard(context, "images/settings.png", "عن التطبيق", 4),
-                drawerCard(context, "images/logo_v_en_2.png", "الشروط والخصوصية", 5),
-                drawerCard(context, "images/logo_v_en_2.png",
-                    "التواصل معنا", 6),
-
+                drawerCard(
+                    context, "images/logo_v_en_2.png", "الشروط والخصوصية", 5),
+                drawerCard(
+                    context, "images/logo_v_en_2.png", "التواصل معنا", 6),
                 Container(
                     height: 80,
                     alignment: Alignment.center,
                     child: GestureDetector(
-                                  onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
-                                  },
+                      onTap: () {
+                        FirebaseAuth.instance.signOut().then((value) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignIn()),
+                            (Route<dynamic> route) => false,
+                          );
+                        });
+                      },
                       child: Container(
                         alignment: Alignment.center,
                         height: 50,
@@ -59,7 +72,6 @@ Widget drawer(context) {
                         ),
                         child: Text("تسجيل الخروج",
                             style: TextStyle(
-
                                 color: Colors.pink[900],
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600)),
@@ -71,12 +83,13 @@ Widget drawer(context) {
 }
 
 Widget drawerCard(context, imageurl, text, id) {
+  AppState appState = Provider.of<AppState>(context ,listen: false);
   return GestureDetector(
     onTap: () {
       switch (id) {
         case 1:
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => UserProfile()));
+              context, MaterialPageRoute(builder: (context) => UserProfile(true , LatLng(appState.lat, appState.long) , FirebaseAuth.instance.currentUser.uid)));
           break;
         case 2:
           Navigator.push(
@@ -114,7 +127,8 @@ Widget drawerCard(context, imageurl, text, id) {
           alignment: Alignment.center,
           color: Color(0xfffdfdfd),
           height: 50,
-          child: Text(text, style: TextStyle(color: Colors.black, fontSize: 18)),
+          child:
+              Text(text, style: TextStyle(color: Colors.black, fontSize: 18)),
         ),
         Divider(
           thickness: 1,

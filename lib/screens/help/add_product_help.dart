@@ -1,20 +1,40 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jeraan_project/screens/e_commerse/e_commerse_home.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jeraan_project/screens/help/help_home.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
+import 'package:jeraan_project/screens/serves/uploadPic.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
+import 'package:provider/provider.dart';
 
-class AddProductHelp extends StatelessWidget {
+class AddProductHelp extends StatefulWidget {
+  @override
+  _AddProductHelpState createState() => _AddProductHelpState();
+}
+
+class _AddProductHelpState extends State<AddProductHelp> {
   final TextEditingController _titleController = new TextEditingController();
+
   final TextEditingController _descController = new TextEditingController();
+
   final TextEditingController _whatsController = new TextEditingController();
+
+  File image ;
+
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('إضافة منتج'),
@@ -81,20 +101,40 @@ class AddProductHelp extends StatelessWidget {
                   SizedBox(
                     height: Get.height*.02,
                   ),
+                  image == null ?
+                  Container():
+                  Container(
+                    margin: EdgeInsets.only(bottom: Get.height*.02),
+                    height: 180,
+                    width: MediaQuery.of(context).size.width,
+                    child: Image.file(image , fit: BoxFit.contain),
+                  ),
                   Center(
-                    child: Container(
-                      color: Colors.grey[100],
-                      height: Get.height*.15,
-                      width: Get.width*.4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.add_a_photo,color: Colors.pink[900],size: 30,),
-                          SizedBox(
-                            width: Get.width*.03,
-                          ),
-                          Text('إضافة صورة',style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
-                        ],
+                    child: GestureDetector(
+                      onTap: ()async{
+                        ImagePicker _picker = ImagePicker();
+                        await _picker.getImage(source: ImageSource.gallery).then((value) {
+                          if (value != null) {
+                            setState(() {
+                           image = File(value.path);
+                         }); 
+                          }
+                        });
+                      },
+                      child: Container(
+                        color: Colors.grey[100],
+                        height: Get.height*.15,
+                        width: Get.width*.4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add_a_photo,color: Colors.pink[900],size: 30,),
+                            SizedBox(
+                              width: Get.width*.03,
+                            ),
+                            Text(image == null ?'إضافة صورة' : 'تغيير الصورة',style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -104,8 +144,170 @@ class AddProductHelp extends StatelessWidget {
                   DefaultButton(
                     text: 'إضافة المنتج',
                     press: (){
-                      var result =  showDialog(
+                      if(_titleController.text.trim() !="" &&
+                        _whatsController.text.trim() !="" &&
+                        _descController.text.trim() !="" &&
+                        image != null
+                      ){
+                        EasyLoading.show(status:"جاري اضافة منشورك");
+                        uploadFirebaseImage(image).then((boo) async{
+                        if (boo != null) {
+                        try{
+                          // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
+                        List<String> listId = [];
+                        List<double> listL = [];
+                        List<double> listG = [];
+                        List<String> listimage = [];
+                        List<String> listname = [];
+                        List<String> listdate = [];
+                        //
+                        List<String> listphone = [];
+                        List<String> listPhotos = [];
+                        List<String> listProduct = [];
+                        List<String> listdesc = [];
+                        QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Est3arat').get();
+                        if(_myDoc.size>0){
+                      for (var i = 0; i < _myDoc.size; i++) {
+                        print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
+                        if(_myDoc.docs[i]["index"] == "${_myDoc.size-1}"){
+                          List l =  List.from(_myDoc.docs[i]["listId"]);
+                          if(l.length < 200){
+                            listimage = List.from(_myDoc.docs[i]["listImage"]);
+                            listname = List.from(_myDoc.docs[i]["listName"]);
+                            listL = List.from(_myDoc.docs[i]["listL"]);
+                            listG = List.from(_myDoc.docs[i]["listG"]);
+                            listdate = List.from(_myDoc.docs[i]["listDate"]);
+                            listId = List.from(_myDoc.docs[i]["listId"]);
 
+                            listphone = List.from(_myDoc.docs[i]["listPhone"]);
+                            listPhotos = List.from(_myDoc.docs[i]["listPhotos"]);
+                            listProduct = List.from(_myDoc.docs[i]["listProduct"]);
+                            listdesc = List.from(_myDoc.docs[i]["listDesc"]);
+
+                            listimage.add(appState.getimage);
+                            listname.add(appState.getname);
+                            listId.add(FirebaseAuth.instance.currentUser.uid);
+                            listdate.add(DateTime.now().toString());
+                            listL.add(appState.getlat);
+                            listG.add(appState.getlong);
+
+                            listphone.add(_whatsController.text.trim().toString());
+                            listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+                            listProduct.add(_titleController.text.trim().toString());
+                            listdesc.add(_descController.text.trim().toString());
+
+                            FirebaseFirestore.instance.collection("Est3arat").doc(_myDoc.docs[i].id).update({
+                              "listImage" : listimage,
+                              "listName" : listname,
+                              "listId" : listId,
+                              "listL" : listL,
+                              "listG" : listG,
+                              "listDate" : listdate,
+                              
+                              "listPhone": listphone,
+                              "listPhotos" : listPhotos,
+                              "listProduct" : listProduct,
+                              "listDesc" : listdesc
+                            }).then((value){
+                              EasyLoading.dismiss();
+                              showDialogNow();
+                            });
+                          }else{
+                            listimage.add(appState.getimage);
+                            listname.add(appState.getname);
+                            listId.add(FirebaseAuth.instance.currentUser.uid);
+                            listdate.add(DateTime.now().toString());
+                            listL.add(appState.getlat);
+                            listG.add(appState.getlong);
+
+                            listphone.add(_whatsController.text.trim().toString());
+                            listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+                            listProduct.add(_titleController.text.trim().toString());
+                            listdesc.add(_descController.text.trim().toString());
+
+                            FirebaseFirestore.instance.collection("Est3arat").add({
+                              "index" : _myDoc.size.toString(),
+                              "listImage" : listimage,
+                              "listName" : listname,
+                              "listId" : listId,
+                              "listL" : listL,
+                              "listG" : listG,
+                              "listDate" : listdate,
+                              
+                              "listPhone": listphone,
+                              "listPhotos" : listPhotos,
+                              "listProduct" : listProduct,
+                              "listDesc" : listdesc
+                            }).then((value){
+                              EasyLoading.dismiss();
+                              showDialogNow();
+                            });
+
+                          }
+                          break;
+                        }
+                        
+                        }
+                        
+                        }else{
+                            listimage.add(appState.getimage);
+                            listname.add(appState.getname);
+                            listId.add(FirebaseAuth.instance.currentUser.uid);
+                            listdate.add(DateTime.now().toString());
+                            listL.add(appState.getlat);
+                            listG.add(appState.getlong);
+
+                            listphone.add(_whatsController.text.trim().toString());
+                            listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+                            listProduct.add(_titleController.text.trim().toString());
+                            listdesc.add(_descController.text.trim().toString());
+
+                            FirebaseFirestore.instance.collection("Est3arat").add({
+                              "index" : _myDoc.size.toString(),
+                              "listImage" : listimage,
+                              "listName" : listname,
+                              "listId" : listId,
+                              "listL" : listL,
+                              "listG" : listG,
+                              "listDate" : listdate,
+                              
+                              "listPhone": listphone,
+                              "listPhotos" : listPhotos,
+                              "listProduct" : listProduct,
+                              "listDesc" : listdesc
+                            }).then((value){
+                              EasyLoading.dismiss();
+                              showDialogNow();
+                            });
+
+                        }
+
+                        }catch(e){
+                          EasyLoading.dismiss();
+                          EasyLoading.showError("عفوا حدث خطأ ما" , duration: Duration(milliseconds: 600));
+                          print(e);
+                        }
+                        }
+                      });
+                        
+                      }else{
+                        EasyLoading.showInfo("تأكد من ملئ البيانات و إرفاق صورة",duration: Duration(milliseconds:900));
+                      }
+                     
+                    },
+                  )
+                ],
+              ),
+            ),
+
+
+          ],
+        ),
+      ),
+    );
+  }
+  showDialogNow(){
+     var result =  showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
@@ -125,30 +327,103 @@ class AddProductHelp extends StatelessWidget {
                                 child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
                                     fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpHome()));
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HelpHome()));
                                 },
                               ),
                               TextButton(
                                 child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
                                     fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },
                               ),
                             ],
                           );
                         },
                       );
-                    },
-                  )
-                ],
-              ),
-            ),
-
-
-          ],
-        ),
-      ),
-    );
   }
 }
+
+
+
+//  List<String> listId = [];
+//                         List<double> listL = [];
+//                         List<double> listG = [];
+//                         List<String> listimage = [];
+//                         List<String> listname = [];
+//                         List<String> listdate = [];
+//                         //
+//                         List<String> listphone = [];
+//                         List<String> listPhotos = [];
+//                         List<String> listProduct = [];
+//                         List<String> listdesc = [];
+//                         QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Est3arat').get();
+//                         if(_myDoc.size>0){
+//                       for (var i = 0; i < _myDoc.size; i++) {
+//                         print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
+//                         if(_myDoc.docs[i]["index"] == "${_myDoc.size-1}"){
+//                           List l =  List.from(_myDoc.docs[i]["listId"]);
+//                           if(l.length <= 200){
+//                             listimage = List.from(_myDoc.docs[i]["listImage"]);
+//                             listname = List.from(_myDoc.docs[i]["listName"]);
+//                             listL = List.from(_myDoc.docs[i]["listL"]);
+//                             listG = List.from(_myDoc.docs[i]["listG"]);
+//                             listdate = List.from(_myDoc.docs[i]["listDate"]);
+//                             listId = List.from(_myDoc.docs[i]["listId"]);
+
+//                             listphone = List.from(_myDoc.docs[i]["listPhone"]);
+//                             listPhotos = List.from(_myDoc.docs[i]["listPhotos"]);
+//                             listProduct = List.from(_myDoc.docs[i]["listProduct"]);
+//                             listdesc = List.from(_myDoc.docs[i]["listDesc"]);
+
+//                             listimage.add(appState.getimage);
+//                             listname.add(appState.getname);
+//                             listId.add(FirebaseAuth.instance.currentUser.uid);
+//                             listdate.add(DateTime.now().toString());
+//                             listL.add(appState.getlat);
+//                             listG.add(appState.getlong);
+
+//                             listphone.add(_whatsController.text.trim().toString());
+//                             listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+//                             listProduct.add(_titleController.text.trim().toString());
+//                             listdesc.add(_descController.text.trim().toString());
+
+//                             FirebaseFirestore.instance.collection("Est3arat").doc(_myDoc.docs[i].id).update({
+//                               "listImage" : listimage,
+//                               "listName" : listname,
+//                               "listId" : listId,
+//                               "listL" : listL,
+//                               "listG" : listG,
+//                               "listDate" : listdate,
+                              
+//                               "listPhone": listphone,
+//                               "listPhotos" : listPhotos,
+//                               "listProduct" : listProduct,
+//                               "listDesc" : listdesc
+//                             }).then((value){
+//                               EasyLoading.dismiss();
+//                               showDialogNow();
+//                             });
+//                           }else{
+                            
+//                           }
+//                         }
+//                         break;
+//                         }
+                        
+//                         }else{
+
+//                         }
+
+//                         }catch(e){
+//                           EasyLoading.dismiss();
+//                           EasyLoading.showError("عفوا حدث خطأ ما" , duration: Duration(milliseconds: 600));
+//                         }
+//                         }
+//                       });
+                        
+//                       }else{
+//                         EasyLoading.showInfo("تأكد من ملئ البيانات و إرفاق صورة",duration: Duration(milliseconds:900));
+//                       }

@@ -5,19 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
-import 'package:jeraan_project/screens/t3arf/t3arf_home.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
 import 'package:provider/provider.dart';
 
-class AddPostT3arf extends StatefulWidget {
+import 'ask_home.dart';
+
+class AddPostAsk extends StatefulWidget {
   @override
-  _AddPostT3arfState createState() => _AddPostT3arfState();
+  _AddPostAskState createState() => _AddPostAskState();
 }
 
-class _AddPostT3arfState extends State<AddPostT3arf> {
+class _AddPostAskState extends State<AddPostAsk> {
   TextEditingController _ageController = new TextEditingController();
 
   TextEditingController _jobController = new TextEditingController();
@@ -42,7 +43,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('إضافة منشور'),
+        title: Text('إضافة استشارة'),
         centerTitle: true,
       ),
       body: Form(
@@ -99,7 +100,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                   Padding(
                     padding: const EdgeInsets.only(right:15.0),
                     child: Text(
-                      "المنشور",
+                      "تفاصيل الاستشارة",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -110,7 +111,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: SpetialCustomTextForm(
 
-                      false, 'ادخل المنشور',controller: _postController,),
+                      false, 'ادخل الاستشارة',controller: _postController,),
                   ),
 
 
@@ -118,11 +119,11 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                     height: Get.height*.05,
                   ),
                   DefaultButton(
-                    text: 'إضافة المنشور',
+                    text: 'إضافة استشارة',
                     press: ()async{
                       bool success = false;
-                      EasyLoading.show(status:"جاري اضافة منشورك");
-                      // await FirebaseFirestore.instance.collection("T3arf").add({
+                      EasyLoading.show(status:"جاري اضافة استشارتك");
+                      // await FirebaseFirestore.instance.collection("Ask").add({
                       //   "uid" : FirebaseAuth.instance.currentUser.uid,
                       //   "image" : appState.getimage,
                       //   "name" : appState.getname,
@@ -145,7 +146,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                       List<String> listpost = [];
                       List<String> listphone = [];
                       List<String> listId = [];
-                      QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('T3arf').get();
+                      QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Ask').get();
                       if(_myDoc.size>0){
                       for (var i = 0; i < _myDoc.size; i++) {
                         print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
@@ -172,7 +173,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             listdate.add(DateTime.now().toString());
                             listL.add(appState.getlat);
                             listG.add(appState.getlong);
-                            FirebaseFirestore.instance.collection("T3arf").doc(_myDoc.docs[i].id).update({
+                            FirebaseFirestore.instance.collection("Ask").doc(_myDoc.docs[i].id).update({
                               "listImage" : listimage,
                               "listAge" : listage,
                               "listJops" : listjop,
@@ -194,7 +195,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
+                                Text('تم الاضافة بنجاح :)',style: TextStyle(
                                     fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -208,7 +209,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>T3arfHome()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AskHome()));
                                 },
                               ),
                               TextButton(
@@ -234,7 +235,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             listdate.add(DateTime.now().toString());
                             listL.add(appState.getlat);
                             listG.add(appState.getlong);
-                            FirebaseFirestore.instance.collection("T3arf").add({
+                            FirebaseFirestore.instance.collection("Ask").add({
                               "index" : _myDoc.size.toString(),
                               "listImage" : listimage,
                               "listAge" : listage,
@@ -257,7 +258,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
+                                Text('تم الاضافة بنجاح :)',style: TextStyle(
                                     fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -271,7 +272,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>T3arfHome()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AskHome()));
                                 },
                               ),
                               TextButton(
@@ -301,7 +302,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             listdate.add(DateTime.now().toString());
                             listL.add(appState.getlat);
                             listG.add(appState.getlong);
-                            FirebaseFirestore.instance.collection("T3arf").add({
+                            FirebaseFirestore.instance.collection("Ask").add({
                               "index" : _myDoc.size.toString(),
                               "listImage" : listimage,
                               "listAge" : listage,
@@ -324,7 +325,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
+                                Text('تم الاضافة بنجاح :)',style: TextStyle(
                                     fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -338,7 +339,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>T3arfHome()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AskHome()));
                                 },
                               ),
                               TextButton(

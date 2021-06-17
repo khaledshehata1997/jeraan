@@ -40,7 +40,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
         items: [
           Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: Colors.pink[900],
                   borderRadius: BorderRadius.circular(10)
@@ -50,7 +50,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
           ),
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 color: Colors.pink[900],
                 borderRadius: BorderRadius.circular(10)
@@ -61,7 +61,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
           ),
           Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(7),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: Colors.pink[900],
                   borderRadius: BorderRadius.circular(10)

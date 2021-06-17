@@ -1,7 +1,17 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
+import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
 class JobDetail extends StatefulWidget {
+  final String image;
+  final String name;
+  final String id;
+  final int distance;
+  final String age;
+  final String hobby;
+  final String desc;
+  JobDetail(this.image,this.name,this.id,this.distance,this.age,this.hobby,this.desc);
   @override
   _JobDetailState createState() => _JobDetailState();
 }
@@ -21,8 +31,8 @@ class _JobDetailState extends State<JobDetail> {
         body: ListView(
           children: [
             Container(
-                margin: EdgeInsets.only(top: 15,left: 8,right: 8,bottom: 10),
-                padding: EdgeInsets.only(left: 8,right: 8,bottom: 8,top: 8),
+                margin: EdgeInsets.only(top: 10,left: 8,right: 8,bottom: 10),
+                padding: EdgeInsets.only(left: 18,right: 18,bottom: 20,top: 12),
                 width: Get.width,
                 // height: Get.height*.3,
                 decoration: BoxDecoration(
@@ -38,25 +48,48 @@ class _JobDetailState extends State<JobDetail> {
                 child:SingleChildScrollView(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:NetworkImage('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6'),
-                            maxRadius: 25,
-                          ),
-                          Text(
-                            'Khaled Mohamed',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17),
-                          ),
-                          IconButton(icon: Icon(Icons.favorite,color: fav,size: 30,), onPressed: (){
-                            setState(() {
-                              isfav= !isfav;
-                              isfav?fav=Colors.grey[400]:fav=Colors.red;
-                            });
-                          })
-                        ],
+                      GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen("${widget.id}")));
+                },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:FirebaseImage(widget.image),
+                              maxRadius: 25,
+                            ),
+                            Text(
+                              widget.name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17),
+                            ),
+                            Column(
+                                          children: [
+                        Text(
+                                          'يبعد عنك',
+                                          style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                        Row(
+                          children: [
+                             Text(
+                                          "متر",
+                                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                            SizedBox(width: 5,),
+                            Text(
+                                          "${widget.distance}",
+                                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                                          ],
+                                        )
+                          ],
+                        ),
                       ),
                       Divider(
                         height: 15,
@@ -77,7 +110,7 @@ class _JobDetailState extends State<JobDetail> {
                             width: Get.width*.4,
                             height: Get.height*.04,
                             child: Text(
-                              'معلم رياضيات',
+                              widget.hobby,
                               style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),textDirection: TextDirection.rtl,
                             ),
                           ),
@@ -92,7 +125,7 @@ class _JobDetailState extends State<JobDetail> {
                             width: Get.width*.4,
                             height: Get.height*.04,
                             child: Text(
-                              '23 عام',
+                              "${widget.age} عام",
                               style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.bold),textDirection: TextDirection.rtl,
                             ),
                           ),
@@ -103,7 +136,7 @@ class _JobDetailState extends State<JobDetail> {
                         child: Column(
                           children: [
                             Text(
-                              'انا خالد محمد معلم رياضيات في مدرسة الرحمة الثانوية.\n خبرة 8 سنوات مجال التدريس. \n اذا ارت الحضور يمكنك التواصل مع او الحصول علي العنوان من صفحتي الخاصة. ',style:
+                              widget.desc,style:
                             TextStyle(fontSize: 19,color: Colors.pink[900]),textDirection: TextDirection.rtl,),
                           ],
                         ),
@@ -132,16 +165,21 @@ class _JobDetailState extends State<JobDetail> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   actions: [
-                                    Text(''
-                                        'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.',style: TextStyle(
-                                        fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                    TextButton(
+                                      child: Text(''
+                                          'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.',style: TextStyle(
+                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen(widget.id)));
+                                      },
+                                    ),
 
 
                                     TextButton(
                                       child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
                                           fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
                                       onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                       },
                                     ),
                                   ],

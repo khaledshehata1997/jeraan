@@ -1,9 +1,43 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:geodesy/geodesy.dart';
 import 'package:get/get.dart';
-import 'package:jeraan_project/widgets/default_button.dart';
-class UserProfile extends StatelessWidget {
+import 'package:jeraan_project/screens/drawer_sections/updateProfile.dart';
+import 'package:jeraan_project/screens/serves/alerts.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
+import 'package:provider/provider.dart';
+import 'package:clipboard/clipboard.dart';
+
+class UserProfile extends StatefulWidget {
+  final bool isMe;
+  final LatLng userlg;
+  final String userid;
+  UserProfile(this.isMe , this.userlg , this.userid);
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  Geodesy geodesy = Geodesy();
+  int distance;
+  String age = "";
+  @override
+  void initState() {
+  AppState appState = Provider.of<AppState>(context , listen: false);
+  LatLng l1 = LatLng(appState.getlat , appState.getlong);
+  int point = geodesy.distanceBetweenTwoGeoPoints(l1, widget.userlg).toInt();
+  DateTime dateOfBirth = DateTime(int.parse(appState.getage[0]),int.parse(appState.getage[1]),int.parse(appState.getage[2]));
+  age = ((DateTime.now().difference(dateOfBirth).inDays / 365.25).floor()).toString();
+  setState(() {
+    distance = point;
+  });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+  AppState appState = Provider.of<AppState>(context );
     return Scaffold(
       appBar: AppBar(
         title: Text('الملف الشخصي'),
@@ -12,100 +46,116 @@ class UserProfile extends StatelessWidget {
       body: ListView(
         children: [
           Container(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(horizontal: 15 , vertical: 30),
             decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [BoxShadow(spreadRadius: .5, blurRadius: 7)],
                 borderRadius: BorderRadius.circular(12)),
             width: Get.width*.95,
-            height: Get.height*.8,
             margin: EdgeInsets.symmetric(vertical: 20,horizontal: 8),
             child: Column(
               children: [
                 CircleAvatar(
                   maxRadius: 45,
-                  backgroundImage: NetworkImage('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/145442707_2866291720305610_6893681363896788682_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=PmFE_GfUzo8AX_CL4Nx&_nc_ht=scontent-hbe1-1.xx&oh=1a1096bb0420aeb0871ff43c0bef18c2&oe=609808D6'),
+                  backgroundImage: FirebaseImage(appState.image),
                 ),
                 SizedBox(height: 20,),
-                Text('Khaled Mohamed',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                Text(appState.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                 SizedBox(height: Get.height*.05,),
                 Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('khaledmshehata1997@gmail.com',style: TextStyle(fontSize: 14)),
+                        Text("سنة",style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 3,),
+                        Text(age,style: TextStyle(fontSize: 14)),
                         SizedBox(width: 20,),
-                       Icon(Icons.email_outlined),
+                       Icon(Icons.person)
 
                       ],
                     ),
-                    SizedBox(height: Get.height*.025,),
+                    SizedBox(height: Get.height*.02,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('سائق تاكسي',style: TextStyle(fontSize: 14)),
+                        Text(appState.jop ,style: TextStyle(fontSize: 14)),
                         SizedBox(width: 20,),
                        Icon(Icons.work_outline_outlined),
 
                       ],
                     ),
-                    SizedBox(height: Get.height*.025,),
+                    SizedBox(height: Get.height*.02,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('10 th Of Ramadan City',style: TextStyle(fontSize: 14)),
+                        Text(appState.adress ,style: TextStyle(fontSize: 14)),
                         SizedBox(width: 20,),
                        Icon(Icons.location_on_outlined),
 
                       ],
                     ),
-                    SizedBox(height: Get.height*.025,),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     Icon(Icons.copy),
-                    //     SizedBox(width: Get.width*.2,),
-                    //     Text('+201064871625',style: TextStyle(fontSize: 14)),
-                    //     SizedBox(width: Get.width*.04,),
-                    //     Icon(Icons.contact_phone_outlined),
-                    //    // Text('البريد الالكتروني :   ',style: TextStyle(fontSize: 15),textDirection: TextDirection.rtl,),
-                    //   ],
-                    // ),
+                    SizedBox(height: Get.height*.02,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text( "متر" ,style: TextStyle(fontSize: 15)),
+                        SizedBox(width: 5,),
+                        Text( "${distance.toString()}" ?? "" ,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 5,),
+                        Text( "يبعد عنك"  ,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 20,),
+                       Icon(Icons.location_on_outlined),
+                       // Text('البريد الالكتروني :   ',style: TextStyle(fontSize: 15),textDirection: TextDirection.rtl,),
+                      ],
+                    ),
+                    SizedBox(height: Get.height*.02,),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            alignment: Alignment.topRight,
+                            width: MediaQuery.of(context).size.width*0.70,
+                            child: Text(appState.about ,style: TextStyle(fontSize: 14),textAlign: TextAlign.right,)),
+                          SizedBox(width: 20,),
+                         Icon(Icons.edit ,size: 20,),
+
+                        ],
+                      ),
+                    ),
+                    
                     Divider(thickness: 2,height: Get.height*.05,),
-                    SizedBox(height: Get.height*.01,),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image.asset('images/whats.png',width:30,height: 30,),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset('images/whats.png',width:30,height: 30,),
+                          ),
                           Text(
-                            '+201064871625',
+                            appState.phone,
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.green),
                           ),
-                          Icon(Icons.copy)
+                          IconButton(onPressed: (){
+                             FlutterClipboard.copy(appState.phone).then((value) =>EasyLoading.showSuccess("تم النسخ",duration: Duration(milliseconds: 600)));
+                          }, icon: Icon(Icons.copy))
                         ]),
-                    SizedBox(height: Get.height*.07,),
+                    SizedBox(height: Get.height*.02,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                         ElevatedButton(
-                             onPressed: (){},
-                           child: Text('تعديل الملف الشخصي'),
-                           style: ButtonStyle(
-                             backgroundColor: MaterialStateProperty.all<Color>(Colors.pink[900]),
-                           ),
-                         ),
-                         ElevatedButton(onPressed: (){},
-                             style: ButtonStyle(
-                               backgroundColor: MaterialStateProperty.all<Color>(Colors.pink[900]),
-                             ),
-                             child: Text('تعديل الملف الشخصي')),
-                        ],
+                      child: ElevatedButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateProfile()));
+                          },
+                        child: Text('تعديل الملف الشخصي'),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.pink[900]),
+                        ),
                       ),
                     )
                   ],

@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/constants.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -12,6 +14,15 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   var radioVal='value';
   var radioVal2='value';
+
+  @override
+  void initState() {
+    AppState appState = Provider.of<AppState>(context , listen:false);
+    setState(() {
+     // radioVal =  appState.getThmeTypeisDark ? "val2" : "val1";
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,14 +104,13 @@ class _SettingsState extends State<Settings> {
              ),
              child: Column(
                children: [
-                 Text('لغة التطبيق',style: TextStyle(
+                 Text('لغة التطبيق (في التحديث القادم)',style: TextStyle(
                      fontWeight:FontWeight.bold,fontSize: 18,color: mainColor),),
                  Row(
                    mainAxisAlignment: MainAxisAlignment.end,
                    children: [
                      Text('العربية'),
                      Radio(
-
                        value: 'arabic',
                        groupValue:radioVal2 ,
                        onChanged: (val){
@@ -134,7 +144,12 @@ class _SettingsState extends State<Settings> {
           DefaultButton(
             text: 'حفظ التغييرات',
             press: (){
-
+              AppState appState = Provider.of<AppState>(context , listen:false);
+              // if(radioVal == "val1"){
+              //   appState.setLightMode();
+              // }else if(radioVal == "val2"){
+              //   appState.setDarkMode();
+              // }
             },
           )
 
