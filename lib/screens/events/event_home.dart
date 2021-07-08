@@ -49,14 +49,15 @@ class _EventHomeState extends State<EventHome> {
 
   @override
   void initState(){
+    AppState appState = Provider.of<AppState>(context , listen: false);
     getData();
     _scrollController.addListener(() {
      if (_scrollController.position.extentAfter == 0){
        if (myIndex.trim() != "" && myIndex != "0") {
-        EasyLoading.show(status: "جاري تحميل المزيد");
+        EasyLoading.show(status:appState.getlocal == "ar"? "جاري تحميل المزيد":"Loading ..");
         getNextData();
        }else{
-         EasyLoading.showInfo("لا يوجد المزيد" , duration: Duration(milliseconds: 600));
+         EasyLoading.showInfo(appState.getlocal == "ar"?"لا يوجد المزيد" : "No more posts" , duration: Duration(milliseconds: 600));
          
        } 
       }
@@ -72,9 +73,10 @@ void dispose() {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('مناسبات الجيران'),
+        title: Text(appState.getlocal == "ar"?'مناسبات الجيران':"Neighbors events"),
         centerTitle: true,
 
       ),
@@ -92,7 +94,7 @@ void dispose() {
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>AddEvent()));
                     },
-                    child: Text('إضافة مناسبة',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
+                    child: Text(appState.getlocal == "ar"?'إضافة مناسبة':"Add Event",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
               );
             }),
       ),
@@ -112,6 +114,7 @@ void dispose() {
   }
 
   Widget event(String image, String name,String type,String desc ,String eventDate ,String id ,int distance){
+    AppState appState = Provider.of<AppState>(context , listen: false);
     return Container(
       margin: EdgeInsets.only(top: 10,left: 8,right: 8,bottom: 10),
          padding: EdgeInsets.only(left: 18,right: 18,bottom: 20,top: 12),
@@ -144,14 +147,14 @@ void dispose() {
               Column(
                     children: [
                       Text(
-                    'يبعد عنك',
+                    appState.getlocal == "ar"?'يبعد عنك':"Away",
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                       Row(
                         children: [
                            Text(
-                    "متر",
+                     appState.getlocal == "ar"?"متر" : "m",
                     style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14),
                           ),
@@ -216,7 +219,7 @@ void dispose() {
               onPressed:() {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>EventDetails(image,name,id,distance,type,eventDate,desc)));
               } ,
-              child:Text('عرض التفاصيل',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
+              child:Text( appState.getlocal == "ar"?'عرض التفاصيل':"View Details",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
         ],
       )
     );
@@ -270,7 +273,7 @@ void dispose() {
       });
     });
   }else{
-    EasyLoading.showInfo("لا توجد منشورات", duration: Duration(milliseconds: 800));
+    EasyLoading.showInfo(appState.getlocal == "ar"?"لا توجد منشورات":"No posts founded", duration: Duration(milliseconds: 800));
     setState(() {
       loading = false;
     });

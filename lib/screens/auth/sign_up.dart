@@ -49,7 +49,7 @@ class _SignUpState extends State<SignUp> {
             Container(
               margin: EdgeInsets.only(left: 12, right: 12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: mediQuery.width * .04,

@@ -1,4 +1,7 @@
+import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +13,7 @@ class HomeCarousel extends StatefulWidget {
 }
 
 class _HomeCarouselState extends State<HomeCarousel> {
+  List<Map> ad = [];
   int currentPage = 0;
   AnimatedContainer buildDot({int index}) {
     return AnimatedContainer(
@@ -34,42 +38,24 @@ class _HomeCarouselState extends State<HomeCarousel> {
   // }
 
   @override
+  void initState() {
+    FirebaseFirestore.instance.collection("ads").doc("main").get().then((value){
+      ad = List.from(value["ads"]);
+      setState(() {
+        
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(children: [
-      CarouselSlider(
-        items: [
-          Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.pink[900],
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child:Text('عن عائشة رضي الله عنها عن النبي  صلى الله عليه وسلم\n  قال: ((ما زال جبريل يوصيني بالجار حتى ظننت أنه سيورثه)) .',
-                style:TextStyle(fontSize:15,fontWeight:FontWeight.bold,color: Colors.white ) ,textDirection: TextDirection.rtl,)
-          ),
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.pink[900],
-                borderRadius: BorderRadius.circular(10)
-            ),
-             child:Text('(وَاعْبُدُوا اللَّهَ وَلَا تُشْرِكُوا بِهِ شَيْئًا وَبِالْوَالِدَيْنِ إِحْسَانًا وَبِذِي الْقُرْبَى وَالْيَتَامَى وَالْمَسَاكِينِ وَالْجَارِ ذِي الْقُرْبَى وَالْجَارِ الْجُنُبِ وَالصَّاحِبِ بِالْجَنْبِ وَابْنِ السَّبِيلِ وَمَا مَلَكَتْ أَيْمَانُكُمْ إِنَّ اللَّهَ لَا يُحِبُّ مَنْ كَانَ مُخْتَالًا فَخُورًا)'
-
-               ,style:TextStyle(fontSize:13,fontWeight:FontWeight.bold,color: Colors.white ) ,textDirection: TextDirection.rtl,)
-          ),
-          Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.pink[900],
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child:Text('عن أَبي شُريْحٍ الخُزاعيِّ : أَنَّ النَّبيَّ ﷺ قَالَ \n(("مَنْ كَانَ يُؤمِنُ بِاللَّهِ والْيَوْمِ الآخِرِ فَلْيُحْسِنْ إلى جارِهِ"))',
-                style:TextStyle(fontSize:15,fontWeight:FontWeight.bold,color: Colors.white ) ,textDirection: TextDirection.rtl,)
-          ),
-        ],
+    ad.length > 0 ?  CarouselSlider.builder(
+        itemCount: ad.length, itemBuilder: (context,i,n){
+          return cardAd(ad[i]["image"], ad[i]["url"]);
+        },
+        
         options: CarouselOptions(
             autoPlay: true,
             enlargeCenterPage: true,
@@ -79,7 +65,22 @@ class _HomeCarouselState extends State<HomeCarousel> {
                 currentPage = index;
               });
             }),
-      )
+      ):Container()
     ]);
+  }
+  Widget cardAd(image , url){
+    return GestureDetector(
+      onTap: ()async{
+         await canLaunch(url) ? await launch(url) : print('Could not launch $url');
+      },
+      child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.pink[900],
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(image: FirebaseImage(image),fit: BoxFit.cover),
+                ),
+            ),
+    );
   }
 }

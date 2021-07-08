@@ -34,7 +34,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             child: Form(
               key: _formKey,
                           child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: mediQuery.width,

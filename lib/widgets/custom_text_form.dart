@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
+import 'package:provider/provider.dart';
 
 class CustomTextForm extends StatefulWidget {
   var obScur;
@@ -19,8 +21,9 @@ class _CustomTextFormState extends State<CustomTextForm> {
   
   @override
   Widget build(BuildContext context) {
+     AppState appState = Provider.of<AppState>(context);
     var mediQuery = MediaQuery.of(context).size;
-    return Directionality(textDirection: TextDirection.rtl,
+    return Directionality(textDirection:appState.getlocal == "ar"? TextDirection.rtl : TextDirection.ltr,
       child: Stack(
                       children: [
                         Padding(

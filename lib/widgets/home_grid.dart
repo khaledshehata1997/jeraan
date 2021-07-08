@@ -5,13 +5,16 @@ import 'package:jeraan_project/screens/e_commerse/e_commerse_home.dart';
 import 'package:jeraan_project/screens/events/event_home.dart';
 import 'package:jeraan_project/screens/help/help_home.dart';
 import 'package:jeraan_project/screens/jobs/jobs_home.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/screens/t3arf/t3arf_home.dart';
+import 'package:provider/provider.dart';
 class HomeGrid extends StatelessWidget {
   String image1,image2;
   String text1,text2;
 
   @override
   Widget build(BuildContext context) {
+  AppState appState = Provider.of<AppState>(context);
  Fun1(){Navigator.push(context, MaterialPageRoute(builder: (context)=>EventHome()));};
  Fun2(){Navigator.push(context, MaterialPageRoute(builder: (context)=>T3arfHome()));};
  Fun3(){Navigator.push(context, MaterialPageRoute(builder: (context)=>ECommerseHome()));};
@@ -23,17 +26,17 @@ class HomeGrid extends StatelessWidget {
         children: [
 
           homeGrid(context,'home_images/eventss.png',   'home_images/twasl.jpg',
-              'مناسبات الجيران',     'تعارف الجيران',
+              appState.getlocal == "ar"?  'مناسبات الجيران': "Neighbors events",    appState.getlocal == "ar"? 'تعارف الجيران' : "know the neighbors",
                  Fun1,
                  Fun2,
       ),
           homeGrid(context,'home_images/E-commerse.png',    'home_images/help.jpg'
-              ,'بيع وشراء الجيران',   'إستعارات الجيران',
+              ,appState.getlocal == "ar"? 'بيع وشراء الجيران': "Sell and Buy",appState.getlocal == "ar"? 'إستعارات الجيران': "Borrow something",
               Fun3,
               Fun4,
           ),
           homeGrid(context,'home_images/jobs.jpg',   'home_images/istshara.jpg',
-              'هوايات الجيران',   'استشارات بين الجيران',
+             appState.getlocal == "ar"? 'هوايات الجيران': "Neighbors' hobbies", appState.getlocal == "ar"? 'استشارات بين الجيران' : "Ask your neighbors",
       Fun5,
       Fun6,
       ),

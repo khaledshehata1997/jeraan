@@ -38,7 +38,7 @@ class _SignInState extends State<SignIn> {
             Container(
               margin: EdgeInsets.all(12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                  Container(
                    margin: EdgeInsets.only(left: 15),

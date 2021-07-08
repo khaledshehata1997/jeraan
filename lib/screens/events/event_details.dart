@@ -2,7 +2,9 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
+import 'package:provider/provider.dart';
 class EventDetails extends StatefulWidget {
   final String image;
   final String name;
@@ -23,9 +25,10 @@ class _EventDetailsState extends State<EventDetails> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('تفاصيل المناسبة'),
+        title: Text( appState.getlocal == "ar"?'تفاصيل المناسبة':"Event Details"),
         centerTitle: true,
       ),
       body: ListView(
@@ -133,7 +136,6 @@ class _EventDetailsState extends State<EventDetails> {
                               //   width: Get.width*.65,
                               //   height: Get.height*.2,
                               // )
-
                             ],
                           ),
                         )
@@ -154,38 +156,44 @@ class _EventDetailsState extends State<EventDetails> {
                                   title:Image.asset('images/text.png',width: 60,height: 50,),
                                   content: Row(
                                     children: [
-                                      Image.asset('images/smile.png',width: 30,height: 30,),
-                                      Text('شكرا علي الاهتمام بهذه المناسبة :)',style: TextStyle(
-                                          fontSize: 15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                      Image.asset('images/smile.png',width: 25,height: 25,),
+                                      Text(appState.getlocal == "ar"?'شكرا علي الاهتمام بهذه المناسبة :)' : " Thank you for your interest in this Event ",style: TextStyle(
+                                          fontSize: appState.getlocal == "ar"? 15 : 14,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                                     ],
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   actions: [
-                                    TextButton(
-                                      child: Text(''
-                                          'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.',style: TextStyle(
-                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen(widget.id)));
-                                      },
+                                    Container(
+                                      alignment : appState.getlocal == "ar"? Alignment.topRight : Alignment.topLeft,
+                                      child: TextButton(
+                                        child: Text(appState.getlocal == "ar"?''
+                                            'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.' : "Go to the advertiser's account and get the address and contact",style: TextStyle(
+                                            fontSize: appState.getlocal == "ar"? 15 : 13,color:Colors.pink[900]),textDirection:appState.getlocal == "ar"?  TextDirection.rtl : TextDirection.ltr,),
+                                        onPressed: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen(widget.id)));
+                                        },
+                                      ),
                                     ),
 
 
-                                    TextButton(
-                                      child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
-                                      onPressed: () {
-                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
-                                      },
+                                    Container(
+                                      alignment: appState.getlocal == "ar"? Alignment.topRight : Alignment.topLeft,
+                                      child: TextButton(
+                                        child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':"Go to the main menu",style: TextStyle(
+                                            fontSize: appState.getlocal == "ar"?15:13,color:Colors.pink[900]),textDirection:appState.getlocal == "ar"? TextDirection.rtl : TextDirection.ltr,),
+                                        onPressed: () {
+                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 );
                               },
                             );
                         },
-                        child:Text('أنوي الحضور',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
+                        child:Text(appState.getlocal == "ar"?'أنوي الحضور':"Will Attend",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
                   ],
                 ),
               )

@@ -40,7 +40,7 @@ class _UserProfileState extends State<UserProfile> {
   AppState appState = Provider.of<AppState>(context );
     return Scaffold(
       appBar: AppBar(
-        title: Text('الملف الشخصي'),
+        title: Text(appState.getlocal == "ar"?'الملف الشخصي':"Profile"),
         centerTitle: true,
       ),
       body: ListView(
@@ -65,47 +65,47 @@ class _UserProfileState extends State<UserProfile> {
                 Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("سنة",style: TextStyle(fontSize: 14)),
-                        SizedBox(width: 3,),
+                        Icon(Icons.person),
+                        SizedBox(width: 20,),
                         Text(age,style: TextStyle(fontSize: 14)),
-                        SizedBox(width: 20,),
-                       Icon(Icons.person)
-
-                      ],
-                    ),
-                    SizedBox(height: Get.height*.02,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(appState.jop ,style: TextStyle(fontSize: 14)),
-                        SizedBox(width: 20,),
-                       Icon(Icons.work_outline_outlined),
-
-                      ],
-                    ),
-                    SizedBox(height: Get.height*.02,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(appState.adress ,style: TextStyle(fontSize: 14)),
-                        SizedBox(width: 20,),
-                       Icon(Icons.location_on_outlined),
-
-                      ],
-                    ),
-                    SizedBox(height: Get.height*.02,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text( "متر" ,style: TextStyle(fontSize: 15)),
                         SizedBox(width: 5,),
-                        Text( "${distance.toString()}" ?? "" ,style: TextStyle(fontSize: 14)),
-                        SizedBox(width: 5,),
-                        Text( "يبعد عنك"  ,style: TextStyle(fontSize: 14)),
+                        Text(appState.getlocal == "ar"?"سنة":"year",style: TextStyle(fontSize: 14)),
+                       
+                      ],
+                    ),
+                    SizedBox(height: Get.height*.02,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.work_outline_outlined),
                         SizedBox(width: 20,),
-                       Icon(Icons.location_on_outlined),
+                       Text(appState.jop ,style: TextStyle(fontSize: 14)),
+
+                      ],
+                    ),
+                    SizedBox(height: Get.height*.02,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.location_on_outlined),
+                        SizedBox(width: 20,),
+                       Text(appState.adress ,style: TextStyle(fontSize: 14)),
+
+                      ],
+                    ),
+                    SizedBox(height: Get.height*.02,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.location_on_outlined),
+                        SizedBox(width: 20,),
+                        Text( appState.getlocal == "ar"? "يبعد عنك" : "away from you"  ,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 5,),
+                       Text( "${distance.toString()}" ?? "" ,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 5,),
+                       Text( appState.getlocal == "ar"? "متر" : "m" ,style: TextStyle(fontSize: 15)),
                        // Text('البريد الالكتروني :   ',style: TextStyle(fontSize: 15),textDirection: TextDirection.rtl,),
                       ],
                     ),
@@ -113,14 +113,15 @@ class _UserProfileState extends State<UserProfile> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            alignment: Alignment.topRight,
-                            width: MediaQuery.of(context).size.width*0.70,
-                            child: Text(appState.about ,style: TextStyle(fontSize: 14),textAlign: TextAlign.right,)),
-                          SizedBox(width: 20,),
                          Icon(Icons.edit ,size: 20,),
+                          SizedBox(width: 20,),
+                           Container(
+                            alignment: appState.getlocal == "ar"? Alignment.topRight : Alignment.topLeft,
+                            width: MediaQuery.of(context).size.width*0.70,
+                            child: Text(appState.about ,style: TextStyle(fontSize: 14),textAlign:appState.getlocal == "ar"? TextAlign.right : TextAlign.left,)),
+                         
 
                         ],
                       ),
@@ -142,7 +143,7 @@ class _UserProfileState extends State<UserProfile> {
                                 color: Colors.green),
                           ),
                           IconButton(onPressed: (){
-                             FlutterClipboard.copy(appState.phone).then((value) =>EasyLoading.showSuccess("تم النسخ",duration: Duration(milliseconds: 600)));
+                             FlutterClipboard.copy(appState.phone).then((value) =>EasyLoading.showSuccess((appState.getlocal == "ar"?"تم النسخ" : "Copied"),duration: Duration(milliseconds: 600)));
                           }, icon: Icon(Icons.copy))
                         ]),
                     SizedBox(height: Get.height*.02,),
@@ -152,7 +153,7 @@ class _UserProfileState extends State<UserProfile> {
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateProfile()));
                           },
-                        child: Text('تعديل الملف الشخصي'),
+                        child: Text(appState.getlocal == "ar"?'تعديل الملف الشخصي':"Edit your profile"),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(Colors.pink[900]),
                         ),

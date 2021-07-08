@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/widgets/carosul_slider.dart';
 import 'package:jeraan_project/widgets/drawer.dart';
 import 'package:jeraan_project/widgets/home_grid.dart';
 import 'package:jeraan_project/widgets/serchBar.dart';
+import 'package:provider/provider.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -14,9 +16,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
 GlobalKey<ScaffoldState>drawerKey=GlobalKey();
 @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
     var mediQuery = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -46,15 +50,15 @@ GlobalKey<ScaffoldState>drawerKey=GlobalKey();
                         child: Image.asset('images/jeran2022.jpeg',
                         ),
                       ),
+                      Container(width: 35,)
+                    // IconButton(icon: Icon(Icons.location_on_outlined,size: 25,color: Colors.pink[900],),
+                    //     onPressed: (){
 
-                    IconButton(icon: Icon(Icons.location_on_outlined,size: 25,color: Colors.pink[900],),
-                        onPressed: (){
-
-                        })
+                    //     })
                     ],
                   ),
                 ),
-                serchBar((value){},'Search'),
+                //serchBar((value){},appState.getlocal == "ar"? "البحث" : 'Search'),
                 Container(
                   margin: EdgeInsets.only(top: 12),
                     child: HomeCarousel()

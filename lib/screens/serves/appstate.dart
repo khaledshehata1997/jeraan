@@ -34,55 +34,10 @@ class AppState with ChangeNotifier {
   String get getnearest => nearest;
   String get getabout => about;
 
-  //   final darkTheme = ThemeData(
-  //   primaryColor: Colors.pink[900],
-  //   brightness: Brightness.dark,
-  //   backgroundColor: const Color(0xFF212121),
-  //   accentColor: Colors.pink[900],
-  //   accentIconTheme: IconThemeData(color: Colors.black),
-  //   dividerColor: Colors.black12,
-  // );
-
-  // final lightTheme = ThemeData(
-  //   primaryColor: Colors.pink[900],
-  //   brightness: Brightness.light,
-  //   backgroundColor: const Color(0xFFE5E5E5),
-  //   accentColor: Colors.pink[900],
-  //   accentIconTheme: IconThemeData(color: Colors.white),
-  //   dividerColor: Colors.white54,
-  // );
-
-  // ThemeData _themeData;
-  // ThemeData getTheme() => _themeData;
-  // bool thmeTypeisDark;
-
-  // themeNotifier() {
-  //   StorageManager.readData('themeMode').then((value) {
-  //     print('value read from storage: ' + value.toString());
-  //     var themeMode = value ?? 'light';
-  //     if (themeMode == 'light') {
-  //       _themeData = lightTheme;
-  //         thmeTypeisDark = false;
-  //     } else {
-  //       print('setting dark theme');
-  //       _themeData = darkTheme;
-  //       thmeTypeisDark = true;
-  //     }
-  //     notifyListeners();
-  //   });
-  // }
-  // void setDarkMode() async {
-  //   _themeData = darkTheme;
-  //   StorageManager.saveData('themeMode', 'dark');
-  //   thmeTypeisDark = true;
-  //   notifyListeners();
-  // }
-
-  // void setLightMode() async {
-  //   _themeData = lightTheme;
-  //   StorageManager.saveData('themeMode', 'light');
-  //   thmeTypeisDark = false;
-  //   notifyListeners();
-  // }
-  // bool get getThmeTypeisDark => thmeTypeisDark ?? false; 
+  String local;
+  void setLocal(String loc){
+    local = (loc ?? local)?? "en";
+    notifyListeners();
+  }
+  String get getlocal => local ?? "en";
 }
