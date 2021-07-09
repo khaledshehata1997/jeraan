@@ -324,7 +324,7 @@ void dispose() {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(appState.getlocal == "ar"?'الوظيفة :  ' : ' : Jop',textDirection: TextDirection.rtl,style: TextStyle(
+              Text(appState.getlocal == "ar"?'الوظيفة :  ':' : Jop',textDirection: TextDirection.rtl,style: TextStyle(
                 fontSize: 17,fontWeight: FontWeight.bold
               ),),
               Text('$job',textDirection: TextDirection.rtl,style: TextStyle(
