@@ -42,7 +42,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('إضافة منشور'),
+        title: Text(appState.getlocal == "ar"?'إضافة منشور':"Add Post"),
         centerTitle: true,
       ),
       body: Form(
@@ -52,54 +52,54 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(
-                      "العمر",
+                      appState.getlocal == "ar"?"العمر":"Age",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  CustomTextForm(false, 'العمر',controller: _ageController,),
+                  CustomTextForm(false, appState.getlocal == "ar"?'العمر':"Age",controller: _ageController,),
                   SizedBox(
                     height: Get.height*.02,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(
-                      "الوظيفة",
+                      appState.getlocal == "ar"?"الوظيفة":"Job",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  CustomTextForm(false, 'الوظيفة',controller: _jobController,),
+                  CustomTextForm(false, appState.getlocal == "ar"?'الوظيفة':"Job",controller: _jobController,),
                   SizedBox(
                     height: Get.height*.02,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(
-                      "رقم التواصل",
+                      appState.getlocal == "ar"?"رقم التواصل":"Phone",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  CustomTextForm(false, 'رقم التواصل',controller: _whatsController,),
+                  CustomTextForm(false, appState.getlocal == "ar"?'رقم التواصل':"Phone",controller: _whatsController,),
                   SizedBox(
                     height: Get.height*.02,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:15.0),
                     child: Text(
-                      "المنشور",
+                      appState.getlocal == "ar"?"المنشور":"Post",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -110,7 +110,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: SpetialCustomTextForm(
 
-                      false, 'ادخل المنشور',controller: _postController,),
+                      false, appState.getlocal == "ar"?'ادخل المنشور':"Write the post",controller: _postController,),
                   ),
 
 
@@ -118,10 +118,10 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                     height: Get.height*.05,
                   ),
                   DefaultButton(
-                    text: 'إضافة المنشور',
+                    text: appState.getlocal == "ar"?'إضافة المنشور':"Add The Post",
                     press: ()async{
                       bool success = false;
-                      EasyLoading.show(status:"جاري اضافة منشورك");
+                      EasyLoading.show(status:appState.getlocal == "ar"?"جاري اضافة منشورك":"Adding your Post");
                       // await FirebaseFirestore.instance.collection("T3arf").add({
                       //   "uid" : FirebaseAuth.instance.currentUser.uid,
                       //   "image" : appState.getimage,
@@ -194,8 +194,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
-                                    fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                Text(appState.getlocal == "ar"?'تم إضافة المناسبة بنجاح :)':"Event added successfully :)",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
                             shape: RoundedRectangleBorder(
@@ -203,8 +203,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             ),
                             actions: [
                               TextButton(
-                                child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الرجوع الي القائمة السابقة':"Return to the previous menu",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
@@ -212,8 +212,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                                 },
                               ),
                               TextButton(
-                                child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':'Go to main menu',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },
@@ -257,8 +257,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
-                                    fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                Text(appState.getlocal == "ar"?'تم إضافة المناسبة بنجاح :)':"Event added successfully :)",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
                             shape: RoundedRectangleBorder(
@@ -266,8 +266,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             ),
                             actions: [
                               TextButton(
-                                child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الرجوع الي القائمة السابقة':"Return to the previous menu",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
@@ -275,8 +275,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                                 },
                               ),
                               TextButton(
-                                child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':'Go to main menu',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },
@@ -324,8 +324,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنشور بنجاح :)',style: TextStyle(
-                                    fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                Text(appState.getlocal == "ar"?'تم إضافة المناسبة بنجاح :)':"Event added successfully :)",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
                             shape: RoundedRectangleBorder(
@@ -333,8 +333,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             ),
                             actions: [
                               TextButton(
-                                child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الرجوع الي القائمة السابقة':"Return to the previous menu",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
@@ -342,8 +342,8 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                                 },
                               ),
                               TextButton(
-                                child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':'Go to main menu',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },

@@ -2,7 +2,9 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
+import 'package:provider/provider.dart';
 class JobDetail extends StatefulWidget {
   final String image;
   final String name;
@@ -23,9 +25,10 @@ class _JobDetailState extends State<JobDetail> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('تفاصيل الهواية'),
+          title: Text(appState.getlocal == "ar"?'تفاصيل الهواية':"Hobby details"),
           centerTitle: true,
         ),
         body: ListView(
@@ -67,14 +70,13 @@ class _JobDetailState extends State<JobDetail> {
                             Column(
                                           children: [
                         Text(
-                                          'يبعد عنك',
-                                          style: TextStyle(
+                                          appState.getlocal == "ar"?'يبعد عنك':"Away",                        style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                         Row(
                           children: [
                              Text(
-                                          "متر",
+                                          appState.getlocal == "ar"?"متر" : "m",
                                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 14),
                             ),
@@ -125,7 +127,7 @@ class _JobDetailState extends State<JobDetail> {
                             width: Get.width*.4,
                             height: Get.height*.04,
                             child: Text(
-                              "${widget.age} عام",
+                              appState.getlocal == "ar"?"${widget.age} عام":"${widget.age} year",
                               style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.bold),textDirection: TextDirection.rtl,
                             ),
                           ),
@@ -156,9 +158,9 @@ class _JobDetailState extends State<JobDetail> {
                                   title:Image.asset('images/text.png',width: 60,height: 50,),
                                   content: Row(
                                     children: [
-                                      Image.asset('images/smile.png',width: 30,height: 30,),
-                                      Text('شكرا علي الاهتمام بهذه الهواية :)',style: TextStyle(
-                                          fontSize: 15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                      Image.asset('images/smile.png',width: 25,height: 25,),
+                                      Text(appState.getlocal == "ar"?'شكرا علي الاهتمام بهذه الهواية :)':'Thank you for your interest in this hobby :)',style: TextStyle(
+                                          fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                                     ],
                                   ),
                                   shape: RoundedRectangleBorder(
@@ -166,9 +168,9 @@ class _JobDetailState extends State<JobDetail> {
                                   ),
                                   actions: [
                                     TextButton(
-                                      child: Text(''
-                                          'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.',style: TextStyle(
-                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
+                                      child: Text(appState.getlocal == "ar"?''
+                                          'إذهب الي الحساب الخاص بالمعلن واحصل علي العنوان ووسائل التواصل.':"Go to the advertiser's account and get the address and the means of communication.",style: TextStyle(
+                                          fontSize:appState.getlocal == "ar"? 15 : 13.5,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
                                       onPressed: () {
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewUsersScreen(widget.id)));
                                       },
@@ -176,8 +178,8 @@ class _JobDetailState extends State<JobDetail> {
 
 
                                     TextButton(
-                                      child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                          fontSize: 15,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
+                                      child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':'Go to main menu',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.pink[900]),textDirection: TextDirection.rtl,),
                                       onPressed: () {
                                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                       },
@@ -187,7 +189,7 @@ class _JobDetailState extends State<JobDetail> {
                               },
                             );
                           } ,
-                          child:Text('مهتم بالهواية',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
+                          child:Text(appState.getlocal == "ar"? 'مهتم بالهواية':"Interested in This hobby",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
                     ],
                   ),
                 )

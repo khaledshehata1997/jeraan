@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../constants.dart';
 import '../../widgets/custom_text_form.dart';
 import '../../widgets/default_button.dart';
 import '../../widgets/textOnFields.dart';
@@ -21,6 +22,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     var mediQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: mainColor,
+
         title: Text('نسيت كلمة السر'),
         centerTitle: true,
       ),
@@ -34,7 +37,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             child: Form(
               key: _formKey,
                           child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: mediQuery.width,

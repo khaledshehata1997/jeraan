@@ -27,6 +27,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:AppBar(
+        backgroundColor: mainColor,
         automaticallyImplyLeading: false,
         title: Text('LOG IN'),
         centerTitle: true,
@@ -38,7 +39,7 @@ class _SignInState extends State<SignIn> {
             Container(
               margin: EdgeInsets.all(12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                  Container(
                    margin: EdgeInsets.only(left: 15),

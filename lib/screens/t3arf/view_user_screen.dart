@@ -20,16 +20,17 @@ class _ViewUsersScreenState extends State<ViewUsersScreen> {
   Geodesy geodesy = Geodesy();
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context );
     return Scaffold(
       appBar: AppBar(
-        title: Text('الملف الشخصي'),
+        title: Text(appState.getlocal == "ar"?'الملف الشخصي':"Profile"),
         centerTitle: true,
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("Users").doc(widget.userid).snapshots(),
         builder: (context , snapshot){
         if (snapshot.hasError)
-            return Center(child: Text('خطآ يرجى المحاولة في وقت لاحق'));
+            return Center(child: Text(appState.getlocal == "ar"?'خطآ يرجى المحاولة في وقت لاحق':"Error"));
             switch (snapshot.connectionState) {
             case ConnectionState.waiting: return Center(
               child: Center(child: CircularProgressIndicator())
@@ -71,47 +72,47 @@ class _ViewUsersScreenState extends State<ViewUsersScreen> {
                   Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text("سنة",style: TextStyle(fontSize: 14)),
-                          SizedBox(width: 3,),
-                          Text(age,style: TextStyle(fontSize: 14)),
-                          SizedBox(width: 20,),
-                         Icon(Icons.person)
+                          Icon(Icons.person),
+                        SizedBox(width: 20,),
+                        Text(age,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 5,),
+                        Text(appState.getlocal == "ar"?"سنة":"year",style: TextStyle(fontSize: 14)),
       
                         ],
                       ),
                       SizedBox(height: Get.height*.02,),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(jop ,style: TextStyle(fontSize: 14)),
-                          SizedBox(width: 20,),
                          Icon(Icons.work_outline_outlined),
+                        SizedBox(width: 20,),
+                       Text(jop ,style: TextStyle(fontSize: 14)),
       
                         ],
                       ),
                       SizedBox(height: Get.height*.02,),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(adress ,style: TextStyle(fontSize: 14)),
-                          SizedBox(width: 20,),
-                         Icon(Icons.location_on_outlined),
+                          Icon(Icons.location_on_outlined),
+                        SizedBox(width: 20,),
+                       Text(adress ,style: TextStyle(fontSize: 14)),
       
                         ],
                       ),
                       SizedBox(height: Get.height*.02,),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text( "متر" ,style: TextStyle(fontSize: 15)),
-                          SizedBox(width: 5,),
-                          Text( "${distance.toString()}" ?? "" ,style: TextStyle(fontSize: 14)),
-                          SizedBox(width: 5,),
-                          Text( "يبعد عنك"  ,style: TextStyle(fontSize: 14)),
-                          SizedBox(width: 20,),
-                         Icon(Icons.location_on_outlined),
+                          Icon(Icons.location_on_outlined),
+                        SizedBox(width: 20,),
+                        Text( appState.getlocal == "ar"? "يبعد عنك" : "away from you"  ,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 5,),
+                       Text( "${distance.toString()}" ?? "" ,style: TextStyle(fontSize: 14)),
+                        SizedBox(width: 5,),
+                       Text( appState.getlocal == "ar"? "متر" : "m" ,style: TextStyle(fontSize: 15)),
                          // Text('البريد الالكتروني :   ',style: TextStyle(fontSize: 15),textDirection: TextDirection.rtl,),
                         ],
                       ),
@@ -119,14 +120,14 @@ class _ViewUsersScreenState extends State<ViewUsersScreen> {
                       Container(
                         width: MediaQuery.of(context).size.width,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                              alignment: Alignment.topRight,
-                              width: MediaQuery.of(context).size.width*0.70,
-                              child: Text(about ,style: TextStyle(fontSize: 14),textAlign: TextAlign.right,)),
-                            SizedBox(width: 20,),
-                           Icon(Icons.edit ,size: 20,),
+                            Icon(Icons.edit ,size: 20,),
+                          SizedBox(width: 20,),
+                           Container(
+                            alignment: appState.getlocal == "ar"? Alignment.topRight : Alignment.topLeft,
+                            width: MediaQuery.of(context).size.width*0.70,
+                            child: Text(about ,style: TextStyle(fontSize: 14),textAlign:appState.getlocal == "ar"? TextAlign.right : TextAlign.left,)),
       
                           ],
                         ),
@@ -148,7 +149,7 @@ class _ViewUsersScreenState extends State<ViewUsersScreen> {
                                   color: Colors.green),
                             ),
                             IconButton(onPressed: (){
-                               FlutterClipboard.copy(phone).then((value) =>EasyLoading.showSuccess("تم النسخ",duration: Duration(milliseconds: 600)));
+                               FlutterClipboard.copy(phone).then((value) =>EasyLoading.showSuccess((appState.getlocal == "ar"?"تم النسخ" : "Copied"),duration: Duration(milliseconds: 600)));
                             }, icon: Icon(Icons.copy))
                           ]),
                       //SizedBox(height: Get.height*.02,),

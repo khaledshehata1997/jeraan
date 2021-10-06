@@ -9,7 +9,10 @@ import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'widgets/onboarding_content.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -54,16 +57,29 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //AppState appState = Provider.of<AppState>(context);
+    AppState appState = Provider.of<AppState>(context);
     return MaterialApp(
+    localizationsDelegates: [
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: [
+    const Locale('en', ''),
+    const Locale('ar', ''),
+  ],
+  locale: Locale(appState.getlocal),
     debugShowCheckedModeBanner: false,
       title: 'Jeran',
       theme:// appState.getTheme(),
       ThemeData(
           primaryColor:Colors.pink[900],
-          accentColor: Colors.pink[900]
+        appBarTheme:AppBarTheme(
+          backgroundColor: Colors.pink[900]
+        )
+
       ),
-      home: FirebaseAuth.instance.currentUser != null ? HomeScreen() : OnBoardingScreen(),
+      home: FirebaseAuth.instance.currentUser != null ? HomeScreen() : OnboardingContent(),
       builder: EasyLoading.init(),
     );
   }
@@ -99,6 +115,8 @@ double long = _locationData.longitude;
 
     setlocation(double lat ,double long) async{
      AppState appState = Provider.of<AppState>(context ,listen: false);
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     appState.setLocal(prefs.getString("local"));
      appState.setlocation(lat,long);
      var addresses = await Geocoder.local.findAddressesFromCoordinates(Coordinates(lat, long));
      var first = addresses.first;
@@ -119,11 +137,11 @@ double long = _locationData.longitude;
         newphone: phone,
         newimage: image,
         newadress: adress,
-        newjop: jop,
+        newjop:"Job",
         near: nearest,
         newabout: about);
      });
-     EasyLoading.showSuccess("تم تجهيز التبيق" , duration: Duration(milliseconds: 400));
+     EasyLoading.showSuccess(appState.getlocal == "ar"? "تم تجهيز التبيق" : "Ready to use" , duration: Duration(milliseconds: 400));
      });
   }
 }

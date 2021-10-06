@@ -45,14 +45,15 @@ class _AskHomeState extends State<AskHome> {
   String myIndex = "";
   @override
   void initState(){
+    AppState appState = Provider.of<AppState>(context , listen: false);
     GetData();
     _scrollController.addListener(() {
      if (_scrollController.position.extentAfter == 0){
        if (myIndex.trim() != "" && myIndex != "0") {
-        EasyLoading.show(status: "جاري تحميل المزيد");
+        EasyLoading.show(status: appState.getlocal == "ar"? "جاري تحميل المزيد":"Loading ..");
         GetNextData();
        }else{
-         EasyLoading.showInfo("لا يوجد المزيد" , duration: Duration(milliseconds: 600));
+         EasyLoading.showInfo(appState.getlocal == "ar"?"لا يوجد المزيد" : "No more posts" , duration: Duration(milliseconds: 600));
          
        } 
       }
@@ -108,7 +109,7 @@ void dispose() {
       });
     });
   }else{
-    EasyLoading.showInfo("لا توجد منشورات", duration: Duration(milliseconds: 800));
+    EasyLoading.showInfo(appState.getlocal == "ar"?"لا توجد منشورات":"No posts founded", duration: Duration(milliseconds: 800));
     setState(() {
       loading = false;
     });
@@ -164,6 +165,7 @@ void dispose() {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
     return Scaffold(
         bottomSheet: Padding(
           padding: const EdgeInsets.only(left: 30,right: 30),
@@ -178,12 +180,12 @@ void dispose() {
                       onPressed: ()async{
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddPostAsk()));
                       },
-                      child: Text('إضافة استشارة',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
+                      child: Text(appState.getlocal == "ar"?'إضافة استشارة':"Add Question",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
                 );
               }),
         ),
       appBar: AppBar(
-        title: Text('استشارات الجيران '),
+        title: Text(appState.getlocal == "ar"?'استشارات الجيران ':"Ask your neighbors"),
         centerTitle: true,
       ),
       body: Container(
@@ -204,7 +206,7 @@ void dispose() {
                 width: Get.width*.8,
                 height: 100,
                 child: Text(
-                    'رجاءا من مسئول التطبيق : لا تستخدم هذه الخاصية في إزعاج غيرك من الجيران وراقب الله في افعالك.',
+                    appState.getlocal == "ar"?'رجاءا من مسئول التطبيق : لا تستخدم هذه الخاصية في إزعاج غيرك من الجيران وراقب الله في افعالك.':'Please from the application administrator: Do not use this feature to annoy other neighbors and watch God in your actions.',
                     textDirection: TextDirection.rtl,
                 style: TextStyle(fontSize: 16,color: Colors.white),),
               ),
@@ -236,6 +238,7 @@ void dispose() {
   }
 
   Widget Ask(String image,String name,String age,String job,String text,String phone,String id , int distance , String date){
+    AppState appState = Provider.of<AppState>(context , listen: false);
     int different = DateTime.now().difference(DateTime.parse(date)).inMinutes;
     int hour = DateTime.now().difference(DateTime.parse(date)).inHours;
     int days = DateTime.now().difference(DateTime.parse(date)).inDays;
@@ -282,14 +285,13 @@ void dispose() {
                 Column(
                   children: [
                     Text(
-                  'يبعد عنك',
-                  style: TextStyle(
+                  appState.getlocal == "ar"?'يبعد عنك':"Away",style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     Row(
                       children: [
                          Text(
-                  "متر",
+                  appState.getlocal == "ar"?"متر" : "m",
                   style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14),
                         ),
@@ -308,32 +310,34 @@ void dispose() {
           ),
           SizedBox(height: 15),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Text(appState.getlocal == "ar"?'العمر : ' : ' : Age',textDirection: TextDirection.rtl,style: TextStyle(
+                fontSize: 17,fontWeight: FontWeight.bold
+              ),),
               Text('$age',textDirection: TextDirection.rtl,style: TextStyle(
                 fontSize: 17
               ),),
-              Text('العمر :  ',textDirection: TextDirection.rtl,style: TextStyle(
-                fontSize: 17,fontWeight: FontWeight.bold
-              ),),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text('$job',textDirection: TextDirection.rtl,style: TextStyle(
-                fontSize: 17
-              ),),
-              Text('الوظيفة :  ',textDirection: TextDirection.rtl,style: TextStyle(
-                fontSize: 17,fontWeight: FontWeight.bold
-              ),),
+              
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(different == 0 ? "الآن" : (different > 0 && different < 60)?"قبل $different دقيقة" : (different>=60 && hour<24)
-                     ?"قبل $hour ساعة" : "قبل $days يوم",textDirection: TextDirection.rtl,style: TextStyle(
+              Text(appState.getlocal == "ar"?'الوظيفة :  ':' : Jop',textDirection: TextDirection.rtl,style: TextStyle(
+                fontSize: 17,fontWeight: FontWeight.bold
+              ),),
+              Text('$job',textDirection: TextDirection.rtl,style: TextStyle(
+                fontSize: 17
+              ),),
+              
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(different == 0 ? (appState.getlocal == "ar"?"الآن" : "Now") : (different > 0 && different < 60)?(appState.getlocal == "ar"?"قبل $different دقيقة" : "from $different minutes") : (different>=60 && hour<24)
+                     ?(appState.getlocal == "ar"?"قبل $hour ساعة" : "from $hour hour") : (appState.getlocal == "ar"?"قبل $days ساعة" : "from $days day"),textDirection: TextDirection.rtl,style: TextStyle(
                 fontSize: 11
               ),),
             ],
@@ -361,7 +365,7 @@ void dispose() {
                                 color: Colors.green),
                           ),
                           IconButton(onPressed: (){
-                             FlutterClipboard.copy(phone).then((value) =>EasyLoading.showSuccess("تم النسخ",duration: Duration(milliseconds: 600)) );
+                             FlutterClipboard.copy(phone).then((value) =>EasyLoading.showSuccess((appState.getlocal == "ar"?"تم النسخ" : "Copied"),duration: Duration(milliseconds: 600)) );
                           }, icon: Icon(Icons.copy))
                         ]),
           SizedBox(height: 15,)

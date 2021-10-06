@@ -37,7 +37,7 @@ class _AddProductHelpState extends State<AddProductHelp> {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('إضافة منتج'),
+        title: Text(appState.getlocal == "ar"?'إضافة منتج':"Add Product"),
         centerTitle: true,
       ),
       body: Form(
@@ -47,26 +47,26 @@ class _AddProductHelpState extends State<AddProductHelp> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(
-                      "اسم المنتج",
+                      appState.getlocal == "ar"?"اسم المنتج":"Product Name",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  CustomTextForm(false, 'اسم المنتج ',controller: _titleController,),
+                  CustomTextForm(false, appState.getlocal == "ar"?'اسم المنتج ':"Enter Product Name",controller: _titleController,),
                   SizedBox(
                     height: Get.height*.02,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:15.0),
                     child: Text(
-                      "تفاصيل المنتج",
+                      appState.getlocal == "ar"?"تفاصيل المنتج":"Product Details",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -77,7 +77,7 @@ class _AddProductHelpState extends State<AddProductHelp> {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: SpetialCustomTextForm(
 
-                      false, 'ادخل التفاصيل ',controller: _descController,),
+                      false, appState.getlocal == "ar"?'ادخل التفاصيل ':"Enter Product Details",controller: _descController,),
                   ),
 
                   SizedBox(
@@ -85,7 +85,7 @@ class _AddProductHelpState extends State<AddProductHelp> {
                   ), Padding(
                     padding: const EdgeInsets.only(right:15.0),
                     child: Text(
-                      "رقم التواصل",
+                      appState.getlocal == "ar"?"رقم التواصل":"Phone",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -96,7 +96,7 @@ class _AddProductHelpState extends State<AddProductHelp> {
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: CustomTextForm(
 
-                      false, 'ادخل الرفم ',controller: _whatsController,),
+                      false, appState.getlocal == "ar"?'ادخل الرفم ':"Enter Phone Number",controller: _whatsController,),
                   ),
                   SizedBox(
                     height: Get.height*.02,
@@ -132,7 +132,7 @@ class _AddProductHelpState extends State<AddProductHelp> {
                             SizedBox(
                               width: Get.width*.03,
                             ),
-                            Text(image == null ?'إضافة صورة' : 'تغيير الصورة',style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
+                            Text(image == null ?(appState.getlocal == "ar"?'إضافة صورة':"Add Image"): (appState.getlocal == "ar"?'تغيير الصورة':"Change image"),style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
                           ],
                         ),
                       ),
@@ -142,14 +142,14 @@ class _AddProductHelpState extends State<AddProductHelp> {
                     height: Get.height*.02,
                   ),
                   DefaultButton(
-                    text: 'إضافة المنتج',
+                    text: appState.getlocal == "ar"?'إضافة المنتج':"Add Product",
                     press: (){
                       if(_titleController.text.trim() !="" &&
                         _whatsController.text.trim() !="" &&
                         _descController.text.trim() !="" &&
                         image != null
                       ){
-                        EasyLoading.show(status:"جاري اضافة منشورك");
+                        EasyLoading.show(status:appState.getlocal == "ar"?"جاري اضافة منشورك":"Adding your Post");
                         uploadFirebaseImage(image).then((boo) async{
                         if (boo != null) {
                         try{
@@ -284,14 +284,14 @@ class _AddProductHelpState extends State<AddProductHelp> {
 
                         }catch(e){
                           EasyLoading.dismiss();
-                          EasyLoading.showError("عفوا حدث خطأ ما" , duration: Duration(milliseconds: 600));
+                          EasyLoading.showError(appState.getlocal == "ar"?"عفوا حدث خطأ ما":"sorry you request not complited", duration: Duration(milliseconds: 600));
                           print(e);
                         }
                         }
                       });
                         
                       }else{
-                        EasyLoading.showInfo("تأكد من ملئ البيانات و إرفاق صورة",duration: Duration(milliseconds:900));
+                        EasyLoading.showInfo(appState.getlocal == "ar"?"تأكد من ملئ البيانات و إرفاق صورة":"Be sure to fill out the information and attach a photo",duration: Duration(milliseconds:900));
                       }
                      
                     },
@@ -307,6 +307,7 @@ class _AddProductHelpState extends State<AddProductHelp> {
     );
   }
   showDialogNow(){
+     AppState appState = Provider.of<AppState>(context , listen: false);
      var result =  showDialog(
                         context: context,
                         builder: (context) {
@@ -315,8 +316,8 @@ class _AddProductHelpState extends State<AddProductHelp> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة المنتج بنجاح :)',style: TextStyle(
-                                    fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                Text(appState.getlocal == "ar"?'تم إضافة المنتج بنجاح :)':"Product added successfully :)",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
                             shape: RoundedRectangleBorder(
@@ -324,8 +325,8 @@ class _AddProductHelpState extends State<AddProductHelp> {
                             ),
                             actions: [
                               TextButton(
-                                child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الرجوع الي القائمة السابقة':"Return to the previous menu",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
@@ -333,8 +334,8 @@ class _AddProductHelpState extends State<AddProductHelp> {
                                 },
                               ),
                               TextButton(
-                                child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':'Go to main menu',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },
