@@ -49,14 +49,15 @@ class _HelpHomeState extends State<HelpHome> {
 
   @override
   void initState(){
+    AppState appState = Provider.of<AppState>(context , listen: false);
     getData();
     _scrollController.addListener(() {
      if (_scrollController.position.extentAfter == 0){
        if (myIndex.trim() != "" && myIndex != "0") {
-        EasyLoading.show(status: "جاري تحميل المزيد");
+        EasyLoading.show(status: appState.getlocal == "ar"? "جاري تحميل المزيد":"Loading ..");
         getNextData();
        }else{
-         EasyLoading.showInfo("لا يوجد المزيد" , duration: Duration(milliseconds: 600));
+         EasyLoading.showInfo(appState.getlocal == "ar"?"لا يوجد المزيد" : "No more posts" , duration: Duration(milliseconds: 600));
          
        } 
       }
@@ -71,6 +72,7 @@ void dispose() {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState=Provider.of<AppState>(context);
     return Scaffold(
       bottomSheet: Padding(
         padding: const EdgeInsets.only(left: 30,right: 30),
@@ -85,12 +87,12 @@ void dispose() {
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProductHelp()));
                     },
-                    child: Text('إضافة منتج',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
+                    child: Text(appState.getlocal == "ar"?'إضافة منتج':"Add Product",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
               );
             }),
       ),
       appBar: AppBar(
-        title: Text('إستعارات الجيران'),
+        title: Text(appState.getlocal == "ar"?'إستعارات الجيران':"Borrow something"),
         centerTitle: true,
       ),
       body:Container(
@@ -108,6 +110,7 @@ void dispose() {
     );
   }
   Widget post(String name, String image ,String photo,String product,String desc,String phone,String date,int distance,String id){
+    AppState appState = Provider.of<AppState>(context , listen: false);
     int different = DateTime.now().difference(DateTime.parse(date)).inMinutes;
     int hour = DateTime.now().difference(DateTime.parse(date)).inHours;
     int days = DateTime.now().difference(DateTime.parse(date)).inDays;
@@ -140,14 +143,13 @@ void dispose() {
                   Column(
                   children: [
                     Text(
-                  'يبعد عنك',
-                  style: TextStyle(
+                  appState.getlocal == "ar"?'يبعد عنك':"Away",style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     Row(
                       children: [
                          Text(
-                  "متر",
+                  appState.getlocal == "ar"?"متر" : "m",
                   style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14),
                         ),
@@ -211,8 +213,8 @@ void dispose() {
             Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(different == 0 ? "الآن" : (different > 0 && different < 60)?"قبل $different دقيقة" : (different>=60 && hour<24)
-                     ?"قبل $hour ساعة" : "قبل $days يوم",textDirection: TextDirection.rtl,style: TextStyle(
+              Text(different == 0 ? (appState.getlocal == "ar"?"الآن" : "Now") : (different > 0 && different < 60)?(appState.getlocal == "ar"?"قبل $different دقيقة" : "from $different minutes") : (different>=60 && hour<24)
+                     ?(appState.getlocal == "ar"?"قبل $hour ساعة" : "from $hour hour") : (appState.getlocal == "ar"?"قبل $days ساعة" : "from $days day"),textDirection: TextDirection.rtl,style: TextStyle(
                 fontSize: 11
               ),),
             ],
@@ -236,7 +238,7 @@ void dispose() {
                         color: Colors.green),
                   ),
                   IconButton(onPressed: (){
-                             FlutterClipboard.copy(phone).then((value) =>EasyLoading.showSuccess("تم النسخ",duration: Duration(milliseconds: 600)) );
+                             FlutterClipboard.copy(phone).then((value) =>EasyLoading.showSuccess((appState.getlocal == "ar"?"تم النسخ" : "Copied"),duration: Duration(milliseconds: 600)) );
                           }, icon: Icon(Icons.copy))
                 ]),
           ],
@@ -294,7 +296,7 @@ void dispose() {
       });
     });
   }else{
-    EasyLoading.showInfo("لا توجد منشورات", duration: Duration(milliseconds: 800));
+    EasyLoading.showInfo(appState.getlocal == "ar"?"لا توجد منشورات":"No posts founded", duration: Duration(milliseconds: 800));
     setState(() {
       loading = false;
     });

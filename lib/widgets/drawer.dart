@@ -40,14 +40,14 @@ Widget drawer(context) {
                   thickness: 2,
                   height: 15,
                 ),
-                drawerCard(context, "images/user_6.png", "ملفي الشخصي", 1),
+                drawerCard(context, "images/user_6.png", appState.getlocal == "ar"?"ملفي الشخصي":"Profile", 1),
                 // drawerCard(context, "images/subscription.png", "نشاطي", 2),
-                //drawerCard(context, "images/youtube_2.png", "الاعدادات", 3),
-                drawerCard(context, "images/settings.png", "عن التطبيق", 4),
+                drawerCard(context, "images/youtube_2.png",appState.getlocal == "ar"?"الاعدادات":"Settings", 3),
+                drawerCard(context, "images/settings.png", appState.getlocal == "ar"? "عن التطبيق":"About", 4),
                 drawerCard(
-                    context, "images/logo_v_en_2.png", "الشروط والخصوصية", 5),
+                    context, "images/logo_v_en_2.png", appState.getlocal == "ar"?"الشروط والخصوصية":"Terms and Privacy", 5),
                 drawerCard(
-                    context, "images/logo_v_en_2.png", "التواصل معنا", 6),
+                    context, "images/logo_v_en_2.png", appState.getlocal == "ar"?"التواصل معنا":"Contact us", 6),
                 Container(
                     height: 80,
                     alignment: Alignment.center,
@@ -70,7 +70,7 @@ Widget drawer(context) {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        child: Text("تسجيل الخروج",
+                        child: Text(appState.getlocal == "ar"?"تسجيل الخروج":"Log out",
                             style: TextStyle(
                                 color: Colors.pink[900],
                                 fontSize: 18,

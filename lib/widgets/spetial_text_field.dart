@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jeraan_project/screens/serves/appstate.dart';
+import 'package:provider/provider.dart';
 
 class SpetialCustomTextForm extends StatefulWidget {
   var obScur;
@@ -18,13 +20,14 @@ class _CustomTextFormState extends State<SpetialCustomTextForm> {
   var hint;
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
     var mediQuery = MediaQuery.of(context).size;
     return Stack(
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 6,vertical: 2),
           child: TextFormField(
-            textDirection: TextDirection.rtl,
+            textDirection: appState.getlocal == "ar"? TextDirection.rtl : TextDirection.ltr,
             maxLines:5,
               controller: widget.controller,
               obscureText: widget.obScur,

@@ -31,7 +31,7 @@ class _AddJobState extends State<AddJob> {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('إضافة هواية'),
+        title: Text(appState.getlocal == "ar"?'إضافة هواية':"Add Hobby"),
         centerTitle: true,
       ),
       body: Form(
@@ -41,26 +41,26 @@ class _AddJobState extends State<AddJob> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right:10.0),
                     child: Text(
-                      "نوع الهواية",
+                      appState.getlocal == "ar"?"نوع الهواية":"About Your hobby",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  CustomTextForm(false, 'نوع نوع الهوية ',controller: _titleController,),
+                  CustomTextForm(false, appState.getlocal == "ar"?"نوع الهواية":"About Your hobby",controller: _titleController,),
                   SizedBox(
                     height: Get.height*.02,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:30.0),
                     child: Text(
-                      "العمر",
+                      appState.getlocal == "ar"?"العمر":"Age",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -69,7 +69,7 @@ class _AddJobState extends State<AddJob> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: CustomTextForm(false, 'العمر',controller: _ageController,),
+                    child: CustomTextForm(false, appState.getlocal == "ar"?'العمر':"Age",controller: _ageController,),
                   ),
                   SizedBox(
                     height: Get.height*.02,
@@ -77,7 +77,7 @@ class _AddJobState extends State<AddJob> {
                   Padding(
                     padding: const EdgeInsets.only(right:15.0),
                     child: Text(
-                      "تفاصيل الهواية",
+                      appState.getlocal == "ar"?"تفاصيل الهواية":"Hobby Details",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black45,
@@ -88,7 +88,7 @@ class _AddJobState extends State<AddJob> {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: SpetialCustomTextForm(
 
-                      false, 'التفاصيل ',controller: _descController,),
+                      false, appState.getlocal == "ar"?"تفاصيل الهواية":"Hobby Details",controller: _descController,),
                   ),
 
                   SizedBox(
@@ -97,13 +97,13 @@ class _AddJobState extends State<AddJob> {
 
 
                   DefaultButton(
-                    text: 'إضافة الهواية',
+                    text: appState.getlocal == "ar"?'إضافة الهواية':"Add Hobby",
                     press: ()async{
                       if(_titleController.text.trim() !="" &&
                         _ageController.text.trim() !="" &&
                         _descController.text.trim() !=""
                       ){
-                        EasyLoading.show(status:"جاري اضافة الهواية");
+                        EasyLoading.show(status:appState.getlocal == "ar"?"جاري اضافة الهواية":"Adding the hobby ..");
                        
                         try{
                           // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
@@ -233,13 +233,13 @@ class _AddJobState extends State<AddJob> {
 
                         }catch(e){
                           EasyLoading.dismiss();
-                          EasyLoading.showError("عفوا حدث خطأ ما" , duration: Duration(milliseconds: 600));
+                          EasyLoading.showError(appState.getlocal == "ar"?"عفوا حدث خطأ ما":"sorry you request not complited", duration: Duration(milliseconds: 600));
                           print(e);
                         }
                        
                         
                       }else{
-                        EasyLoading.showInfo("تأكد من ملئ البيانات",duration: Duration(milliseconds:900));
+                        EasyLoading.showInfo(appState.getlocal == "ar"?"تأكد من ملئ البيانات و إرفاق صورة":"Be sure to fill out the information and attach a photo",duration: Duration(milliseconds:900));
                       }
                       
                     },
@@ -255,6 +255,7 @@ class _AddJobState extends State<AddJob> {
     );
   }
   showDialogNow(){
+     AppState appState = Provider.of<AppState>(context , listen: false);
     var result =  showDialog(
                         context: context,
                         builder: (context) {
@@ -262,9 +263,9 @@ class _AddJobState extends State<AddJob> {
                             title:Image.asset('images/text.png',width: 60,height: 50,),
                             content: Row(
                               children: [
-                                Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text('تم إضافة الهواية بنجاح :)',style: TextStyle(
-                                    fontSize: 19,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
+                                Image.asset('images/smile.png',width: 25,height: 25,),
+                                Text(appState.getlocal == "ar"?'تم إضافة الهواية بنجاح :)':'Hobby added successfully :)',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
                             shape: RoundedRectangleBorder(
@@ -272,8 +273,8 @@ class _AddJobState extends State<AddJob> {
                             ),
                             actions: [
                               TextButton(
-                                child: Text('الرجوع الي القائمة السابقة',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الرجوع الي القائمة السابقة':"Return to the previous menu",style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
@@ -281,8 +282,8 @@ class _AddJobState extends State<AddJob> {
                                 },
                               ),
                               TextButton(
-                                child: Text('الذهاب الي القائمة الرئيسيه',style: TextStyle(
-                                    fontSize: 15,color:Colors.black),textDirection: TextDirection.rtl,),
+                                child: Text(appState.getlocal == "ar"?'الذهاب الي القائمة الرئيسيه':'Go to main menu',style: TextStyle(
+                                    fontSize: appState.getlocal == "ar"? 15 : 13.5,color:Colors.black),textDirection: TextDirection.rtl,),
                                 onPressed: () {
                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                                 },

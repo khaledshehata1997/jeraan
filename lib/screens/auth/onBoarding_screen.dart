@@ -13,55 +13,30 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  AnimatedContainer buildDot({int index}) {
-    return AnimatedContainer(
-
-      duration: Duration(seconds: 2),
-      margin: EdgeInsets.only(right: 5),
-      height: 6,
-      width: currentPage == index ? 20 : 6,
-      decoration: BoxDecoration(
-        color: currentPage == index ? mainColor : Color(0xFFD8D8D8),
-        borderRadius: BorderRadius.circular(3),
-      ),
-    );
-  }
-
-  int currentPage = 0;
-  List<Map<String, String>> onboardingData = [
-    {"text": "مرحبا بكم في جيران! \nنحن نساعد الجيران علي التواصل والتقرب من بعضهم البعض، \n رجاءا ساعدنا علي اتمام هذا العمل الرائع بدون اي شيئ يؤثر علي الهدف",
-      "image": "images/jeran.png"},
-  ];
+  // AnimatedContainer buildDot({int index}) {
+  //   return AnimatedContainer(
+  //
+  //     duration: Duration(seconds: 2),
+  //     margin: EdgeInsets.only(right: 5),
+  //     height: 6,
+  //     width: currentPage == index ? 20 : 6,
+  //     decoration: BoxDecoration(
+  //       color: currentPage == index ? mainColor : Color(0xFFD8D8D8),
+  //       borderRadius: BorderRadius.circular(3),
+  //     ),
+  //   );
+  // }
+  //
+  // int currentPage = 0;
+  // List<Map<String, String>> onboardingData = [
+  //   {"text": "",
+  //     "image": ""},
+  // ];
 
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
-    return Scaffold(
-      body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: PageView.builder(
-                  onPageChanged: (value) {
-                    setState(() {
-                      currentPage = value;
-                    });
-                  },
-                  itemCount: onboardingData.length,
-                  itemBuilder: (context, index) => OnboardingContent(
-                    image: onboardingData[index]["image"],
-                    text: onboardingData[index]['text'],
-                  ),
-                ),
-              ),
-
-                    ],
-                  ),
-                ),
-              ),
+    return  OnboardingContent(
     );
   }
 }

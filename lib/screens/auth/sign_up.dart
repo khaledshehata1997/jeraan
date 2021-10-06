@@ -39,6 +39,8 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: mainColor,
+
         title: Text('SIGN UP'),
         centerTitle: true,
       ),
@@ -49,7 +51,7 @@ class _SignUpState extends State<SignUp> {
             Container(
               margin: EdgeInsets.only(left: 12, right: 12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: mediQuery.width * .04,
