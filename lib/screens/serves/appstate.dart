@@ -39,5 +39,5 @@ class AppState with ChangeNotifier {
     local = (loc ?? local)?? "ar";
     notifyListeners();
   }
-  String get getlocal => local ?? "ar";
+  String get getlocal => local ?? "en";
 }

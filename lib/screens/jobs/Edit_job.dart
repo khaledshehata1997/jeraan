@@ -14,26 +14,46 @@ import 'package:provider/provider.dart';
 
 import 'job_services.dart';
 
-class AddJob extends StatefulWidget {
+class EditJob extends StatefulWidget {
+  final String image, name, hobby, desc , age ;
+  final int distance;
+  final String id , docId;
+  final double lat , long ;
+  EditJob(this.image,this.name,this.hobby, this.desc ,this.age, this.distance , this.id ,this.docId,this.lat,this.long);
   @override
-  _AddJobState createState() => _AddJobState();
+  _EditJobState createState() => _EditJobState(this.image,this.name,this.hobby, this.desc ,this.age, this.distance , this.id ,this.docId,this.lat,this.long);
 }
 
-class _AddJobState extends State<AddJob> {
-  final TextEditingController _titleController = new TextEditingController();
+class _EditJobState extends State<EditJob> {
+  final String image, name, hobby, desc , age ;
+  final int distance;
+  final String id , docId;
+  final double lat , long ;
+  _EditJobState(this.image,this.name,this.hobby, this.desc ,this.age, this.distance , this.id ,this.docId,this.lat,this.long);
+   TextEditingController _titleController = new TextEditingController();
 
-  final TextEditingController _descController = new TextEditingController();
+   TextEditingController _descController = new TextEditingController();
 
-  final TextEditingController _ageController = new TextEditingController();
+   TextEditingController _ageController = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _titleController = TextEditingController(text: hobby);
+
+    _descController = TextEditingController(text: desc);
+
+    _ageController = TextEditingController(text: age);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text(appState.getlocal == "ar"?'إضافة هواية':"Add Hobby"),
+        title: Text(appState.getlocal == "ar"?'تعديل هواية':"Edit Hobby"),
         centerTitle: true,
       ),
       body: Form(
@@ -99,13 +119,13 @@ class _AddJobState extends State<AddJob> {
 
 
                   DefaultButton(
-                    text: appState.getlocal == "ar"?'إضافة الهواية':"Add Hobby",
+                    text: appState.getlocal == "ar"?'تعديل الهواية':"Edit Hobby",
                     press: ()async{
                       if(_titleController.text.trim() !="" &&
                         _ageController.text.trim() !="" &&
                         _descController.text.trim() !=""
                       ){
-                        EasyLoading.show(status:appState.getlocal == "ar"?"جاري اضافة الهواية":"Adding the hobby ..");
+                        EasyLoading.show(status:appState.getlocal == "ar"?"جاري تعديل الهواية":"Editing the hobby ..");
                        
                         try{
                           // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
@@ -165,6 +185,23 @@ class _AddJobState extends State<AddJob> {
                               
                             // })
                             // 
+                            var ref = FirebaseFirestore.instance.collection("Hobby").doc(docId);
+                          Map<String,dynamic> beforeHobbyMap = {
+                            "Image" : image,
+                            "Name" : name,
+                            "L" : lat,
+                            "G" : long,
+                            "Id" : id,
+                            "Desc" : desc,
+                            "Hobby" : hobby,
+                            "Age" : age
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeHobbyMap
+                          ]
+                          )
+                          });
                             hobbyServicesUpdate(appState.getimage,appState.getname,appState.getlat, appState.getlong,
                               FirebaseAuth.instance.currentUser.uid ,
                               _myDoc.docs[i].id,_descController.text.trim().toString(),
@@ -199,6 +236,23 @@ class _AddJobState extends State<AddJob> {
                             //   "listDesc" : listdesc
                             // })
                             // 
+                            var ref = FirebaseFirestore.instance.collection("Hobby").doc(docId);
+                          Map<String,dynamic> beforeHobbyMap = {
+                            "Image" : image,
+                            "Name" : name,
+                            "L" : lat,
+                            "G" : long,
+                            "Id" : id,
+                            "Desc" : desc,
+                            "Hobby" : hobby,
+                            "Age" : age
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeHobbyMap
+                          ]
+                          )
+                          });
                             hobbyServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
                               FirebaseAuth.instance.currentUser.uid ,
                               _myDoc.size.toString(),_descController.text.trim().toString(),
@@ -242,7 +296,23 @@ class _AddJobState extends State<AddJob> {
                             //   EasyLoading.dismiss();
                             //   showDialogNow();
                             // });
-
+                            var ref = FirebaseFirestore.instance.collection("Hobby").doc(docId);
+                          Map<String,dynamic> beforeHobbyMap = {
+                            "Image" : image,
+                            "Name" : name,
+                            "L" : lat,
+                            "G" : long,
+                            "Id" : id,
+                            "Desc" : desc,
+                            "Hobby" : hobby,
+                            "Age" : age
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeHobbyMap
+                          ]
+                          )
+                          });
                             hobbyServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
                               FirebaseAuth.instance.currentUser.uid ,
                               _myDoc.size.toString(),_descController.text.trim().toString(),
@@ -287,7 +357,7 @@ class _AddJobState extends State<AddJob> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 25,height: 25,),
-                                Text(appState.getlocal == "ar"?'تم إضافة الهواية بنجاح :)':'Hobby added successfully :)',style: TextStyle(
+                                Text(appState.getlocal == "ar"?'تم تعديل الهواية بنجاح :)':'Hobby Edited successfully :)',style: TextStyle(
                                     fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),

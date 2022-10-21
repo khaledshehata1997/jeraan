@@ -1,5 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,6 +10,7 @@ import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
 import 'package:provider/provider.dart';
 import 'add_post_t3arf.dart';
+import 'edit_t3arf.dart';
 
 class T3arfHome extends StatefulWidget {
   @override
@@ -20,27 +22,34 @@ class _T3arfHomeState extends State<T3arfHome> {
   Color fav=Colors.grey[400];
   bool isfav=false;
   bool loading = true;
-  List<String> mainlistimage = [];
-  List<String> mainlistage = [];
-  List<String> mainlistjop = [];
-  List<String> mainlistname = [];
-  List<String> mainlistpost = [];
-  List<String> mainlistphone = [];
-  List<String> mainlistId = [];
-  List<double> mainlistL = [];
-  List<double> mainlistG = [];
-  List<String> mainlistdate = [];
-  List<String> listdate = [];
-  List<double> listL = [];
-  List<double> listG = [];
-  List<String> listimage = [];
-  List<String> listage = [];
-  List<String> listjop = [];
-  List<String> listname = [];
-  List<String> listpost = [];
-  List<String> listphone = [];
-  List<String> listId = [];
+  // List<String> mainlistimage = [];
+  // List<String> mainlistage = [];
+  // List<String> mainlistjop = [];
+  // List<String> mainlistname = [];
+  // List<String> mainlistpost = [];
+  // List<String> mainlistphone = [];
+  // List<String> mainlistId = [];
+  // List<double> mainlistL = [];
+  // List<double> mainlistG = [];
+  // List<String> mainlistdate = [];
+  // List<String> listdate = [];
+  // List<double> listL = [];
+  // List<double> listG = [];
+  // List<String> listimage = [];
+  // List<String> listage = [];
+  // List<String> listjop = [];
+  // List<String> listname = [];
+  // List<String> listpost = [];
+  // List<String> listphone = [];
+  // List<String> listId = [];
+  // List<double> listDistance = [];
+  // String myIndex = "";
+
+  List<String> docId = [];
   List<double> listDistance = [];
+
+  List<Map> listData = [];
+  List<Map> mainListData = [];
   String myIndex = "";
   @override
   void initState(){
@@ -73,38 +82,45 @@ void dispose() {
     QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('T3arf').get();
     if(_myDoc.size>0){
     FirebaseFirestore.instance.collection("T3arf").where("index", isEqualTo: (_myDoc.size-1).toString()).get().then((value){
-      mainlistimage = List.from(value.docs[0]["listImage"]);
-      mainlistage = List.from(value.docs[0]["listAge"]);
-      mainlistjop = List.from(value.docs[0]["listJops"]);
-      mainlistname = List.from(value.docs[0]["listName"]);
-      mainlistpost = List.from(value.docs[0]["listPost"]);
-      mainlistphone = List.from(value.docs[0]["listPhone"]);
-      mainlistL = List.from(value.docs[0]["listL"]);
-      mainlistG = List.from(value.docs[0]["listG"]);      
-      mainlistId = List.from(value.docs[0]["listId"]);
-      mainlistdate = List.from(value.docs[0]["listDate"]);
+      mainListData = List.from(value.docs[0]["data"]);
+
+      // mainlistimage = List.from(value.docs[0]["listImage"]);
+      // mainlistage = List.from(value.docs[0]["listAge"]);
+      // mainlistjop = List.from(value.docs[0]["listJops"]);
+      // mainlistname = List.from(value.docs[0]["listName"]);
+      // mainlistpost = List.from(value.docs[0]["listPost"]);
+      // mainlistphone = List.from(value.docs[0]["listPhone"]);
+      // mainlistL = List.from(value.docs[0]["listL"]);
+      // mainlistG = List.from(value.docs[0]["listG"]);      
+      // mainlistId = List.from(value.docs[0]["listId"]);
+      // mainlistdate = List.from(value.docs[0]["listDate"]);
       myIndex = (_myDoc.size-1).toString();
-    }).then((value) {
-      for (var i = mainlistimage.length-1; i >= 0; i--) {
-      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainlistL[i], mainlistG[i])).toDouble();
+      for (var i = mainListData.length-1; i >= 0; i--) {
+      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainListData[i]["L"], mainListData[i]["G"])).toDouble();
       if (distance <= myDistance) {
+      // listDistance.add(distance);
+      // listL.add(mainlistL[i]);
+      // listG.add(mainlistG[i]);
+      // listimage.add(mainlistimage[i]);
+      // listage.add(mainlistage[i]);
+      // listjop.add(mainlistjop[i]);
+      // listname.add(mainlistname[i]);
+      // listpost.add(mainlistpost[i]);
+      // listphone.add(mainlistphone[i]);
+      // listId.add(mainlistId[i]);
+      // listdate.add(mainlistdate[i]);
       listDistance.add(distance);
-      listL.add(mainlistL[i]);
-      listG.add(mainlistG[i]);
-      listimage.add(mainlistimage[i]);
-      listage.add(mainlistage[i]);
-      listjop.add(mainlistjop[i]);
-      listname.add(mainlistname[i]);
-      listpost.add(mainlistpost[i]);
-      listphone.add(mainlistphone[i]);
-      listId.add(mainlistId[i]);
-      listdate.add(mainlistdate[i]);
+      docId.add(value.docs[0].id);
+      listData.add(mainListData[i]);
       }
+      }
+      if (mainListData.length < 2) {
+        GetNextData();
       }
     }).whenComplete((){
       setState(() {
         loading = false;
-        listimage = listimage;
+        listData = listData;
       });
     });
   }else{
@@ -120,43 +136,47 @@ void dispose() {
     AppState appState = Provider.of<AppState>(context , listen: false);
     LatLng l1 = LatLng(appState.getlat , appState.getlong);
     double myDistance = double.parse(appState.getnearest) * 1000;
-    mainlistimage = []; mainlistage = []; mainlistjop = [];
-    mainlistname = []; mainlistpost = []; mainlistphone = [];
-    mainlistL = []; mainlistG = [];
-    mainlistdate = []; mainlistId = [];
+    mainListData = [];
+
+    // mainlistimage = []; mainlistage = []; mainlistjop = [];
+    // mainlistname = []; mainlistpost = []; mainlistphone = [];
+    // mainlistL = []; mainlistG = [];
+    // mainlistdate = []; mainlistId = [];
     FirebaseFirestore.instance.collection("T3arf").where("index", isEqualTo: (int.parse(myIndex) - 1).toString()).get().then((value){
-      mainlistimage = List.from(value.docs[0]["listImage"]);
-      mainlistage = List.from(value.docs[0]["listAge"]);
-      mainlistjop = List.from(value.docs[0]["listJops"]);
-      mainlistname = List.from(value.docs[0]["listName"]);
-      mainlistpost = List.from(value.docs[0]["listPost"]);
-      mainlistphone = List.from(value.docs[0]["listPhone"]);
-      mainlistL = List.from(value.docs[0]["listL"]);
-      mainlistG = List.from(value.docs[0]["listG"]);      
-      mainlistId = List.from(value.docs[0]["listId"]);
-      mainlistdate = List.from(value.docs[0]["listDate"]);
+      // mainlistimage = List.from(value.docs[0]["listImage"]);
+      // mainlistage = List.from(value.docs[0]["listAge"]);
+      // mainlistjop = List.from(value.docs[0]["listJops"]);
+      // mainlistname = List.from(value.docs[0]["listName"]);
+      // mainlistpost = List.from(value.docs[0]["listPost"]);
+      // mainlistphone = List.from(value.docs[0]["listPhone"]);
+      // mainlistL = List.from(value.docs[0]["listL"]);
+      // mainlistG = List.from(value.docs[0]["listG"]);      
+      // mainlistId = List.from(value.docs[0]["listId"]);
+      // mainlistdate = List.from(value.docs[0]["listDate"]);
+      mainListData = List.from(value.docs[0]["data"]);
       myIndex = (int.parse(myIndex) - 1).toString();
-    }).then((value) {
-      for (var i = mainlistimage.length-1; i >= 0; i--) {
-      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainlistL[i], mainlistG[i])).toDouble();
+      for (var i = mainListData.length-1; i >= 0; i--) {
+      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainListData[i]["L"], mainListData[i]["G"])).toDouble();
       if (distance <= myDistance) {
-      listDistance.add(distance);
-      listL.add(mainlistL[i]);
-      listG.add(mainlistG[i]);
-      listimage.add(mainlistimage[i]);
-      listage.add(mainlistage[i]);
-      listjop.add(mainlistjop[i]);
-      listname.add(mainlistname[i]);
-      listpost.add(mainlistpost[i]);
-      listphone.add(mainlistphone[i]);
-      listId.add(mainlistId[i]);
-      listdate.add(mainlistdate[i]);
+       listDistance.add(distance);
+      // listL.add(mainlistL[i]);
+      // listG.add(mainlistG[i]);
+      // listimage.add(mainlistimage[i]);
+      // listage.add(mainlistage[i]);
+      // listjop.add(mainlistjop[i]);
+      // listname.add(mainlistname[i]);
+      // listpost.add(mainlistpost[i]);
+      // listphone.add(mainlistphone[i]);
+      // listId.add(mainlistId[i]);
+      // listdate.add(mainlistdate[i]);
+      docId.add(value.docs[0].id);
+      listData.add(mainListData[i]);
       }
       }
     }).whenComplete((){
       EasyLoading.dismiss();
       setState(() {
-        listimage = listimage;
+        listData = listData;
       });
     });
   }
@@ -203,11 +223,11 @@ void dispose() {
                 margin: EdgeInsets.only(top: 10),
                 padding: EdgeInsets.all(8),
                 width: Get.width*.8,
-                height: MediaQuery.of(context).size.height*.15,
+                height: 100,
                 child: Text(
                     appState.getlocal == "ar"?'رجاءا من مسئول التطبيق : لا تستخدم هذه الخاصية في إزعاج غيرك من الجيران وراقب الله في افعالك.':'Please from the application administrator: Do not use this feature to annoy other neighbors and watch God in your actions.',
                     textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 14,color: Colors.white),),
+                style: TextStyle(fontSize: 16,color: Colors.white),),
               ),
             
             Container(
@@ -221,11 +241,9 @@ void dispose() {
                 shrinkWrap: true,
                 controller: _scrollController,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: listimage.length ?? 0,
+                itemCount: listData.length ?? 0,
                 itemBuilder: (context,i){
-                  return GestureDetector(
-
-                      child: t3arf(listimage[i], listname[i], listage[i], listjop[i], listpost[i], listphone[i], listId[i] , listDistance[i].toInt() , listdate[i]));
+                  return t3arf(listData[i]["Image"], listData[i]["Name"], listData[i]["Age"], listData[i]["Jops"], listData[i]["Post"], listData[i]["Phone"], listData[i]["Id"] , listDistance[i].toInt() , listData[i]["Date"] , docId[i] , listData[i]["L"] , listData[i]["G"]);
                 },
                ),
             ),
@@ -238,7 +256,7 @@ void dispose() {
     );
   }
 
-  Widget t3arf(String image,String name,String age,String job,String text,String phone,String id , int distance , String date){
+  Widget t3arf(String image,String name,String age,String job,String text,String phone,String id , int distance , String date , String docId , double lat,double long){
     AppState appState = Provider.of<AppState>(context , listen: false);
     int different = DateTime.now().difference(DateTime.parse(date)).inMinutes;
     int hour = DateTime.now().difference(DateTime.parse(date)).inHours;
@@ -266,24 +284,62 @@ void dispose() {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-                   CircleAvatar(
-                    radius: 20,
-                    backgroundImage: FirebaseImage('$image'),
+                
+                   Row(
+                     children: [
+                       CircleAvatar(
+                        radius: 20,
+                        backgroundImage: FirebaseImage('$image'),
                   ),
-
-                Text(
+                  SizedBox(width: 15,),
+                  Text(
                   '$name',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
+                     ],
+                   ),
                 // IconButton(icon: Icon(Icons.favorite,color: fav,size: 30,), onPressed: (){
                 //   setState(() {
                 //     isfav= !isfav;
                 //     isfav?fav=Colors.grey[400]:fav=Colors.red;
                 //   });
                 // })
-                Column(
+                id == FirebaseAuth.instance.currentUser.uid ?  Row(
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          var ref = FirebaseFirestore.instance.collection("T3arf").doc(docId);
+                          Map<String,dynamic> beforeT3arfMap = {
+                            "Image" : image,
+                            "Age" : age,
+                            "Jops" : job,
+                            "Name" : name,
+                            "Post" : text,
+                            "Phone": phone,
+                            "L" : lat,
+                            "G" : long,
+                            "Date" : date,
+                            "Id" : id
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeT3arfMap
+                          ]
+                          )
+                          }).then((value){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>T3arfHome()));
+                          });
+
+                      }, icon: Icon(Icons.delete ,)),
+
+
+                       IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>EditPostT3arf(image,name,age,job,text,phone,id,distance,date,docId,lat,long)));
+                          
+                      }, icon: Icon(Icons.edit , )),
+                    ],
+                  ) :Column(
                   children: [
                     Text(
                   appState.getlocal == "ar"?'يبعد عنك':"Away",
@@ -311,18 +367,18 @@ void dispose() {
             ),
           ),
           SizedBox(height: 15),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   children: [
-          //     Text(appState.getlocal == "ar"?'العمر :  ' : ' : Age',textDirection: TextDirection.rtl,style: TextStyle(
-          //       fontSize: 17,fontWeight: FontWeight.bold
-          //     ),),
-          //     Text('$age',textDirection: TextDirection.rtl,style: TextStyle(
-          //       fontSize: 17
-          //     ),),
-          //
-          //   ],
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(appState.getlocal == "ar"?'العمر :  ' : ' : Age',textDirection: TextDirection.rtl,style: TextStyle(
+                fontSize: 17,fontWeight: FontWeight.bold
+              ),),
+              Text('$age',textDirection: TextDirection.rtl,style: TextStyle(
+                fontSize: 17
+              ),),
+              
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

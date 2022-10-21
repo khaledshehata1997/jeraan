@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:jeraan_project/screens/ask/askServices.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
@@ -136,55 +137,47 @@ class _AddPostAskState extends State<AddPostAsk> {
                       //     success = true;
                       //   });
                       // });
-                      List<String> listdate = [];
-                      List<double> listL = [];
-                      List<double> listG = [];
-                      List<String> listimage = [];
-                      List<String> listage = [];
-                      List<String> listjop = [];
-                      List<String> listname = [];
-                      List<String> listpost = [];
-                      List<String> listphone = [];
-                      List<String> listId = [];
+                      // List<String> listdate = [];
+                      // List<double> listL = [];
+                      // List<double> listG = [];
+                      // List<String> listimage = [];
+                      // List<String> listage = [];
+                      // List<String> listjop = [];
+                      // List<String> listname = [];
+                      // List<String> listpost = [];
+                      // List<String> listphone = [];
+                      // List<String> listId = [];
                       QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Ask').get();
                       if(_myDoc.size>0){
                       for (var i = 0; i < _myDoc.size; i++) {
                         print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
                         if(_myDoc.docs[i]["index"] == "${_myDoc.size-1}"){
-                          List l =  List.from(_myDoc.docs[i]["listAge"]);
+                          List l =  List.from(_myDoc.docs[i]["data"]);
                           if(l.length <= 200){
-                            listimage = List.from(_myDoc.docs[i]["listImage"]);
-                            listage = List.from(_myDoc.docs[i]["listAge"]);
-                            listjop = List.from(_myDoc.docs[i]["listJops"]);
-                            listname = List.from(_myDoc.docs[i]["listName"]);
-                            listpost = List.from(_myDoc.docs[i]["listPost"]);
-                            listphone = List.from(_myDoc.docs[i]["listPhone"]);
-                            listL = List.from(_myDoc.docs[i]["listL"]);
-                            listG = List.from(_myDoc.docs[i]["listG"]);
-                            listdate = List.from(_myDoc.docs[i]["listDate"]);
-                            listId = List.from(_myDoc.docs[i]["listId"]);
-                            listimage.add(appState.getimage);
-                            listage.add(_ageController.text.trim().toString());
-                            listjop.add(_jobController.text.trim().toString());
-                            listname.add(appState.getname);
-                            listpost.add(_postController.text.trim().toString());
-                            listphone.add(_whatsController.text.trim().toString());
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
-                            FirebaseFirestore.instance.collection("Ask").doc(_myDoc.docs[i].id).update({
-                              "listImage" : listimage,
-                              "listAge" : listage,
-                              "listJops" : listjop,
-                              "listName" : listname,
-                              "listPost" : listpost,
-                              "listPhone": listphone,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
-                              "listId" : listId
-                            }).then((value){
+                            // listimage = List.from(_myDoc.docs[i]["listImage"]);
+                            // listage = List.from(_myDoc.docs[i]["listAge"]);
+                            // listjop = List.from(_myDoc.docs[i]["listJops"]);
+                            // listname = List.from(_myDoc.docs[i]["listName"]);
+                            // listpost = List.from(_myDoc.docs[i]["listPost"]);
+                            // listphone = List.from(_myDoc.docs[i]["listPhone"]);
+                            // listL = List.from(_myDoc.docs[i]["listL"]);
+                            // listG = List.from(_myDoc.docs[i]["listG"]);
+                            // listdate = List.from(_myDoc.docs[i]["listDate"]);
+                            // listId = List.from(_myDoc.docs[i]["listId"]);
+                            // listimage.add(appState.getimage);
+                            // listage.add(_ageController.text.trim().toString());
+                            // listjop.add(_jobController.text.trim().toString());
+                            // listname.add(appState.getname);
+                            // listpost.add(_postController.text.trim().toString());
+                            // listphone.add(_whatsController.text.trim().toString());
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
+                            askServicesUpdate(appState.getimage, _ageController.text.trim().toString(), _jobController.text.trim().toString(),
+                             appState.getname, _postController.text.trim().toString(), _whatsController.text.trim().toString(),
+                              appState.getlat, appState.getlong, DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid , _myDoc.docs[i].id)
+                            .then((value){
                               EasyLoading.dismiss();
                               var result =  showDialog(
 
@@ -225,29 +218,33 @@ class _AddPostAskState extends State<AddPostAsk> {
                       );
                             });
                           }else{
-                            listimage.add(appState.getimage);
-                            listage.add(_ageController.text.trim().toString());
-                            listjop.add(_jobController.text.trim().toString());
-                            listname.add(appState.getname);
-                            listpost.add(_postController.text.trim().toString());
-                            listphone.add(_whatsController.text.trim().toString());
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
-                            FirebaseFirestore.instance.collection("Ask").add({
-                              "index" : _myDoc.size.toString(),
-                              "listImage" : listimage,
-                              "listAge" : listage,
-                              "listJops" : listjop,
-                              "listName" : listname,
-                              "listPost" : listpost,
-                              "listPhone": listphone,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
-                              "listId" : listId
-                            }).then((value){
+                            // listimage.add(appState.getimage);
+                            // listage.add(_ageController.text.trim().toString());
+                            // listjop.add(_jobController.text.trim().toString());
+                            // listname.add(appState.getname);
+                            // listpost.add(_postController.text.trim().toString());
+                            // listphone.add(_whatsController.text.trim().toString());
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
+                            // FirebaseFirestore.instance.collection("Ask").add({
+                            //   "index" : _myDoc.size.toString(),
+                            //   "listImage" : listimage,
+                            //   "listAge" : listage,
+                            //   "listJops" : listjop,
+                            //   "listName" : listname,
+                            //   "listPost" : listpost,
+                            //   "listPhone": listphone,
+                            //   "listL" : listL,
+                            //   "listG" : listG,
+                            //   "listDate" : listdate,
+                            //   "listId" : listId
+                            // })
+                            askServicesSet(appState.getimage, _ageController.text.trim().toString(), _jobController.text.trim().toString(),
+                             appState.getname, _postController.text.trim().toString(), _whatsController.text.trim().toString(),
+                              appState.getlat, appState.getlong, DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid , _myDoc.size.toString())
+                            .then((value){
                               EasyLoading.dismiss();
                               var result =  showDialog(
 
@@ -292,29 +289,33 @@ class _AddPostAskState extends State<AddPostAsk> {
                         }
                       }
                       }else{
-                        listimage.add(appState.getimage);
-                            listage.add(_ageController.text.trim().toString());
-                            listjop.add(_jobController.text.trim().toString());
-                            listname.add(appState.getname);
-                            listpost.add(_postController.text.trim().toString());
-                            listphone.add(_whatsController.text.trim().toString());
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
-                            FirebaseFirestore.instance.collection("Ask").add({
-                              "index" : _myDoc.size.toString(),
-                              "listImage" : listimage,
-                              "listAge" : listage,
-                              "listJops" : listjop,
-                              "listName" : listname,
-                              "listPost" : listpost,
-                              "listPhone": listphone,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
-                              "listId" : listId
-                            }).then((value){
+                        // listimage.add(appState.getimage);
+                        //     listage.add(_ageController.text.trim().toString());
+                        //     listjop.add(_jobController.text.trim().toString());
+                        //     listname.add(appState.getname);
+                        //     listpost.add(_postController.text.trim().toString());
+                        //     listphone.add(_whatsController.text.trim().toString());
+                        //     listId.add(FirebaseAuth.instance.currentUser.uid);
+                        //     listdate.add(DateTime.now().toString());
+                        //     listL.add(appState.getlat);
+                        //     listG.add(appState.getlong);
+                        //     FirebaseFirestore.instance.collection("Ask").add({
+                        //       "index" : _myDoc.size.toString(),
+                        //       "listImage" : listimage,
+                        //       "listAge" : listage,
+                        //       "listJops" : listjop,
+                        //       "listName" : listname,
+                        //       "listPost" : listpost,
+                        //       "listPhone": listphone,
+                        //       "listL" : listL,
+                        //       "listG" : listG,
+                        //       "listDate" : listdate,
+                        //       "listId" : listId
+                            // })
+                            askServicesSet(appState.getimage, _ageController.text.trim().toString(), _jobController.text.trim().toString(),
+                             appState.getname, _postController.text.trim().toString(), _whatsController.text.trim().toString(),
+                              appState.getlat, appState.getlong, DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid,_myDoc.size.toString())
+                            .then((value){
                               EasyLoading.dismiss();
                               var result =  showDialog(
 

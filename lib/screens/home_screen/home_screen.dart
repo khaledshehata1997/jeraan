@@ -6,7 +6,6 @@ import 'package:jeraan_project/widgets/carosul_slider.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/drawer.dart';
 import 'package:jeraan_project/widgets/home_grid.dart';
-import 'package:jeraan_project/widgets/serchBar.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,12 +18,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-GlobalKey<ScaffoldState>drawerKey=GlobalKey();
-@override
+  GlobalKey<ScaffoldState>drawerKey=GlobalKey();
+  @override
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context);
     var mediQuery = MediaQuery.of(context).size;
-
     return Scaffold(
       key: drawerKey,
       drawer: Drawer(
@@ -42,7 +40,7 @@ GlobalKey<ScaffoldState>drawerKey=GlobalKey();
                     children: [
                       IconButton(icon:Icon(Icons.menu,size: 25,color: Colors.pink[900],),
                           onPressed: (){
-                        drawerKey.currentState.openDrawer();
+                            drawerKey.currentState.openDrawer();
                           }),
                       Container(
                         margin: EdgeInsets.only(left: 15),
@@ -53,10 +51,10 @@ GlobalKey<ScaffoldState>drawerKey=GlobalKey();
                         ),
                       ),
                       Container(width: 35,)
-                    // IconButton(icon: Icon(Icons.location_on_outlined,size: 25,color: Colors.pink[900],),
-                    //     onPressed: (){
+                      // IconButton(icon: Icon(Icons.location_on_outlined,size: 25,color: Colors.pink[900],),
+                      //     onPressed: (){
 
-                    //     })
+                      //     })
                     ],
                   ),
                 ),
@@ -71,7 +69,7 @@ GlobalKey<ScaffoldState>drawerKey=GlobalKey();
                 ),
                 //serchBar((value){},appState.getlocal == "ar"? "البحث" : 'Search'),
                 Container(
-                  margin: EdgeInsets.only(top: 12),
+                    margin: EdgeInsets.only(top: 12),
                     child: HomeCarousel()
                 ),
                 SizedBox(height: mediQuery.height*.035),
@@ -83,7 +81,7 @@ GlobalKey<ScaffoldState>drawerKey=GlobalKey();
       ),
     );
   }
-sendEmail() async {
-  await launch("mailto:khaledmshehata1997@gmail.com?subject=hello&body=New");
-}
+  sendEmail() async {
+    await launch("mailto:khaledmshehata1997@gmail.com?subject=hello&body=New");
+  }
 }

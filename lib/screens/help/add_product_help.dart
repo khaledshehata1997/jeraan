@@ -16,6 +16,8 @@ import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
 import 'package:provider/provider.dart';
 
+import 'help_services.dart';
+
 class AddProductHelp extends StatefulWidget {
   @override
   _AddProductHelpState createState() => _AddProductHelpState();
@@ -153,129 +155,150 @@ class _AddProductHelpState extends State<AddProductHelp> {
                         uploadFirebaseImage(image).then((boo) async{
                         if (boo != null) {
                         try{
-                          // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
-                        List<String> listId = [];
-                        List<double> listL = [];
-                        List<double> listG = [];
-                        List<String> listimage = [];
-                        List<String> listname = [];
-                        List<String> listdate = [];
-                        //
-                        List<String> listphone = [];
-                        List<String> listPhotos = [];
-                        List<String> listProduct = [];
-                        List<String> listdesc = [];
+                        // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
+                        // List<String> listId = [];
+                        // List<double> listL = [];
+                        // List<double> listG = [];
+                        // List<String> listimage = [];
+                        // List<String> listname = [];
+                        // List<String> listdate = [];
+                        // //
+                        // List<String> listphone = [];
+                        // List<String> listPhotos = [];
+                        // List<String> listProduct = [];
+                        // List<String> listdesc = [];
                         QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Est3arat').get();
                         if(_myDoc.size>0){
                       for (var i = 0; i < _myDoc.size; i++) {
                         print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
                         if(_myDoc.docs[i]["index"] == "${_myDoc.size-1}"){
-                          List l =  List.from(_myDoc.docs[i]["listId"]);
-                          if(l.length < 200){
-                            listimage = List.from(_myDoc.docs[i]["listImage"]);
-                            listname = List.from(_myDoc.docs[i]["listName"]);
-                            listL = List.from(_myDoc.docs[i]["listL"]);
-                            listG = List.from(_myDoc.docs[i]["listG"]);
-                            listdate = List.from(_myDoc.docs[i]["listDate"]);
-                            listId = List.from(_myDoc.docs[i]["listId"]);
+                          List l =  List.from(_myDoc.docs[i]["data"]);
+                          if(l.length <= 200){
+                            // listimage = List.from(_myDoc.docs[i]["listImage"]);
+                            // listname = List.from(_myDoc.docs[i]["listName"]);
+                            // listL = List.from(_myDoc.docs[i]["listL"]);
+                            // listG = List.from(_myDoc.docs[i]["listG"]);
+                            // listdate = List.from(_myDoc.docs[i]["listDate"]);
+                            // listId = List.from(_myDoc.docs[i]["listId"]);
 
-                            listphone = List.from(_myDoc.docs[i]["listPhone"]);
-                            listPhotos = List.from(_myDoc.docs[i]["listPhotos"]);
-                            listProduct = List.from(_myDoc.docs[i]["listProduct"]);
-                            listdesc = List.from(_myDoc.docs[i]["listDesc"]);
+                            // listphone = List.from(_myDoc.docs[i]["listPhone"]);
+                            // listPhotos = List.from(_myDoc.docs[i]["listPhotos"]);
+                            // listProduct = List.from(_myDoc.docs[i]["listProduct"]);
+                            // listdesc = List.from(_myDoc.docs[i]["listDesc"]);
 
-                            listimage.add(appState.getimage);
-                            listname.add(appState.getname);
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
+                            // listimage.add(appState.getimage);
+                            // listname.add(appState.getname);
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
 
-                            listphone.add(_whatsController.text.trim().toString());
-                            listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
-                            listProduct.add(_titleController.text.trim().toString());
-                            listdesc.add(_descController.text.trim().toString());
+                            // listphone.add(_whatsController.text.trim().toString());
+                            // listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+                            // listProduct.add(_titleController.text.trim().toString());
+                            // listdesc.add(_descController.text.trim().toString());
 
-                            FirebaseFirestore.instance.collection("Est3arat").doc(_myDoc.docs[i].id).update({
-                              "listImage" : listimage,
-                              "listName" : listname,
-                              "listId" : listId,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
+                            // FirebaseFirestore.instance.collection("Est3arat").doc(_myDoc.docs[i].id).update({
+                            //   "listImage" : listimage,
+                            //   "listName" : listname,
+                            //   "listId" : listId,
+                            //   "listL" : listL,
+                            //   "listG" : listG,
+                            //   "listDate" : listdate,
                               
-                              "listPhone": listphone,
-                              "listPhotos" : listPhotos,
-                              "listProduct" : listProduct,
-                              "listDesc" : listdesc
-                            }).then((value){
+                            //   "listPhone": listphone,
+                            //   "listPhotos" : listPhotos,
+                            //   "listProduct" : listProduct,
+                            //   "listDesc" : listdesc
+                            // })
+                            // 
+                            
+                            helpServicesUpdate(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                             DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid ,
+                            _whatsController.text.trim().toString(),"gs://jeeran-24c62.appspot.com/main${image.path}",
+                            _titleController.text.trim().toString(),_descController.text.trim().toString(),
+                            _myDoc.docs[i].id).then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
                             });
                           }else{
-                            listimage.add(appState.getimage);
-                            listname.add(appState.getname);
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
+                            // listimage.add(appState.getimage);
+                            // listname.add(appState.getname);
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
 
-                            listphone.add(_whatsController.text.trim().toString());
-                            listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
-                            listProduct.add(_titleController.text.trim().toString());
-                            listdesc.add(_descController.text.trim().toString());
+                            // listphone.add(_whatsController.text.trim().toString());
+                            // listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+                            // listProduct.add(_titleController.text.trim().toString());
+                            // listdesc.add(_descController.text.trim().toString());
 
-                            FirebaseFirestore.instance.collection("Est3arat").add({
-                              "index" : _myDoc.size.toString(),
-                              "listImage" : listimage,
-                              "listName" : listname,
-                              "listId" : listId,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
+                            // FirebaseFirestore.instance.collection("Est3arat").add({
+                            //   "index" : _myDoc.size.toString(),
+                            //   "listImage" : listimage,
+                            //   "listName" : listname,
+                            //   "listId" : listId,
+                            //   "listL" : listL,
+                            //   "listG" : listG,
+                            //   "listDate" : listdate,
                               
-                              "listPhone": listphone,
-                              "listPhotos" : listPhotos,
-                              "listProduct" : listProduct,
-                              "listDesc" : listdesc
-                            }).then((value){
+                            //   "listPhone": listphone,
+                            //   "listPhotos" : listPhotos,
+                            //   "listProduct" : listProduct,
+                            //   "listDesc" : listdesc
+                            // })
+                            // 
+                            // 
+                              helpServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                             DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid ,
+                            _whatsController.text.trim().toString(),"gs://jeeran-24c62.appspot.com/main${image.path}",
+                            _titleController.text.trim().toString(),_descController.text.trim().toString(),
+                           _myDoc.size.toString()).then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
                             });
-
                           }
                           break;
                         }
-                        
                         }
                         
                         }else{
-                            listimage.add(appState.getimage);
-                            listname.add(appState.getname);
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
+                            // listimage.add(appState.getimage);
+                            // listname.add(appState.getname);
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
 
-                            listphone.add(_whatsController.text.trim().toString());
-                            listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
-                            listProduct.add(_titleController.text.trim().toString());
-                            listdesc.add(_descController.text.trim().toString());
+                            // listphone.add(_whatsController.text.trim().toString());
+                            // listPhotos.add("gs://jeeran-24c62.appspot.com/main${image.path}");
+                            // listProduct.add(_titleController.text.trim().toString());
+                            // listdesc.add(_descController.text.trim().toString());
 
-                            FirebaseFirestore.instance.collection("Est3arat").add({
-                              "index" : _myDoc.size.toString(),
-                              "listImage" : listimage,
-                              "listName" : listname,
-                              "listId" : listId,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
+                            // FirebaseFirestore.instance.collection("Est3arat").add({
+                            //   "index" : _myDoc.size.toString(),
+                            //   "listImage" : listimage,
+                            //   "listName" : listname,
+                            //   "listId" : listId,
+                            //   "listL" : listL,
+                            //   "listG" : listG,
+                            //   "listDate" : listdate,
                               
-                              "listPhone": listphone,
-                              "listPhotos" : listPhotos,
-                              "listProduct" : listProduct,
-                              "listDesc" : listdesc
-                            }).then((value){
+                            //   "listPhone": listphone,
+                            //   "listPhotos" : listPhotos,
+                            //   "listProduct" : listProduct,
+                            //   "listDesc" : listdesc
+                            // }).then((value){
+                            //   EasyLoading.dismiss();
+                            //   showDialogNow();
+                            // });
+
+                            helpServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                             DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid ,
+                            _whatsController.text.trim().toString(),"gs://jeeran-24c62.appspot.com/main${image.path}",
+                            _titleController.text.trim().toString(),_descController.text.trim().toString(),
+                           _myDoc.size.toString()).then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
                             });

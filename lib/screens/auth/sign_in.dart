@@ -27,9 +27,9 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:AppBar(
-        backgroundColor: mainColor,
         automaticallyImplyLeading: false,
         title: Text('LOG IN'),
+        backgroundColor: mainColor,
         centerTitle: true,
       ),
       body: Form(

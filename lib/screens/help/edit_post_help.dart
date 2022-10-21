@@ -1,46 +1,63 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:jeraan_project/screens/e_commerse/e_commerse_home.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
-import 'package:jeraan_project/screens/serves/uploadPic.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:get/get.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
 import 'package:provider/provider.dart';
-import 'ecommerceEvents.dart';
+
+import 'help_home.dart';
+import 'help_services.dart';
 
 
-class AddProductEcommerse extends StatefulWidget {
+class EditProductHelp extends StatefulWidget {
+  final String name, image , photo, product, desc, phone, date;
+  final int distance;
+  final String id , docId;
+  final double lat , long;
+  EditProductHelp(this.name,this.image , this.photo, this.product, this.desc, this.phone, this.date, this.distance, this.id, this.docId , this.lat , this.long);
   @override
-  _AddProductEcommerseState createState() => _AddProductEcommerseState();
+  _EditProductHelpState createState() => _EditProductHelpState(this.name,this.image , this.photo, this.product, this.desc, this.phone, this.date, this.distance, this.id, this.docId , this.lat , this.long);
 }
 
-class _AddProductEcommerseState extends State<AddProductEcommerse> {
-  final TextEditingController _titleController = new TextEditingController();
+class _EditProductHelpState extends State<EditProductHelp> {
+  String name, image , photo, product, desc, phone, date;
+  int distance;
+  String id , docId;
+  double lat , long;
+  _EditProductHelpState(this.name,this.image , this.photo, this.product, this.desc, this.phone, this.date, this.distance, this.id , this.docId , this.lat , this.long);
 
-  final TextEditingController _priceController = new TextEditingController();
+   TextEditingController _titleController = new TextEditingController();
 
-  final TextEditingController _descController = new TextEditingController();
+   TextEditingController _descController = new TextEditingController();
 
-  final TextEditingController _whatsController = new TextEditingController();
+   TextEditingController _whatsController = new TextEditingController();
 
-  File image ;
+  // File myimage ;
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _titleController = TextEditingController(text: product);
+
+    _descController = TextEditingController(text: desc);
+
+    _whatsController = TextEditingController(text: phone);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text(appState.getlocal == "ar"? 'إضافة منتج':"Add Product"),
+        title: Text(appState.getlocal == "ar"? 'تعديل منتج':"Edit Product"),
         centerTitle: true,
       ),
       body: Form(
@@ -85,22 +102,7 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                   SizedBox(
                    height:Get.height*.02 ,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right:15.0),
-                    child: Text(
-                      appState.getlocal == "ar"? "سعر المنتج":"Product Price",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black45,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: CustomTextForm(
-
-                      false, appState.getlocal == "ar"? 'ادخل السعر ' : "Enter Product Price",controller:_priceController,),
-                  ),
+                  
                   SizedBox(
                     height: Get.height*.02,
                   ), Padding(
@@ -122,58 +124,54 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                   SizedBox(
                     height: Get.height*.02,
                   ),
-                  image == null ?
-                  Container():
-                  Container(
-                    margin: EdgeInsets.only(bottom: Get.height*.02),
-                    height: 180,
-                    width: MediaQuery.of(context).size.width,
-                    child: Image.file(image , fit: BoxFit.contain),
-                  ),
-                  Center(
-                    child: GestureDetector(
-                      onTap: ()async{
-                        ImagePicker _picker = ImagePicker();
-                        await _picker.getImage(source: ImageSource.gallery).then((value) {
-                          if (value != null) {
-                            setState(() {
-                           image = File(value.path);
-                         }); 
-                          }
-                        });
-                      },
-                      child: Container(
-                        color: Colors.grey[100],
-                        height: Get.height*.15,
-                        width: Get.width*.4,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add_a_photo,color: Colors.pink[900],size: 30,),
-                            SizedBox(
-                              width: Get.width*.03,
-                            ),
-                            Text(image == null ?(appState.getlocal == "ar"?'إضافة صورة':"Add Image"): (appState.getlocal == "ar"?'تغيير الصورة':"Change image"),style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: Get.height*.02,
-                  ),
+                  // myimage == null ?
+                  // Container():
+                  // Container(
+                  //   margin: EdgeInsets.only(bottom: Get.height*.02),
+                  //   height: 180,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   child: Image.file(myimage , fit: BoxFit.contain),
+                  // ),
+                  // Center(
+                  //   child: GestureDetector(
+                  //     onTap: ()async{
+                  //       ImagePicker _picker = ImagePicker();
+                  //       await _picker.getImage(source: ImageSource.gallery).then((value) {
+                  //         if (value != null) {
+                  //           setState(() {
+                  //          myimage = File(value.path);
+                  //        }); 
+                  //         }
+                  //       });
+                  //     },
+                  //     child: Container(
+                  //       color: Colors.grey[100],
+                  //       height: Get.height*.15,
+                  //       width: Get.width*.4,
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Icon(Icons.add_a_photo,color: Colors.pink[900],size: 30,),
+                  //           SizedBox(
+                  //             width: Get.width*.03,
+                  //           ),
+                  //           Text(image == null ?(appState.getlocal == "ar"?'تعديل صورة':"Edit Image"): (appState.getlocal == "ar"?'تغيير الصورة':"Change image"),style: TextStyle(fontSize: 18,color: Colors.pink[900]),)
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: Get.height*.02,
+                  // ),
                   DefaultButton(
-                    text: appState.getlocal == "ar"?'إضافة المنتج':"Add Product",
-                    press: (){
+                    text: appState.getlocal == "ar"?'تعديل المنتج':"Edit Product",
+                    press: ()async{
                       if(_titleController.text.trim() !="" &&
                         _whatsController.text.trim() !="" &&
-                        _descController.text.trim() !="" &&
-                        _priceController.text.trim() != "" &&
-                        image != null
+                        _descController.text.trim() !=""
                       ){
-                        EasyLoading.show(status:appState.getlocal == "ar"?"جاري اضافة المنتج":"Adding The Product");
-                        uploadFirebaseImage(image).then((boo) async{
-                        if (boo != null) {
+                        EasyLoading.show(status:appState.getlocal == "ar"?"جاري تعديل المنتج":"Editing The Product");
                         try{
                           // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
                         // List<String> listId = [];
@@ -188,8 +186,8 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                         // List<String> listProduct = [];
                         // List<String> listdesc = [];
                         // List<String> listPrice = [];
-
-                        QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Ecommerce').get();
+                         var ref = FirebaseFirestore.instance.collection("Est3arat").doc(docId);
+                        QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Est3arat').get();
                         if(_myDoc.size>0){
                       for (var i = 0; i < _myDoc.size; i++) {
                         print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
@@ -222,7 +220,7 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             // listdesc.add(_descController.text.trim().toString());
                             // listPrice.add(_priceController.text.trim().toString());
 
-                            // FirebaseFirestore.instance.collection("Ecommerce").doc(_myDoc.docs[i].id).update({
+                            // FirebaseFirestore.instance.collection("Est3arat").doc(_myDoc.docs[i].id).update({
                             //   "listImage" : listimage,
                             //   "listName" : listname,
                             //   "listId" : listId,
@@ -236,13 +234,29 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             //   "listDesc" : listdesc ,
                             //   "listPrice" : listPrice
                             // })
-                            
-                            ecommerceServicesUpdate(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                          Map<String,dynamic> helpMap = {
+                          "Image" : image,
+                          "Name" : name,
+                          "L" : lat,
+                          "G" : long,
+                          "Date" : date,
+                          "Id" : id,
+                          "Phone" : phone,
+                          "Photo" : photo,
+                          "Product" : product,
+                          "Desc" : desc,
+                        };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            helpMap
+                          ]
+                          )
+                          });
+                            helpServicesUpdate(appState.getimage,appState.getname,appState.getlat, appState.getlong,
                              DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid ,
-                            _whatsController.text.trim().toString(),"gs://jeeran-24c62.appspot.com/main${image.path}",
+                            _whatsController.text.trim().toString(),photo,
                             _titleController.text.trim().toString(),_descController.text.trim().toString(),
-                            _priceController.text.trim().toString()
-                            ,_myDoc.docs[i].id)
+                            _myDoc.docs[i].id)
                             .then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
@@ -261,7 +275,7 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             // listdesc.add(_descController.text.trim().toString());
                             // listPrice.add(_priceController.text.trim().toString());
 
-                            // FirebaseFirestore.instance.collection("Ecommerce").add({
+                            // FirebaseFirestore.instance.collection("Est3arat").add({
                             //   "index" : _myDoc.size.toString(),
                             //   "listImage" : listimage,
                             //   "listName" : listname,
@@ -279,13 +293,29 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             //   EasyLoading.dismiss();
                             //   showDialogNow();
                             // });
-
-                            ecommerceServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                            Map<String,dynamic> helpMap = {
+                          "Image" : image,
+                          "Name" : name,
+                          "L" : lat,
+                          "G" : long,
+                          "Date" : date,
+                          "Id" : id,
+                          "Phone" : phone,
+                          "Photo" : photo,
+                          "Product" : product,
+                          "Desc" : desc,
+                        };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            helpMap
+                          ]
+                          )
+                          });
+                            helpServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
                              DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid ,
-                            _whatsController.text.trim().toString(),"gs://jeeran-24c62.appspot.com/main${image.path}",
+                            _whatsController.text.trim().toString(),photo,
                             _titleController.text.trim().toString(),_descController.text.trim().toString(),
-                            _priceController.text.trim().toString()
-                            ,_myDoc.size.toString())
+                            _myDoc.size.toString())
                             .then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
@@ -311,7 +341,7 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             // listdesc.add(_descController.text.trim().toString());
                             // listPrice.add(_priceController.text.trim().toString());
 
-                            // FirebaseFirestore.instance.collection("Ecommerce").add({
+                            // FirebaseFirestore.instance.collection("Est3arat").add({
                             //   "index" : _myDoc.size.toString(),
                             //   "listImage" : listimage,
                             //   "listName" : listname,
@@ -329,13 +359,30 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             //   EasyLoading.dismiss();
                             //   showDialogNow();
                             // });
+                            Map<String,dynamic> helpMap = {
+                          "Image" : image,
+                          "Name" : name,
+                          "L" : lat,
+                          "G" : long,
+                          "Date" : date,
+                          "Id" : id,
+                          "Phone" : phone,
+                          "Photo" : photo,
+                          "Product" : product,
+                          "Desc" : desc,
+                        };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            helpMap
+                          ]
+                          )
+                          });
 
-                            ecommerceServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                            helpServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
                              DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid ,
-                            _whatsController.text.trim().toString(),"gs://jeeran-24c62.appspot.com/main${image.path}",
+                            _whatsController.text.trim().toString(),photo,
                             _titleController.text.trim().toString(),_descController.text.trim().toString(),
-                            _priceController.text.trim().toString()
-                            ,_myDoc.size.toString())
+                            _myDoc.size.toString())
                             .then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
@@ -347,11 +394,10 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                           EasyLoading.showError(appState.getlocal == "ar"?"عفوا حدث خطأ ما":"sorry you request not complited" , duration: Duration(milliseconds: 600));
                           print(e);
                         }
-                        }
-                      });
+                        
                         
                       }else{
-                        EasyLoading.showInfo(appState.getlocal == "ar"?"تأكد من ملئ البيانات و إرفاق صورة":"Be sure to fill out the information and attach a photo",duration: Duration(milliseconds:900));
+                        EasyLoading.showInfo(appState.getlocal == "ar"?"تأكد من ملئ البيانات ":"Be sure to fill out the information",duration: Duration(milliseconds:900));
                       }
                       
                     },
@@ -377,7 +423,7 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text(appState.getlocal == "ar"?'تم إضافة المنتج بنجاح :)':"Product added successfully :)",style: TextStyle(
+                                Text(appState.getlocal == "ar"?'تم تعديل المنتج بنجاح :)':"Product Edited successfully :)",style: TextStyle(
                                     fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -391,7 +437,7 @@ class _AddProductEcommerseState extends State<AddProductEcommerse> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ECommerseHome()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HelpHome()));
                                 },
                               ),
                               TextButton(

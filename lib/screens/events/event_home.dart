@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geodesy/geodesy.dart';
 import 'package:get/get.dart';
+import 'package:jeraan_project/screens/e_commerse/Edit_product_ecommerce.dart';
 import 'package:jeraan_project/screens/events/event_details.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:provider/provider.dart';
 
 import 'add_event.dart';
+import 'edit_event.dart';
 
 class EventHome extends StatefulWidget {
   @override
@@ -21,30 +24,36 @@ class _EventHomeState extends State<EventHome> {
   ScrollController _scrollController = new ScrollController();
   bool loading = true;
 
-  List<String> mainlistId = [];
-  List<double> mainlistL = [];
-  List<double> mainlistG = [];
-  List<String> mainlistimage = [];
-  List<String> mainlistname = [];
-  List<String> mainlistdate = [];
-  //
-  List<String> mainlistType = [];
-  List<String> mainlistEventDate = [];
-  List<String> mainlistdesc = [];
+  // List<String> mainlistId = [];
+  // List<double> mainlistL = [];
+  // List<double> mainlistG = [];
+  // List<String> mainlistimage = [];
+  // List<String> mainlistname = [];
+  // List<String> mainlistdate = [];
+  // //
+  // List<String> mainlistType = [];
+  // List<String> mainlistEventDate = [];
+  // List<String> mainlistdesc = [];
 
 
-  List<String> listId = [];
-  List<double> listL = [];
-  List<double> listG = [];
-  List<String> listimage = [];
-  List<String> listname = [];
-  List<String> listdate = [];
-  //
-  List<String> listType = [];
-  List<String> listEventDate = [];
-  List<String> listdesc = [];
+  // List<String> listId = [];
+  // List<double> listL = [];
+  // List<double> listG = [];
+  // List<String> listimage = [];
+  // List<String> listname = [];
+  // List<String> listdate = [];
+  // //
+  // List<String> listType = [];
+  // List<String> listEventDate = [];
+  // List<String> listdesc = [];
 
+  // List<double> listDistance = [];
+  // String myIndex = "";
+  List<String> docId = [];
   List<double> listDistance = [];
+
+  List<Map> listData = [];
+  List<Map> mainListData = [];
   String myIndex = "";
 
   @override
@@ -88,7 +97,7 @@ void dispose() {
             onClosing: (){},
             builder: (ctx) {
               return Container(
-                height: Get.height*.055,
+                height: Get.height*.062,
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
                     onPressed: (){
@@ -104,16 +113,16 @@ void dispose() {
             ) : ListView.builder(
                 shrinkWrap: true,
                 controller: _scrollController,
-                itemCount: listimage.length ?? 0,
+                itemCount: listData.length ?? 0,
                 itemBuilder: (context,i){
-                  return event(listimage[i] ,listname[i] , listType[i] , listdesc[i] , listEventDate[i] ,  listId[i], listDistance[i].toInt());
+                  return event(listData[i]["Image"] ,listData[i]["Name"] , listData[i]["Type"] , listData[i]["Desc"] , listData[i]["Date"] , listData[i]["EventDate"] ,  listData[i]["Id"], listDistance[i].toInt() , docId[i] , listData[i]["L"] , listData[i]["G"]);
                 },
         ),
        ),
     );
   }
 
-  Widget event(String image, String name,String type,String desc ,String eventDate ,String id ,int distance){
+  Widget event(String image, String name,String type,String desc , String date ,String eventDate ,String id ,int distance , String docId , double lat , double long){
     AppState appState = Provider.of<AppState>(context , listen: false);
     return Container(
       margin: EdgeInsets.only(top: 10,left: 8,right: 8,bottom: 10),
@@ -135,16 +144,54 @@ void dispose() {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircleAvatar(
-                backgroundImage:FirebaseImage('$image'),
-                maxRadius: 25,
-              ),
-              Text(
-                '$name',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 17),
-              ),
-              Column(
+              Row(
+                     children: [
+                       CircleAvatar(
+                        radius: 20,
+                        backgroundImage: FirebaseImage('$image'),
+                  ),
+                  SizedBox(width: 15,),
+                  Text(
+                  '$name',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                     ],
+                   ),
+              id == FirebaseAuth.instance.currentUser.uid ?  Row(
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          var ref = FirebaseFirestore.instance.collection("Event").doc(docId);
+                          Map<String,dynamic> beforeEventMap = {
+                            "Image" : image,
+                            "Name" : name,
+                            "L" : lat,
+                            "G" : long,
+                            "Date" : date,
+                            "EventDate" : eventDate,
+                            "Id" : id,
+                            "Type" : type,
+                            "Desc" : desc
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeEventMap
+                          ]
+                          )
+                          }).then((value){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>EventHome()));
+                          });
+
+                      }, icon: Icon(Icons.delete ,)),
+
+
+                       IconButton(onPressed: (){
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>EditEvent(image,name,id,distance,date,docId,lat,long,eventDate,desc,type)));
+                          
+                      }, icon: Icon(Icons.edit , )),
+                    ],
+                  ) : Column(
                     children: [
                       Text(
                     appState.getlocal == "ar"?'يبعد عنك':"Away",
@@ -233,43 +280,32 @@ void dispose() {
     QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Event').get();
     if(_myDoc.size>0){
     FirebaseFirestore.instance.collection("Event").where("index", isEqualTo: (_myDoc.size-1).toString()).get().then((value){
+      mainListData = List.from(value.docs[0]["data"]);
+      // mainlistimage = List.from(value.docs[0]["listImage"]);
+      // mainlistname = List.from(value.docs[0]["listName"]);
+      // mainlistL = List.from(value.docs[0]["listL"]);
+      // mainlistG = List.from(value.docs[0]["listG"]);      
+      // mainlistId = List.from(value.docs[0]["listId"]);
+      // mainlistdate = List.from(value.docs[0]["listDate"]);
 
-      mainlistimage = List.from(value.docs[0]["listImage"]);
-      mainlistname = List.from(value.docs[0]["listName"]);
-      mainlistL = List.from(value.docs[0]["listL"]);
-      mainlistG = List.from(value.docs[0]["listG"]);      
-      mainlistId = List.from(value.docs[0]["listId"]);
-      mainlistdate = List.from(value.docs[0]["listDate"]);
-
-      mainlistEventDate = List.from(_myDoc.docs[0]["listEventDate"]);
-      mainlistType = List.from(_myDoc.docs[0]["listType"]);
-      mainlistdesc = List.from(_myDoc.docs[0]["listDesc"]);
+      // mainlistEventDate = List.from(_myDoc.docs[0]["listEventDate"]);
+      // mainlistType = List.from(_myDoc.docs[0]["listType"]);
+      // mainlistdesc = List.from(_myDoc.docs[0]["listDesc"]);
 
 
       myIndex = (_myDoc.size-1).toString();
-    }).then((value) {
-      for (var i = mainlistimage.length-1; i >= 0; i--) {
-      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainlistL[i], mainlistG[i])).toDouble();
+      for (var i = mainListData.length-1; i >= 0; i--) {
+      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainListData[i]["L"], mainListData[i]["G"])).toDouble();
       if (distance <= myDistance) {
-      listimage.add(mainlistimage[i]);
-      listname.add(mainlistname[i]);
-      listL.add(mainlistL[i]);
-      listG.add(mainlistG[i]);
-      listId.add(mainlistId[i]);
-      listdate.add(mainlistdate[i]);
-
-      listEventDate.add(mainlistEventDate[i]);
-      listType.add(mainlistType[i]);
-      listdesc.add(mainlistdesc[i]);
-
-
       listDistance.add(distance);
+      docId.add(value.docs[0].id);
+      listData.add(mainListData[i]);
       }
       }
     }).whenComplete((){
       setState(() {
         loading = false;
-        listimage = listimage;
+        listData = listData;
       });
     });
   }else{
@@ -286,47 +322,48 @@ void dispose() {
     AppState appState = Provider.of<AppState>(context , listen: false);
     LatLng l1 = LatLng(appState.getlat , appState.getlong);
     double myDistance = double.parse(appState.getnearest) * 1000;
-
-    mainlistimage = []; mainlistname = [];  mainlistL = []; mainlistG = [];
-    mainlistdate = []; mainlistId = []; 
+    mainListData = [];
+    // mainlistimage = []; mainlistname = [];  mainlistL = []; mainlistG = [];
+    // mainlistdate = []; mainlistId = []; 
     
-    mainlistEventDate = []; mainlistType = []; mainlistdesc = [];
+    // mainlistEventDate = []; mainlistType = []; mainlistdesc = [];
     FirebaseFirestore.instance.collection("Event").where("index", isEqualTo: (int.parse(myIndex) - 1).toString()).get().then((value){
-      mainlistimage = List.from(value.docs[0]["listImage"]);
-      mainlistname = List.from(value.docs[0]["listName"]);
-      mainlistL = List.from(value.docs[0]["listL"]);
-      mainlistG = List.from(value.docs[0]["listG"]);      
-      mainlistId = List.from(value.docs[0]["listId"]);
-      mainlistdate = List.from(value.docs[0]["listDate"]);
+      
+      // mainlistimage = List.from(value.docs[0]["listImage"]);
+      // mainlistname = List.from(value.docs[0]["listName"]);
+      // mainlistL = List.from(value.docs[0]["listL"]);
+      // mainlistG = List.from(value.docs[0]["listG"]);      
+      // mainlistId = List.from(value.docs[0]["listId"]);
+      // mainlistdate = List.from(value.docs[0]["listDate"]);
 
-      mainlistEventDate = List.from(value.docs[0]["listEventDate"]);
-      mainlistType = List.from(value.docs[0]["listType"]);
-      mainlistdesc = List.from(value.docs[0]["listDesc"]);
-
+      // mainlistEventDate = List.from(value.docs[0]["listEventDate"]);
+      // mainlistType = List.from(value.docs[0]["listType"]);
+      // mainlistdesc = List.from(value.docs[0]["listDesc"]);
+      mainListData = List.from(value.docs[0]["data"]);
       myIndex = (int.parse(myIndex) - 1).toString();
-    }).then((value) {
-      for (var i = mainlistimage.length-1; i >= 0; i--) {
-      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainlistL[i], mainlistG[i])).toDouble();
+      for (var i = mainListData.length-1; i >= 0; i--) {
+      double distance = geodesy.distanceBetweenTwoGeoPoints(l1,  LatLng(mainListData[i]["L"], mainListData[i]["G"])).toDouble();
       if (distance <= myDistance) {
-      listimage.add(mainlistimage[i]);
-      listname.add(mainlistname[i]);
-      listL.add(mainlistL[i]);
-      listG.add(mainlistG[i]);
-      listId.add(mainlistId[i]);
-      listdate.add(mainlistdate[i]);
-
-      listEventDate.add(mainlistEventDate[i]);
-      listType.add(mainlistType[i]);
-      listdesc.add(mainlistdesc[i]);
-
-
       listDistance.add(distance);
+      // listimage.add(mainlistimage[i]);
+      // listname.add(mainlistname[i]);
+      // listL.add(mainlistL[i]);
+      // listG.add(mainlistG[i]);
+      // listId.add(mainlistId[i]);
+      // listdate.add(mainlistdate[i]);
+
+      // listEventDate.add(mainlistEventDate[i]);
+      // listType.add(mainlistType[i]);
+      // listdesc.add(mainlistdesc[i]);
+
+      docId.add(value.docs[0].id);
+      listData.add(mainListData[i]);
       }
       }
     }).whenComplete((){
       EasyLoading.dismiss();
       setState(() {
-        listimage = listimage;
+        listData = listData;
       });
     });
   }

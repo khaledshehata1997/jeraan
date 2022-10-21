@@ -7,62 +7,63 @@ import 'package:jeraan_project/screens/auth/sign_in.dart';
 
 import 'default_button.dart';
 class OnboardingContent extends StatelessWidget {
+  final String text, image;
+  OnboardingContent({
+    this.text,
+    this.image,
+  });
 
   @override
   Widget build(BuildContext context) {
     var mediaQuery =MediaQuery.of(context).size;
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-        Container(
-          alignment: Alignment.center,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height*.15,
-        child: DefaultTextStyle(
-        style: const TextStyle(
-        fontSize: 45.0,
-        fontFamily: 'Canterbury',
-        ),
-        child: AnimatedTextKit(
-          repeatForever: true,
-          isRepeatingAnimation: true,
-        animatedTexts: [
-        ScaleAnimatedText('جيران',textStyle: TextStyle(color:mainColor,fontWeight: FontWeight.bold)),
-        ScaleAnimatedText('NEIGBORS',textStyle: TextStyle(color: mainColor,fontWeight: FontWeight.bold)),
-        ],
-        )
-        ),
-        ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediaQuery.width*0.03),
-              child: Text(
-                'مرحبا بكم في جيران! \nنحن نساعد الجيران علي التواصل والتقرب من بعضهم البعض، \n رجاءا ساعدنا علي اتمام هذا العمل الرائع بدون اي شيئ يؤثر علي الهدف',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                fontSize: 18
-                ),
-                textDirection: TextDirection.rtl,
-              ),
+    return Column(
+      children: <Widget>[
+    Container(
+      alignment: Alignment.center,
+    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height*.1,
+    child: DefaultTextStyle(
+    style: const TextStyle(
+    fontSize: 35.0,
+    fontFamily: 'Canterbury',
+    ),
+    child: AnimatedTextKit(
+      repeatForever: true,
+      isRepeatingAnimation: true,
+    animatedTexts: [
+    ScaleAnimatedText('جيران',textStyle: TextStyle(color:mainColor,fontWeight: FontWeight.bold)),
+    ScaleAnimatedText('NEIGBORS',textStyle: TextStyle(color: mainColor,fontWeight: FontWeight.bold)),
+    ],
+    )
+    ),
+    ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: mediaQuery.width*0.03),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+            fontSize: 18
             ),
-            SizedBox(height:MediaQuery.of(context).size.height*.05,),
+            textDirection: TextDirection.rtl,
+          ),
+        ),
+        SizedBox(height:MediaQuery.of(context).size.height*.03,),
 
-            Image.asset(
-              'images/jeran.png',
-              height: mediaQuery.height*0.2,
-              width: mediaQuery.width*0.6,
-            ),
-            SizedBox(height:MediaQuery.of(context).size.height*.1,),
-
-            DefaultButton(
-              text: "تخطي",
-              press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
-              },
-            ),
-          ],
+        Image.asset(
+          image,
+          height: mediaQuery.height*0.23,
+          width: mediaQuery.width*0.8,
         ),
-      ),
+        SizedBox(height:MediaQuery.of(context).size.height*.12,),
+
+        DefaultButton(
+          text: "تخطي",
+          press: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
+          },
+        ),
+      ],
     );
   }
 }

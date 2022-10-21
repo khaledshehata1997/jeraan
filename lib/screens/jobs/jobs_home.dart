@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,6 +9,7 @@ import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/screens/t3arf/view_user_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'Edit_job.dart';
 import 'add_job.dart';
 import 'job_datails.dart';
  class JobsHome extends StatefulWidget {
@@ -20,30 +22,37 @@ import 'job_datails.dart';
    bool isfav=false;
   ScrollController _scrollController = new ScrollController();
   bool loading = true;
-  List<String> mainlistId = [];
-  List<double> mainlistL = [];
-  List<double> mainlistG = [];
-  List<String> mainlistimage = [];
-  List<String> mainlistname = [];
-  List<String> mainlistdate = [];
-  //
-  List<String> mainlistAge = [];
-  List<String> mainlistHobby = [];
-  List<String> mainlistdesc = [];
+  // List<String> mainlistId = [];
+  // List<double> mainlistL = [];
+  // List<double> mainlistG = [];
+  // List<String> mainlistimage = [];
+  // List<String> mainlistname = [];
+  // List<String> mainlistdate = [];
+  // //
+  // List<String> mainlistAge = [];
+  // List<String> mainlistHobby = [];
+  // List<String> mainlistdesc = [];
 
 
-  List<String> listId = [];
-  List<double> listL = [];
-  List<double> listG = [];
-  List<String> listimage = [];
-  List<String> listname = [];
-  List<String> listdate = [];
-  //
-  List<String> listAge = [];
-  List<String> listHobby = [];
-  List<String> listdesc = [];
+  // List<String> listId = [];
+  // List<double> listL = [];
+  // List<double> listG = [];
+  // List<String> listimage = [];
+  // List<String> listname = [];
+  // List<String> listdate = [];
+  // //
+  // List<String> listAge = [];
+  // List<String> listHobby = [];
+  // List<String> listdesc = [];
 
+  // List<double> listDistance = [];
+  // String myIndex = "";
+
+  List<String> docId = [];
   List<double> listDistance = [];
+
+  List<Map> listData = [];
+  List<Map> mainListData = [];
   String myIndex = "";
 
   @override
@@ -78,20 +87,20 @@ void dispose() {
          centerTitle: true,
        ),
        bottomSheet: Padding(
-         padding: const EdgeInsets.only(left: 20,right: 20),
+         padding: const EdgeInsets.only(left: 30,right: 30),
          child: BottomSheet(
              elevation: 10,
              backgroundColor: Colors.pink[900],
              onClosing: (){},
              builder: (ctx) {
                return Container(
-                 height: Get.height*.055,
+                 height: Get.height*.062,
                  width: MediaQuery.of(context).size.width,
                  child: TextButton(
                      onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>AddJob()));
                      },
-                     child: Text(appState.getlocal == "ar"?'إضافة هواية':"Add Hobby",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.white),)),
+                     child: Text(appState.getlocal == "ar"?'إضافة هواية':"Add Hobby",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
                );
              }),
        ),
@@ -101,15 +110,15 @@ void dispose() {
             ) : ListView.builder(
                 shrinkWrap: true,
                 controller: _scrollController,
-                itemCount: listimage.length ?? 0,
+                itemCount: listData.length ?? 0,
                 itemBuilder: (context,i){
-                  return event(listimage[i] ,listname[i] , listHobby[i] , listdesc[i] , listAge[i] , listDistance[i].toInt(), listId[i]);
+                  return event(listData[i]["Image"] , listData[i]["Name"] , listData[i]["Hobby"] , listData[i]["Desc"] , listData[i]["Age"] , listDistance[i].toInt(), listData[i]["Id"], docId[i] , listData[i]["L"] , listData[i]["G"]);
                 },
         ),
        ),
      );
    }
-   Widget event(String image,String name,String hobby,String desc ,String age ,int distance ,String id  ){
+   Widget event(String image,String name,String hobby,String desc ,String age ,int distance,String id , String docId , double lat , double long ){
      AppState appState = Provider.of<AppState>(context , listen: false);
      return Container(
          margin: EdgeInsets.only(top: 10,left: 8,right: 8,bottom: 10),
@@ -134,15 +143,53 @@ void dispose() {
                child: Row(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [
-                   CircleAvatar(
-                     backgroundImage:FirebaseImage('$image'),
-                     maxRadius: 25,
+                   Row(
+                     children: [
+                       CircleAvatar(
+                        radius: 20,
+                        backgroundImage: FirebaseImage('$image'),
+                  ),
+                  SizedBox(width: 15,),
+                  Text(
+                  '$name',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                     ],
                    ),
-                   Text(
-                     '$name',
-                     style: TextStyle(
-                         fontWeight: FontWeight.bold, fontSize: 17),
-                   ),
+                  id == FirebaseAuth.instance.currentUser.uid ?  Row(
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          var ref = FirebaseFirestore.instance.collection("Hobby").doc(docId);
+                          Map<String,dynamic> beforeHobbyMap = {
+                            "Image" : image,
+                            "Name" : name,
+                            "L" : lat,
+                            "G" : long,
+                            "Id" : id,
+                            "Desc" : desc,
+                            "Hobby" : hobby,
+                            "Age" : age
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeHobbyMap
+                          ]
+                          )
+                          }).then((value){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>JobsHome()));
+                          });
+
+                      }, icon: Icon(Icons.delete ,)),
+
+
+                       IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>EditJob(image,name,hobby, desc ,age, distance , id ,docId,lat,long)));
+                          
+                      }, icon: Icon(Icons.edit , )),
+                    ],
+                  ) :
                     Column(
                     children: [
                       Text(
@@ -211,43 +258,44 @@ void dispose() {
     QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Hobby').get();
     if(_myDoc.size>0){
     FirebaseFirestore.instance.collection("Hobby").where("index", isEqualTo: (_myDoc.size-1).toString()).get().then((value){
+      mainListData = List.from(value.docs[0]["data"]);
 
-      mainlistimage = List.from(value.docs[0]["listImage"]);
-      mainlistname = List.from(value.docs[0]["listName"]);
-      mainlistL = List.from(value.docs[0]["listL"]);
-      mainlistG = List.from(value.docs[0]["listG"]);      
-      mainlistId = List.from(value.docs[0]["listId"]);
-      mainlistdate = List.from(value.docs[0]["listDate"]);
+      // mainlistimage = List.from(value.docs[0]["listImage"]);
+      // mainlistname = List.from(value.docs[0]["listName"]);
+      // mainlistL = List.from(value.docs[0]["listL"]);
+      // mainlistG = List.from(value.docs[0]["listG"]);      
+      // mainlistId = List.from(value.docs[0]["listId"]);
+      // mainlistdate = List.from(value.docs[0]["listDate"]);
 
-      mainlistHobby = List.from(_myDoc.docs[0]["listHobby"]);
-      mainlistAge = List.from(_myDoc.docs[0]["listAge"]);
-      mainlistdesc = List.from(_myDoc.docs[0]["listDesc"]);
+      // mainlistHobby = List.from(_myDoc.docs[0]["listHobby"]);
+      // mainlistAge = List.from(_myDoc.docs[0]["listAge"]);
+      // mainlistdesc = List.from(_myDoc.docs[0]["listDesc"]);
 
 
       myIndex = (_myDoc.size-1).toString();
-    }).then((value) {
-      for (var i = mainlistimage.length-1; i >= 0; i--) {
-      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainlistL[i], mainlistG[i])).toDouble();
+      for (var i = mainListData.length-1; i >= 0; i--) {
+      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainListData[i]["L"], mainListData[i]["G"])).toDouble();
       if (distance <= myDistance) {
-      listimage.add(mainlistimage[i]);
-      listname.add(mainlistname[i]);
-      listL.add(mainlistL[i]);
-      listG.add(mainlistG[i]);
-      listId.add(mainlistId[i]);
-      listdate.add(mainlistdate[i]);
+      // listimage.add(mainlistimage[i]);
+      // listname.add(mainlistname[i]);
+      // listL.add(mainlistL[i]);
+      // listG.add(mainlistG[i]);
+      // listId.add(mainlistId[i]);
+      // listdate.add(mainlistdate[i]);
 
-      listHobby.add(mainlistHobby[i]);
-      listAge.add(mainlistAge[i]);
-      listdesc.add(mainlistdesc[i]);
-
+      // listHobby.add(mainlistHobby[i]);
+      // listAge.add(mainlistAge[i]);
+      // listdesc.add(mainlistdesc[i]);
 
       listDistance.add(distance);
+      docId.add(value.docs[0].id);
+      listData.add(mainListData[i]);
       }
       }
     }).whenComplete((){
       setState(() {
         loading = false;
-        listimage = listimage;
+        listData = listData;
       });
     });
   }else{
@@ -264,47 +312,50 @@ void dispose() {
     AppState appState = Provider.of<AppState>(context , listen: false);
     LatLng l1 = LatLng(appState.getlat , appState.getlong);
     double myDistance = double.parse(appState.getnearest) * 1000;
+    mainListData = [];
 
-    mainlistimage = []; mainlistname = [];  mainlistL = []; mainlistG = [];
-    mainlistdate = []; mainlistId = []; 
+    // mainlistimage = []; mainlistname = [];  mainlistL = []; mainlistG = [];
+    // mainlistdate = []; mainlistId = []; 
     
-    mainlistHobby = []; mainlistAge = []; mainlistdesc = [];
+    // mainlistHobby = []; mainlistAge = []; mainlistdesc = [];
     FirebaseFirestore.instance.collection("Hobby").where("index", isEqualTo: (int.parse(myIndex) - 1).toString()).get().then((value){
-      mainlistimage = List.from(value.docs[0]["listImage"]);
-      mainlistname = List.from(value.docs[0]["listName"]);
-      mainlistL = List.from(value.docs[0]["listL"]);
-      mainlistG = List.from(value.docs[0]["listG"]);      
-      mainlistId = List.from(value.docs[0]["listId"]);
-      mainlistdate = List.from(value.docs[0]["listDate"]);
+      // mainlistimage = List.from(value.docs[0]["listImage"]);
+      // mainlistname = List.from(value.docs[0]["listName"]);
+      // mainlistL = List.from(value.docs[0]["listL"]);
+      // mainlistG = List.from(value.docs[0]["listG"]);      
+      // mainlistId = List.from(value.docs[0]["listId"]);
+      // mainlistdate = List.from(value.docs[0]["listDate"]);
 
-      mainlistHobby = List.from(value.docs[0]["listHobby"]);
-      mainlistAge = List.from(value.docs[0]["listAge"]);
-      mainlistdesc = List.from(value.docs[0]["listDesc"]);
+      // mainlistHobby = List.from(value.docs[0]["listHobby"]);
+      // mainlistAge = List.from(value.docs[0]["listAge"]);
+      // mainlistdesc = List.from(value.docs[0]["listDesc"]);
 
+      mainListData = List.from(value.docs[0]["data"]);
       myIndex = (int.parse(myIndex) - 1).toString();
-    }).then((value) {
-      for (var i = mainlistimage.length-1; i >= 0; i--) {
-      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainlistL[i], mainlistG[i])).toDouble();
+      for (var i = mainListData.length-1; i >= 0; i--) {
+      double distance = geodesy.distanceBetweenTwoGeoPoints(l1, LatLng(mainListData[i]["L"], mainListData[i]["G"])).toDouble();
       if (distance <= myDistance) {
-      listimage.add(mainlistimage[i]);
-      listname.add(mainlistname[i]);
-      listL.add(mainlistL[i]);
-      listG.add(mainlistG[i]);
-      listId.add(mainlistId[i]);
-      listdate.add(mainlistdate[i]);
+      // listimage.add(mainlistimage[i]);
+      // listname.add(mainlistname[i]);
+      // listL.add(mainlistL[i]);
+      // listG.add(mainlistG[i]);
+      // listId.add(mainlistId[i]);
+      // listdate.add(mainlistdate[i]);
 
-      listHobby.add(mainlistHobby[i]);
-      listAge.add(mainlistAge[i]);
-      listdesc.add(mainlistdesc[i]);
+      // listHobby.add(mainlistHobby[i]);
+      // listAge.add(mainlistAge[i]);
+      // listdesc.add(mainlistdesc[i]);
 
 
+      docId.add(value.docs[0].id);
+      listData.add(mainListData[i]);
       listDistance.add(distance);
       }
       }
     }).whenComplete((){
       EasyLoading.dismiss();
       setState(() {
-        listimage = listimage;
+        listData = listData;
       });
     });
   }

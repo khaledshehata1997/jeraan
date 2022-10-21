@@ -25,21 +25,20 @@ class HomeGrid extends StatelessWidget {
       child: Column(
         children: [
 
-          homeGrid(context,'home_images/istshara.jpg',   'home_images/twasl.jpg',
-              appState.getlocal == "ar"?  'تعارف الجيران' : "know the neighbors",    appState.getlocal == "ar"? 'استشارات الجيران' : "Ask your neighbors",
+          homeGrid(context,'home_images/eventss.png',   'home_images/twasl.jpg',
+              appState.getlocal == "ar"?  'مناسبات الجيران': "Neighbors events",    appState.getlocal == "ar"? 'تعارف الجيران' : "know the neighbors",
+                 Fun1,
                  Fun2,
-            Fun6,
       ),
-
           homeGrid(context,'home_images/E-commerse.png',    'home_images/help.jpg'
-              ,appState.getlocal == "ar"? 'بيع وشراء الجيران': "Sell and Buy",appState.getlocal == "ar"? 'إستعارات وتبادل الجيران': "Borrow something",
+              ,appState.getlocal == "ar"? 'بيع وشراء الجيران': "Sell and Buy",appState.getlocal == "ar"? 'إستعارات الجيران': "Borrow something",
               Fun3,
               Fun4,
           ),
-       homeGrid(context,'home_images/jobs.jpg',   'home_images/eventss.png',
-             appState.getlocal == "ar"? 'هوايات الجيران': "Neighbors' hobbies", appState.getlocal == "ar"? 'مناسبات الجيران': "Neighbors events",
+          homeGrid(context,'home_images/jobs.jpg',   'home_images/istshara.jpg',
+             appState.getlocal == "ar"? 'هوايات الجيران': "Neighbors' hobbies", appState.getlocal == "ar"? 'استشارات بين الجيران' : "Ask your neighbors",
       Fun5,
-            Fun1,
+      Fun6,
       ),
         ],
       ),
@@ -50,7 +49,7 @@ class HomeGrid extends StatelessWidget {
     var width=MediaQuery.of(context).size.width;
     var height=MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -64,7 +63,7 @@ class HomeGrid extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        blurRadius:15,
+                        blurRadius:10,
                         color: Colors.grey,
                       )
                     ],
@@ -73,8 +72,8 @@ class HomeGrid extends StatelessWidget {
                   ),
                   child: Image.asset('$image1',fit: BoxFit.fill,),
                   margin: EdgeInsets.all(3),
-                  width: width*.35,
-                  height: height*.09,
+                  width: width*.38,
+                  height: height*.095,
                 ),
               ),
               Text('$text1',style: TextStyle(fontSize: 15,color: Colors.pink[900],fontWeight: FontWeight.bold),)
@@ -100,8 +99,8 @@ class HomeGrid extends StatelessWidget {
                   ),
                   child: Image.asset('$image2',fit: BoxFit.fill),
                   margin: EdgeInsets.all(3),
-                  width: width*.35,
-                  height: height*.09,
+                  width: width*.38,
+                  height: height*.095,
                 ),
               ),
               Text('$text2',style: TextStyle(fontSize: 15,color: Colors.pink[900],fontWeight: FontWeight.bold),)

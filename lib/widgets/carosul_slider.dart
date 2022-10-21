@@ -55,14 +55,9 @@ class _HomeCarouselState extends State<HomeCarousel> {
     return Column(children: [
     ad.length > 0 ?  CarouselSlider.builder(
         itemCount: ad.length, itemBuilder: (context,i,n){
-          return BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-      child: Container(
-      color: Colors.grey.withOpacity(0.1),
-      alignment: Alignment.center,
-              child: cardAd(ad[i]["image"], ad[i]["url"])));
+          return cardAd(ad[i]["image"], ad[i]["url"]);
         },
-
+        
         options: CarouselOptions(
             autoPlay: true,
             enlargeCenterPage: true,
@@ -80,14 +75,17 @@ class _HomeCarouselState extends State<HomeCarousel> {
       onTap: ()async{
          await canLaunch(url) ? await launch(url) : print('Could not launch $url');
       },
-      child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.pink[900],
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(image: FirebaseImage(image),fit: BoxFit.cover),
-                ),
-            ),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
+        child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.pink[900],
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(image: FirebaseImage(image),fit: BoxFit.cover),
+                  ),
+              ),
+      ),
     );
   }
 }

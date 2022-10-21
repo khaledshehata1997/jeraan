@@ -13,12 +13,20 @@ import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:jeraan_project/widgets/spetial_text_field.dart';
 import 'package:provider/provider.dart';
 
-class AddPostT3arf extends StatefulWidget {
+class EditPostT3arf extends StatefulWidget {
+  final String image, name, age, job, text, phone, id , date , docId;
+  final int distance ;
+  final double lat, long;
+  EditPostT3arf(this.image,this.name,this.age,this.job,this.text,this.phone,this.id,this.distance,this.date,this.docId,this.lat,this.long);
   @override
-  _AddPostT3arfState createState() => _AddPostT3arfState();
+  _EditPostT3arfState createState() => _EditPostT3arfState(this.image,this.name,this.age,this.job,this.text,this.phone,this.id,this.distance,this.date,this.docId,this.lat,this.long);
 }
 
-class _AddPostT3arfState extends State<AddPostT3arf> {
+class _EditPostT3arfState extends State<EditPostT3arf> {
+  final String image, name, age, job, text, phone, id , date , docId;
+  final int distance ;
+  final double lat, long;
+  _EditPostT3arfState(this.image,this.name,this.age,this.job,this.text,this.phone,this.id,this.distance,this.date,this.docId,this.lat,this.long);
   TextEditingController _ageController = new TextEditingController();
 
   TextEditingController _jobController = new TextEditingController();
@@ -36,6 +44,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
     _ageController = TextEditingController(text: age);
     _jobController = TextEditingController(text: appState.getjop);
     _whatsController = TextEditingController(text: appState.getphone);
+    _postController = TextEditingController(text: text);
     super.initState();
   }
   @override
@@ -43,7 +52,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
     AppState appState = Provider.of<AppState>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text(appState.getlocal == "ar"?'إضافة منشور':"Add Post"),
+        title: Text(appState.getlocal == "ar"?'تعديل منشور':"Edit Post"),
         centerTitle: true,
       ),
       body: Form(
@@ -119,10 +128,10 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                     height: Get.height*.05,
                   ),
                   DefaultButton(
-                    text: appState.getlocal == "ar"?'إضافة المنشور':"Add The Post",
+                    text: appState.getlocal == "ar"?'تعديل المنشور':"Edit The Post",
                     press: ()async{
                       bool success = false;
-                      EasyLoading.show(status:appState.getlocal == "ar"?"جاري اضافة منشورك":"Adding your Post");
+                      EasyLoading.show(status:appState.getlocal == "ar"?"جاري تعديل منشورك":"Editing your Post");
                       // await FirebaseFirestore.instance.collection("T3arf").add({
                       //   "uid" : FirebaseAuth.instance.currentUser.uid,
                       //   "image" : appState.getimage,
@@ -186,6 +195,25 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             //   "listId" : listId
                             // })
                             // 
+                            var ref = FirebaseFirestore.instance.collection("T3arf").doc(docId);
+                            Map<String,dynamic> beforeAskMap = {
+                            "Image" : image,
+                            "Age" : age,
+                            "Jops" : job,
+                            "Name" : name,
+                            "Post" : text,
+                            "Phone": phone,
+                            "L" : lat,
+                            "G" : long,
+                            "Date" : date,
+                            "Id" : id
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeAskMap
+                          ]
+                          )
+                          });
                             t3arfServicesUpdate(appState.getimage, _ageController.text.trim().toString(), _jobController.text.trim().toString(),
                              appState.getname, _postController.text.trim().toString(), _whatsController.text.trim().toString(),
                               appState.getlat, appState.getlong, DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid , _myDoc.docs[i].id)
@@ -200,7 +228,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text(appState.getlocal == "ar"?'تم إضافة المنشور بنجاح :)':"Post added successfully :)",style: TextStyle(
+                                Text(appState.getlocal == "ar"?'تم تعديل المنشور بنجاح :)':"Post Edited successfully :)",style: TextStyle(
                                     fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -253,7 +281,25 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             //   "listDate" : listdate,
                             //   "listId" : listId
                             // }).then((value){
-
+                              var ref = FirebaseFirestore.instance.collection("T3arf").doc(docId);
+                            Map<String,dynamic> beforeAskMap = {
+                            "Image" : image,
+                            "Age" : age,
+                            "Jops" : job,
+                            "Name" : name,
+                            "Post" : text,
+                            "Phone": phone,
+                            "L" : lat,
+                            "G" : long,
+                            "Date" : date,
+                            "Id" : id
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeAskMap
+                          ]
+                          )
+                          });
                               t3arfServicesSet(appState.getimage, _ageController.text.trim().toString(), _jobController.text.trim().toString(),
                              appState.getname, _postController.text.trim().toString(), _whatsController.text.trim().toString(),
                               appState.getlat, appState.getlong, DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid , _myDoc.size.toString())
@@ -268,7 +314,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text(appState.getlocal == "ar"?'تم إضافة المنشور بنجاح :)':"Post added successfully :)",style: TextStyle(
+                                Text(appState.getlocal == "ar"?'تم تعديل المنشور بنجاح :)':"Post Edited successfully :)",style: TextStyle(
                                     fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),
@@ -325,6 +371,25 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                         //       "listDate" : listdate,
                         //       "listId" : listId
                         //     }).then((value){
+                          var ref = FirebaseFirestore.instance.collection("T3arf").doc(docId);
+                            Map<String,dynamic> beforeAskMap = {
+                            "Image" : image,
+                            "Age" : age,
+                            "Jops" : job,
+                            "Name" : name,
+                            "Post" : text,
+                            "Phone": phone,
+                            "L" : lat,
+                            "G" : long,
+                            "Date" : date,
+                            "Id" : id
+                          };
+                          ref.update({
+                          "data": FieldValue.arrayRemove([
+                            beforeAskMap
+                          ]
+                          )
+                          });
                           t3arfServicesSet(appState.getimage, _ageController.text.trim().toString(), _jobController.text.trim().toString(),
                              appState.getname, _postController.text.trim().toString(), _whatsController.text.trim().toString(),
                               appState.getlat, appState.getlong, DateTime.now().toString(), FirebaseAuth.instance.currentUser.uid,_myDoc.size.toString())
@@ -339,7 +404,7 @@ class _AddPostT3arfState extends State<AddPostT3arf> {
                             content: Row(
                               children: [
                                 Image.asset('images/smile.png',width: 40,height: 30,),
-                                Text(appState.getlocal == "ar"?'تم إضافة المنشور بنجاح :)':"Post added successfully :)",style: TextStyle(
+                                Text(appState.getlocal == "ar"?'تم تعديل المنشور بنجاح :)':"Post Edited successfully :)",style: TextStyle(
                                     fontSize: appState.getlocal == "ar"?19:15,color:Colors.pink[900] ),textDirection: TextDirection.rtl,),
                               ],
                             ),

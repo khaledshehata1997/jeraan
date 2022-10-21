@@ -23,7 +23,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
-
         title: Text('نسيت كلمة السر'),
         centerTitle: true,
       ),
@@ -73,6 +72,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   SizedBox(
                       height: mediQuery.height * .05,
                     ),
+
 
                     //states == true ? CircularProgressIndicator() : Container(),
                     isLoading == true

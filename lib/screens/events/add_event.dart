@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jeraan_project/screens/events/event_home.dart';
+import 'package:jeraan_project/screens/events/eventsServices.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
@@ -103,88 +104,84 @@ class _AddEventState extends State<AddEvent> {
                        
                         try{
                           // "image" : "gs://jeeran-24c62.appspot.com/main${image.path}"
-                        List<String> listId = [];
-                        List<double> listL = [];
-                        List<double> listG = [];
-                        List<String> listimage = [];
-                        List<String> listname = [];
-                        List<String> listdate = [];
-                        //
-                        List<String> listType = [];
-                        List<String> listEventDate = [];
-                        List<String> listdesc = [];
+                        // List<String> listId = [];
+                        // List<double> listL = [];
+                        // List<double> listG = [];
+                        // List<String> listimage = [];
+                        // List<String> listname = [];
+                        // List<String> listdate = [];
+                        // //
+                        // List<String> listType = [];
+                        // List<String> listEventDate = [];
+                        // List<String> listdesc = [];
 
                         QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('Event').get();
                         if(_myDoc.size>0){
                       for (var i = 0; i < _myDoc.size; i++) {
                         print("${_myDoc.docs[i]['index']} : ${_myDoc.size-1}");
                         if(_myDoc.docs[i]["index"] == "${_myDoc.size-1}"){
-                          List l =  List.from(_myDoc.docs[i]["listId"]);
-                          if(l.length < 200){
-                            listimage = List.from(_myDoc.docs[i]["listImage"]);
-                            listname = List.from(_myDoc.docs[i]["listName"]);
-                            listL = List.from(_myDoc.docs[i]["listL"]);
-                            listG = List.from(_myDoc.docs[i]["listG"]);
-                            listdate = List.from(_myDoc.docs[i]["listDate"]);
-                            listId = List.from(_myDoc.docs[i]["listId"]);
+                           List l =  List.from(_myDoc.docs[i]["data"]);
+                          if(l.length <= 200){
+                            // listimage = List.from(_myDoc.docs[i]["listImage"]);
+                            // listname = List.from(_myDoc.docs[i]["listName"]);
+                            // listL = List.from(_myDoc.docs[i]["listL"]);
+                            // listG = List.from(_myDoc.docs[i]["listG"]);
+                            // listdate = List.from(_myDoc.docs[i]["listDate"]);
+                            // listId = List.from(_myDoc.docs[i]["listId"]);
 
-                            listEventDate = List.from(_myDoc.docs[i]["listEventDate"]);
-                            listType = List.from(_myDoc.docs[i]["listType"]);
-                            listdesc = List.from(_myDoc.docs[i]["listDesc"]);
+                            // listEventDate = List.from(_myDoc.docs[i]["listEventDate"]);
+                            // listType = List.from(_myDoc.docs[i]["listType"]);
+                            // listdesc = List.from(_myDoc.docs[i]["listDesc"]);
 
-                            listimage.add(appState.getimage);
-                            listname.add(appState.getname);
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
+                            // listimage.add(appState.getimage);
+                            // listname.add(appState.getname);
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
 
-                            listType.add(_titleController.text.trim().toString());
-                            listEventDate.add(_eventDateController.text.trim().toString());
-                            listdesc.add(_descController.text.trim().toString());
+                            // listType.add(_titleController.text.trim().toString());
+                            // listEventDate.add(_eventDateController.text.trim().toString());
+                            // listdesc.add(_descController.text.trim().toString());
                             
-
-                            FirebaseFirestore.instance.collection("Event").doc(_myDoc.docs[i].id).update({
-                              "listImage" : listimage,
-                              "listName" : listname,
-                              "listId" : listId,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
-                              
-                              "listEventDate" : listEventDate,
-                              "listType" : listType,
-                              "listDesc" : listdesc
-                              
-                            }).then((value){
+                            eventServicesUpdate(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                             DateTime.now().toString() , _eventDateController.text.trim().toString() , FirebaseAuth.instance.currentUser.uid ,
+                              _myDoc.docs[i].id,_titleController.text.trim().toString(),_descController.text.trim().toString())
+                            .then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
                             });
                           }else{
-                            listimage.add(appState.getimage);
-                            listname.add(appState.getname);
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
+                            // listimage.add(appState.getimage);
+                            // listname.add(appState.getname);
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
 
-                            listType.add(_titleController.text.trim().toString());
-                            listEventDate.add(_eventDateController.text.trim().toString());
-                            listdesc.add(_descController.text.trim().toString());
+                            // listType.add(_titleController.text.trim().toString());
+                            // listEventDate.add(_eventDateController.text.trim().toString());
+                            // listdesc.add(_descController.text.trim().toString());
 
-                            FirebaseFirestore.instance.collection("Event").add({
-                              "index" : _myDoc.size.toString(),
-                              "listImage" : listimage,
-                              "listName" : listname,
-                              "listId" : listId,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
+                            // FirebaseFirestore.instance.collection("Event").add({
+                            //   "index" : _myDoc.size.toString(),
+                            //   "listImage" : listimage,
+                            //   "listName" : listname,
+                            //   "listId" : listId,
+                            //   "listL" : listL,
+                            //   "listG" : listG,
+                            //   "listDate" : listdate,
                               
-                              "listEventDate" : listEventDate,
-                              "listType" : listType,
-                              "listDesc" : listdesc
-                            }).then((value){
+                            //   "listEventDate" : listEventDate,
+                            //   "listType" : listType,
+                            //   "listDesc" : listdesc
+                            // })
+                            // 
+                            // 
+                              eventServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                             DateTime.now().toString() , _eventDateController.text.trim().toString() , FirebaseAuth.instance.currentUser.uid ,
+                              _myDoc.size.toString(),_titleController.text.trim().toString(),_descController.text.trim().toString())
+                            .then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
                             });
@@ -196,30 +193,37 @@ class _AddEventState extends State<AddEvent> {
                         }
                         
                         }else{
-                            listimage.add(appState.getimage);
-                            listname.add(appState.getname);
-                            listId.add(FirebaseAuth.instance.currentUser.uid);
-                            listdate.add(DateTime.now().toString());
-                            listL.add(appState.getlat);
-                            listG.add(appState.getlong);
+                            // listimage.add(appState.getimage);
+                            // listname.add(appState.getname);
+                            // listId.add(FirebaseAuth.instance.currentUser.uid);
+                            // listdate.add(DateTime.now().toString());
+                            // listL.add(appState.getlat);
+                            // listG.add(appState.getlong);
 
-                            listType.add(_titleController.text.trim().toString());
-                            listEventDate.add(_eventDateController.text.trim().toString());
-                            listdesc.add(_descController.text.trim().toString());
+                            // listType.add(_titleController.text.trim().toString());
+                            // listEventDate.add(_eventDateController.text.trim().toString());
+                            // listdesc.add(_descController.text.trim().toString());
 
-                            FirebaseFirestore.instance.collection("Event").add({
-                              "index" : _myDoc.size.toString(),
-                              "listImage" : listimage,
-                              "listName" : listname,
-                              "listId" : listId,
-                              "listL" : listL,
-                              "listG" : listG,
-                              "listDate" : listdate,
+                            // FirebaseFirestore.instance.collection("Event").add({
+                            //   "index" : _myDoc.size.toString(),
+                            //   "listImage" : listimage,
+                            //   "listName" : listname,
+                            //   "listId" : listId,
+                            //   "listL" : listL,
+                            //   "listG" : listG,
+                            //   "listDate" : listdate,
                               
-                              "listEventDate" : listEventDate,
-                              "listType" : listType,
-                              "listDesc" : listdesc
-                            }).then((value){
+                            //   "listEventDate" : listEventDate,
+                            //   "listType" : listType,
+                            //   "listDesc" : listdesc
+                            // }).then((value){
+                            //   EasyLoading.dismiss();
+                            //   showDialogNow();
+                            // });
+                            eventServicesSet(appState.getimage,appState.getname,appState.getlat, appState.getlong,
+                             DateTime.now().toString() , _eventDateController.text.trim().toString() , FirebaseAuth.instance.currentUser.uid ,
+                              _myDoc.size.toString(),_titleController.text.trim().toString(),_descController.text.trim().toString())
+                            .then((value){
                               EasyLoading.dismiss();
                               showDialogNow();
                             });

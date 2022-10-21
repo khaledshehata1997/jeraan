@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jeraan_project/constants.dart';
 import 'package:jeraan_project/main.dart';
+import 'package:jeraan_project/screens/privacy/privacy.dart';
 import 'package:jeraan_project/widgets/custom_text_form.dart';
 import 'package:jeraan_project/widgets/default_button.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 import 'sign_in.dart';
@@ -40,7 +42,6 @@ class _SignUpState extends State<SignUp> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: mainColor,
-
         title: Text('SIGN UP'),
         centerTitle: true,
       ),
@@ -207,16 +208,23 @@ class _SignUpState extends State<SignUp> {
                           });
                         },
                       ),
-                      RichText(
-                        text: TextSpan(
-                          text:
-                          'اوافق علي كل ',
-                          style: TextStyle(color: Colors.black45),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: ' بنود الخصوصيه',
-                                style: TextStyle(color: mainColor)),
-                          ],
+                      GestureDetector(
+                        onTap: ()async{
+                         await launch('https://www.termsfeed.com/live/409bdd13-7620-4967-ae20-138889d59f35');
+
+
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            text:
+                            'اوافق علي كل ',
+                            style: TextStyle(color: Colors.black45),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: ' بنود الخصوصيه',
+                                  style: TextStyle(color: mainColor)),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -240,8 +248,6 @@ class _SignUpState extends State<SignUp> {
                   isLoading? SizedBox(
                     height: 20,
                   ):Container(),
-
-                 
 
                   DefaultButton(
                     text: 'تسجيل',
@@ -318,7 +324,7 @@ class _SignUpState extends State<SignUp> {
            }).then((value) {
              Navigator.pushAndRemoveUntil(
             context,
-             MaterialPageRoute(builder: (context) => MyApp()),
+             MaterialPageRoute(builder: (context) => Privacy()),
               (Route<dynamic> route) => false,
             );
            });

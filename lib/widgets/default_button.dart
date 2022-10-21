@@ -13,7 +13,7 @@ class DefaultButton extends StatelessWidget {
     var mediaQuery =MediaQuery.of(context).size;
     return SizedBox(
       width: mediaQuery.width*0.94,
-      height: mediaQuery.height*0.06,
+      height: mediaQuery.height*0.07,
       child: FlatButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         color: Colors.pink[800],
@@ -21,7 +21,7 @@ class DefaultButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 20,
             color: Colors.white,
           ),
         ),

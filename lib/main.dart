@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:jeraan_project/constants.dart';
 import 'package:jeraan_project/screens/auth/onBoarding_screen.dart';
 import 'package:jeraan_project/screens/home_screen/home_screen.dart';
 import 'package:jeraan_project/screens/serves/appstate.dart';
@@ -11,8 +12,6 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'widgets/onboarding_content.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -59,6 +58,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context);
     return MaterialApp(
+
     localizationsDelegates: [
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
@@ -73,13 +73,13 @@ class _MyAppState extends State<MyApp> {
       title: 'Jeran',
       theme:// appState.getTheme(),
       ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: mainColor
+        ),
           primaryColor:Colors.pink[900],
-        appBarTheme:AppBarTheme(
-          backgroundColor: Colors.pink[900]
-        )
-
+          accentColor: Colors.pink[900]
       ),
-      home: FirebaseAuth.instance.currentUser != null ? HomeScreen() : OnboardingContent(),
+      home: FirebaseAuth.instance.currentUser != null ? HomeScreen() : OnBoardingScreen(),
       builder: EasyLoading.init(),
     );
   }

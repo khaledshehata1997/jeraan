@@ -29,26 +29,26 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   carousel_slider:
-  get: ^4.1.4
-  animated_text_kit: ^4.2.1
+  get:
+  animated_text_kit:
   firebase_core:
   cloud_firestore:
   firebase_messaging:
   image_picker:
   firebase_storage:
-  fluttertoast:
-  firebase_image:
+  fluttertoast: ^8.0.9
+  firebase_image: ^1.1.1
   firebase_auth:
   location:
   geodesy:
   shared_preferences:
   provider:
-  geocoder:
+  geocoder: ^0.2.1
   clipboard:
   flutter_datetime_picker:
   flutter_easyloading:
-  url_launcher: ^6.0.9
-  easy_localization: ^3.0.0
+  url_launcher:
+  easy_localization:
 
 
 
